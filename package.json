@@ -20,7 +20,7 @@
     "image resizing and CDN", "crop", "resize"
   ],
   "author": "scaleflex",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "react-lazyload": "^2.3.0",
     "throttle-debounce": "^2.0.1"
