@@ -1,6 +1,6 @@
 {
   "name": "react-cloudimage-responsive",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "description": "Cloudimage responsive plugin will make your website load the exact image size you need depending on your user's screen size. Multiple pixel ratios are supported.",
   "main": "dist/index.js",
   "scripts": {
@@ -9,6 +9,11 @@
     "transpile": "babel src -d dist --copy-files",
     "prepublishOnly": "npm run transpile"
   },
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/scaleflex/react-cloudimage-responsive"
+  },
+  "homepage": "https://github.com/scaleflex/react-cloudimage-responsive#readme",
   "keywords": [
     "react", "image", "images", "cloudimage", "responsive images", "lazy loading", "web acceleration", "image management", "image resizing",
     "image compression", "image optimization", "image CDN", "image CDN", "webp", "jpeg xr", "jpg optimization",
