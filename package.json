@@ -1,23 +1,42 @@
 {
   "name": "react-cloudimage-responsive",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Cloudimage responsive plugin will make your website load the exact image size you need depending on your user's screen size. Multiple pixel ratios are supported.",
   "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "webpack-dev-server --mode development",
     "transpile": "babel src -d dist --copy-files",
-    "prepublishOnly": "npm run transpile"
+    "prepublishOnly": "npm run transpile",
+    "build": "webpack --mode production",
+    "deploy": "gh-pages -d examples/dist",
+    "publish-demo": "npm run build && npm run deploy"
   },
   "repository": {
-    "type" : "git",
-    "url" : "https://github.com/scaleflex/react-cloudimage-responsive"
+    "type": "git",
+    "url": "https://github.com/scaleflex/react-cloudimage-responsive"
   },
   "homepage": "https://github.com/scaleflex/react-cloudimage-responsive#readme",
   "keywords": [
-    "react", "image", "images", "cloudimage", "responsive images", "lazy loading", "web acceleration", "image management", "image resizing",
-    "image compression", "image optimization", "image CDN", "image CDN", "webp", "jpeg xr", "jpg optimization",
-    "image resizing and CDN", "crop", "resize"
+    "react",
+    "image",
+    "images",
+    "cloudimage",
+    "responsive images",
+    "lazy loading",
+    "web acceleration",
+    "image management",
+    "image resizing",
+    "image compression",
+    "image optimization",
+    "image CDN",
+    "image CDN",
+    "webp",
+    "jpeg xr",
+    "jpg optimization",
+    "image resizing and CDN",
+    "crop",
+    "resize"
   ],
   "author": "scaleflex",
   "license": "MIT",
@@ -38,6 +57,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.24.1",
     "css-loader": "^2.0.0",
+    "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
