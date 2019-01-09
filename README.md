@@ -12,7 +12,7 @@ Cloudimage Responsive plugin will resize, compress and accelerate images across 
 
 ## Demo
 
-To see the Cloudimage Responsive plugin in action, please check out the [Demo page](https://cloudimage.io/plugin/react/index.html). Play with your browser's viewport size and observe your Inspector's Network tab to see how Cloudimage delivers the optimal image size to your browser, hence accelerating the overall page loading time.
+To see the Cloudimage Responsive plugin in action, please check out the [Demo page](https://scaleflex.github.io/react-cloudimage-responsive/). Play with your browser's viewport size and observe your Inspector's Network tab to see how Cloudimage delivers the optimal image size to your browser, hence accelerating the overall page loading time.
 
 ## Installation
 
