@@ -17,12 +17,20 @@ const App = () => (
   <CloudimageProvider config={cloudimageConfig}>
 
     <div className="container">
-      <h1>Cloudimage React Plugin</h1>
+      <h1>
+        Cloudimage React Plugin
+        <img
+          className="logo"
+          src="https://cdn4.iconfinder.com/data/icons/logos-3/600/React.js_logo-512.png"
+          alt="React logo"
+          height="40px"/>
+      </h1>
       <p>Cloudimage Responsive plugin
         will <strong>resize</strong>, <strong>compress</strong> and <strong>accelerate</strong> images across the World
         in your <b>React</b> application. It leverages the HTML5 &lt;picture&gt; and &lt;srcset&gt; elements to deliver
         the right image size based on the client's <strong>screen size</strong> and <strong>pixel ratio</strong> (retina
-        vs non-retina).</p>
+        vs non-retina). You can find the full extend of image operations in the Cloudimage documentation
+        <a href="https://docs.cloudimage.io/go/cloudimage-documentation/en/operations/"> here</a>.</p>
 
       <h3 style={{ marginTop: 40, marginBottom: 20 }}>
         I. Responsive mode, according to image container size
@@ -118,7 +126,7 @@ const App = () => (
 
       <div style={{ marginTop: 40 }}>
         <h4>Any questions?</h4>
-        <p>Contact us at hello@cloudimage.io, our image resizing experts will be happy to help!</p>
+        <p>Contact us at <a href="mailto:hello@cloudimage.io">hello@cloudimage.io</a>, our image resizing experts will be happy to help!</p>
       </div>
     </div>
 

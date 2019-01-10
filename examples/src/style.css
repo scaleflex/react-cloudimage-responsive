@@ -48,3 +48,12 @@ pre p {
 img {
   width: 100%;
 }
+
+.logo {
+  display: inline-block;
+  width: auto;
+  margin-left: 5px;
+  position: relative;
+  margin-top: -8px;
+  height: 47px;
+}
