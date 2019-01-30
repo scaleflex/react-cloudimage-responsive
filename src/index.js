@@ -106,7 +106,6 @@ class Img extends Component {
 
     const pictureWithRatioStyles =  (ratioBySize || ratio) ?
       {
-        ...styles.pictureWithRatio,
         paddingBottom: (100 / (ratioBySize || ratio)) + '%',
         background: config.placeholderBackground
       } : {};
@@ -164,10 +163,7 @@ const styles = {
     position: 'relative'
   },
 
-  pictureWithRatio: {
-    overflow: 'hidden',
-    position: 'relative'
-  },
+  pictureWithRatio: {},
 
   img: {
     display: 'block',

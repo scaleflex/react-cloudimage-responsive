@@ -57,7 +57,7 @@ export const getParentWidth = (img, config) => {
 
   const parentContainer = getParentContainerWithWidth(img);
   const currentWidth = parseInt(parentContainer, 10);
-  const computedWidth = Number(window.getComputedStyle(img).width);
+  const computedWidth = parseInt(window.getComputedStyle(img).width);
 
   if ((computedWidth && (computedWidth < currentWidth && computedWidth > 15) || !currentWidth)) {
     return getSizeLimit(computedWidth);
@@ -98,8 +98,10 @@ export const generateSources = (operation, size, filters, imgSrc, isAdaptive, co
       const nextSizeType = isLast ? orderFiltered[i - 1] : orderFiltered[i];
       let nextSize = size[orderFiltered[i]];
 
-      if (isPreview)
+      if (isPreview){
         nextSize = nextSize.split('x').map(size => size / 5).join('x');
+        filters = 'q10.foil1';
+      }
 
       const srcSet = generateSrcset(operation, nextSize, filters, imgSrc, config);
       const mediaQuery = '(' + (isLast ? 'min' : 'max') +'-width: ' + (config.presets[nextSizeType] + (isLast ? 1 : 0)) + 'px)';
