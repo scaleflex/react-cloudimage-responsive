@@ -96,7 +96,7 @@ $ npm install --save react-cloudimage-responsive
 
 ## <a name="initialize"></a>Step 2: Initialize
 
-After installing the react-cloudimage-responsive lib, simply iniatialize it with your **token** and the **baseUrl**
+After installing the react-cloudimage-responsive lib, simply initialize it with your **token** and the **baseUrl**
 of your image storage with **CloudimageProvider**:
 
 ```javascript
