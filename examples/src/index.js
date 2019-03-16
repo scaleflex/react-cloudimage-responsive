@@ -271,7 +271,7 @@ class App extends Component {
                 <Img
                   src={images[18].src}
                   operation={'crop'}
-                  size="sm 800x400, (min-width: 620px) 200x20, md 1000x1350, lg 1400x1200, xl 1600x1000"
+                  size="sm 400x200, (min-width: 620px) 200x60, md 250x350, lg 350x300, xl 400x250"
                 />
                 <small>
                   original: <i>{images[18].original_size}</i> <a
@@ -281,20 +281,19 @@ class App extends Component {
               <div className="col-md-6 col-lg-5 desc-wrapper-with-media-query">
                 <h4>You can control your image size/ratio/crop with media query breakpoints</h4>
                 <p>Resize your browser window to see how it works</p>
-                <pre><code>
-            <div><p>&lt;Img</p>
-              <p>  src="{images[0].src}" <br/>  ratio="{images[0].ratio}"<br/></p>
-              <p>  operation="crop"</p>
-              <p>  size="</p>
-              <p>    sm 800x400,</p>
-              <p>    (min-width: 620px) 200x20,</p>
-              <p>    md 1000x1350,</p>
-              <p>    lg 1400x1200, </p>
-              <p>    xl 1600x1000 </p>
-              <p>  "</p>
-              <p>/&gt;</p>
-            </div>
-          </code></pre>
+                <SyntaxHighlighter language='jsx' style={darcula}>
+                  {`<Img
+  src={images[18].src}
+  operation={'crop'}
+  size="
+    sm 400x200,
+    (min-width: 620px) 200x60,
+    md 250x350,
+    lg 350x300,
+    xl 400x250
+  "
+/>`}
+                </SyntaxHighlighter>
               </div>
             </div>
           </div>
@@ -303,7 +302,7 @@ class App extends Component {
         <section className="container ready-to-start">
           <h2 className="text-center">Ready to get started?</h2>
           <p>To use the plugin, you will need a Cloudimage token. Don't worry, it only takes seconds to get one by
-            registering
+            registering{' '}
             <a
               href="https://www.cloudimage.io/en/register_page">here</a>. Once your token is created, you can
             configure{' '}
@@ -388,12 +387,26 @@ render(<App />, document.body);`}</SyntaxHighlighter>
           </div>
         </section>
 
-        <footer>
+        <section style={{ textAlign: 'center' }}>
           <div className="container ready-to-start">
             <h2>Any questions?</h2>
             <p>Contact us at <a href="mailto:hello@cloudimage.io">hello@cloudimage.io</a>, our experts will be happy to
               help!
             </p>
+          </div>
+        </section>
+
+        <footer>
+          <div style={{ background: '#fff' }}>
+            <section className="container ready-to-start filerobot-ui-family">
+              <h2 className="text-center">Filerobot UI family</h2>
+              <ul>
+                <li><a href="https://github.com/scaleflex/js-cloudimage-responsive">JS Cloudimage Responsive</a></li>
+                <li><a href="https://github.com/scaleflex/ng-cloudimage-responsive">Angular Cloudimage Responsive</a></li>
+                <li><a href="https://github.com/scaleflex/filerobot-image-editor">Uploader</a></li>
+                <li><a href="https://github.com/scaleflex/filerobot-uploader">Image Editor</a></li>
+              </ul>
+            </section>
           </div>
           <hr/>
           <div className="copyright">
