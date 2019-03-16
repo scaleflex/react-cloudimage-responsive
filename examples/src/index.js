@@ -240,11 +240,13 @@ class App extends Component {
         </div>
 
         <section className="ready-to-start">
-          <h2 className="text-center">Gallery demo</h2>
+          <div className="container">
+            <h2 className="text-center">Gallery demo</h2>
 
-          <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
-            plugin{' '}
-            will deliver an optimized image for the screen size.</p>
+            <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
+              plugin{' '}
+              will deliver an optimized image for the screen size.</p>
+          </div>
 
           <div className="container-fluid"
                style={{ maxWidth: 1200, marginLeft: 'auto', marginRight: 'auto', paddingTop: 20 }}>

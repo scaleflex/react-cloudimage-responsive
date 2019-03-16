@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { debounce } from 'throttle-debounce'
 
+
 class ContainerBox extends Component {
   constructor() {
     super();
@@ -16,11 +17,10 @@ class ContainerBox extends Component {
       width: this.box.current.offsetWidth
     });
 
-    window.onresize = debounce(400, () => {
-      this.setState({
-        width: this.box.current.offsetWidth
-      });
-    })
+    window.addEventListener('resize', debounce(400, () => {
+        this.setState({ width: this.box.current.offsetWidth });
+      })
+    );
   }
 
   render() {
