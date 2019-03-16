@@ -41,7 +41,7 @@ class App extends Component {
                  data-icon="octicon-repo-forked"
                  aria-label="Fork Scaleflex/react-cloudimage-responsive on GitHub">Fork</a>
               <a className="twitter-share-button btn btn-info" target="_blank"
-                 href="https://twitter.com/intent/tweet?text=Responsive%20images,%20now%20easier%20than%20ever&url=https://scaleflex.github.io/react-cloudimage-responsive/&via=cloudimage&hashtags=images,cloudimage,responsive_images,lazy_loading,web_acceleration,image_managementimage_resizing,image_compression,image_optimization,image_CDN,image_CDNwebp,jpeg_xr,jpg_optimization,image_resizing_and_CDN,cropresize">
+                 href="https://twitter.com/intent/tweet?text=Responsive%20images,%20now%20easier%20than%20ever&url=https://scaleflex.github.io/react-cloudimage-responsive/&via=cloudimage&hashtags=images,cloudimage,responsive_images,lazy_loading,web_acceleration,image_optimization,image_CDN,image_CDNwebp,jpeg_xr,jpg_optimization,image_resizing_and_CDN,cropresize">
                 <i> </i>
                 <span>Tweet</span>
               </a>
