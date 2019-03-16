@@ -4,6 +4,7 @@ import Img, { CloudimageProvider } from '../../src';
 import './style.css';
 import './assets/fonts/helvetica-neue.css';
 import { images } from './mock';
+import ContainerBox from './components/ContainerBox';
 
 
 const cloudimageConfig = {
@@ -13,6 +14,7 @@ const cloudimageConfig = {
   queryString: '?&size_info=1&v=2',
   lazyLoadOffset: 100
 };
+
 
 class App extends Component {
   render() {
@@ -79,7 +81,7 @@ class App extends Component {
         </section>
 
         <section>
-          <div className="container-width-box">container width: <span>---</span> px</div>
+          <ContainerBox/>
           <Img src="https://scaleflex.airstore.io/filerobot/js-cloudimage-responsive/assets/sky.jpg" ratio={2.37}/>
         </section>
 
@@ -107,14 +109,17 @@ class App extends Component {
             The plugin detects the <strong>width of image's container</strong> and <strong>pixel ratio{' '}
             density</strong> of{' '}
             your device to load the exact image size you need. It <strong>processes</strong> images via{' '}
-            <a href="https://www.cloudimage.io/en/home">Cloudimage.io</a> service which offers comprehensive <strong>automated{' '}
+            <a href="https://www.cloudimage.io/en/home">Cloudimage.io</a> service which offers
+            comprehensive <strong>automated{' '}
             image optimization</strong> solutions.
           </p>
           <p style={{ marginTop: 20 }}>
             When an image is first loaded on your website or mobile app, Cloudimage's resizing servers will{' '}
             <strong>download</strong> your origin image from your origin server, <strong>resize</strong> it and{' '}
-            <strong>deliver</strong> to your user via lightning-fast Content Delivery Networks (CDNs). Once the image is{' '}
-            resized in the format of your choice, Cloudimage will send it to a Content Delivery Network, which will in turn{' '}
+            <strong>deliver</strong> to your user via lightning-fast Content Delivery Networks (CDNs). Once the image
+            is{' '}
+            resized in the format of your choice, Cloudimage will send it to a Content Delivery Network, which will in
+            turn{' '}
             deliver it rocket fast to your visitors, <strong>responsively across various screen sizes</strong>.
           </p>
           <p style={{ marginTop: 20 }}>
@@ -226,8 +231,10 @@ class App extends Component {
             </table>
 
             <p>
-              * The plugin <strong>rounds container width</strong> to next possible value which can be divided by 100{' '}
-              without the remainder. It's done for <strong>cache reasons</strong> so that we cache not all images different by{' '}
+              * The plugin <strong>rounds container width</strong> to next possible value which can be divided by
+              100{' '}
+              without the remainder. It's done for <strong>cache reasons</strong> so that we cache not all images
+              different by{' '}
               1px, but only 100px, 200px, 300px …
             </p>
           </section>
@@ -236,7 +243,8 @@ class App extends Component {
         <section className="ready-to-start">
           <h2 className="text-center">Gallery demo</h2>
 
-          <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive plugin{' '}
+          <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
+            plugin{' '}
             will deliver an optimized image for the screen size.</p>
 
           <div className="container-fluid"
@@ -244,13 +252,13 @@ class App extends Component {
 
             <div className="row images-in-columns">
               <div className="col-12">
-                <div className="container-width-box">container width: <span>---</span> px</div>
+                <ContainerBox/>
                 <Img src={images[8].src} ratio={images[8].ratio}/>
               </div>
 
               {images.slice(1, 7).map((image, index) => (
                 <div key={index} className="col-6">
-                  <div className="container-width-box">container width: <span>---</span> px</div>
+                  <ContainerBox/>
                   <Img src={image.src} ratio={image.ratio}/>
                   original: <i>{image.original_size}</i> <a
                   href={`https://cloudimage.public.airstore.io/demo/${image.src}`}
@@ -295,9 +303,11 @@ class App extends Component {
 
         <section className="container ready-to-start">
           <h2 className="text-center">Ready to get started?</h2>
-          <p>To use the plugin, you will need a Cloudimage token. Don't worry, it only takes seconds to get one by registering
+          <p>To use the plugin, you will need a Cloudimage token. Don't worry, it only takes seconds to get one by
+            registering
             <a
-              href="https://www.cloudimage.io/en/register_page">here</a>. Once your token is created, you can configure{' '}
+              href="https://www.cloudimage.io/en/register_page">here</a>. Once your token is created, you can
+            configure{' '}
             it as described below.{' '}
             This token allows you to use 25GB of image cache and 25GB of worldwide CDN traffic per month for free.</p>
         </section>
@@ -323,7 +333,8 @@ class App extends Component {
             <div id="js-version-box" className="">
               <div className="action-wrapper second-action">
                 <p>
-                  initialize it with your <strong>token</strong> and the <strong>baseUrl</strong> of your image storage{' '}
+                  initialize it with your <strong>token</strong> and the <strong>baseUrl</strong> of your image
+                  storage{' '}
                   with <strong>CloudimageProvider</strong>
                 </p>
                 <figure className="highlight">
@@ -417,7 +428,7 @@ render(<App />, document.body);`}</code></pre>
         </footer>
 
         <div id="device-pixel-ratio" className="device-pixel-ratio">
-          Your device pixel ratio: <span>---</span>
+          Your device pixel ratio: <span>{Math.round(window.devicePixelRatio || 1)}</span>
         </div>
 
       </CloudimageProvider>
