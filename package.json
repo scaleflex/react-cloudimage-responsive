@@ -1,17 +1,10 @@
 {
   "name": "react-cloudimage-responsive",
   "version": "1.2.5",
-  "description": "Cloudimage responsive plugin will make your website load the exact image size you need depending on your user's screen size. Multiple pixel ratios are supported.",
   "main": "dist/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "webpack-dev-server --mode development",
-    "transpile": "babel src -d dist --copy-files",
-    "prepublishOnly": "npm run transpile",
-    "build": "webpack --mode production",
-    "deploy": "gh-pages -d examples/dist",
-    "publish-demo": "npm run build && npm run deploy"
-  },
+  "description": "Cloudimage Responsive will smartly resize, compress and accelerate images across the World in your site for all devices. The plugin supports lazy loading technique with fancy animation on image load.",
+  "author": "scaleflex",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/scaleflex/react-cloudimage-responsive"
@@ -38,8 +31,13 @@
     "crop",
     "resize"
   ],
-  "author": "scaleflex",
-  "license": "MIT",
+  "scripts": {
+    "start-demo": "webpack-dev-server --mode development",
+    "dist": "rm -rf dist && babel src -d dist --copy-files",
+    "build-demo": "rm -rf examples/dist && webpack --mode production",
+    "deploy": "gh-pages -d examples/dist",
+    "publish-demo": "npm run build-demo && npm run deploy"
+  },
   "dependencies": {
     "react-lazyload": "^2.3.0",
     "throttle-debounce": "^2.0.1"
