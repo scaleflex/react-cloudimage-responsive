@@ -482,7 +482,8 @@ img {
 }
 
 .table {
-  margin-top: 30px;
+  margin: 30px auto 30px auto;
+  max-width: 850px;
 }
 
 .table thead {
