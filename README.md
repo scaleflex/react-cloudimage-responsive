@@ -99,7 +99,7 @@ $ npm install --save react-cloudimage-responsive
 After installing the react-cloudimage-responsive lib, simply initialize it with your **token** and the **baseUrl**
 of your image storage with **CloudimageProvider**:
 
-```javascript
+```jsx
 import React from 'react';
 import { render } from 'react-dom';
 import Img, { CloudimageProvider } from 'react-cloudimage-responsive';
@@ -247,7 +247,7 @@ Examples (PR - stands for your device Pixel Ratio):
 
 **[width]**:
 
-```javascript
+```jsx
 <Img
   src="dino-reichmuth-1.jpg"
   operation="width"
@@ -257,7 +257,7 @@ Examples (PR - stands for your device Pixel Ratio):
 
 **[width x height]**:
 
-```javascript
+```jsx
 <Img
   src="dino-reichmuth-1.jpg"
   operation="width"
@@ -268,7 +268,7 @@ Examples (PR - stands for your device Pixel Ratio):
 
 **[Width and height for different screen resolutions]**:
 
-```
+```jsx
 <Img
   src="dino-reichmuth-1.jpg"
   operation="crop"
@@ -283,7 +283,7 @@ Examples (PR - stands for your device Pixel Ratio):
 
 You can drop some breakpoints, for example:
 
-```javascript
+```jsx
 <Img
   src="dino-reichmuth-1.jpg"
   operation="crop"
@@ -296,7 +296,7 @@ the Cloudimage Responsive plugin.
 
 For example:
 
-```javascript
+```jsx
 <Img src="dino-reichmuth-1.jpg"/>
 ```
 
