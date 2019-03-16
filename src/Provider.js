@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { getPresets } from './utils';
 import { debounce } from 'throttle-debounce';
 
 
@@ -40,15 +39,14 @@ class CloudimageProvider extends Component {
       filters,
       placeholderBackground,
       baseUrl,
-      presets: presets ? getPresets(presets, 'presets') :
+      presets: presets ? presets :
         {
-          xs: 575,  // up to 576    PHONE
-          sm: 767,  // 577 - 768    PHABLET
-          md: 991,  // 769 - 992    TABLET
-          lg: 1199, // 993 - 1200   SMALL_LAPTOP_SCREEN
-          xl: 3000  // from 1200    USUALSCREEN
+          xs: '(max-width: 575px)',  // to 575       PHONE
+          sm: '(min-width: 576px)',  // 576 - 767    PHABLET
+          md: '(min-width: 768px)',  // 768 - 991    TABLET
+          lg: '(min-width: 992px)',  // 992 - 1199   SMALL_LAPTOP_SCREEN
+          xl: '(min-width: 1200px)'  // from 1200    USUALSCREEN
         },
-      order: presets ? getPresets(presets, 'order') : ['xl', 'lg', 'md', 'sm', 'xs'],
       queryString,
       innerWidth: window.innerWidth,
       //isChrome: /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)

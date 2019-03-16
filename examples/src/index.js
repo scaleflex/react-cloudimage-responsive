@@ -9,7 +9,7 @@ const cloudimageConfig = {
   token: 'demo',
   baseUrl: 'https://cloudimage.public.airstore.io/demo/',
   filters: 'q80.foil1',
-  queryString: '?&size_info=1',
+  queryString: '?&size_info=1&v=2',
   lazyLoadOffset: 100
 };
 
@@ -104,7 +104,7 @@ const App = () => (
           <Img
             src={images[18].src}
             operation={'crop'}
-            size={{ xl: '1600x1000', lg: '1400x1200', md: '1000x1350', sm: '800x400' }}
+            size="sm 800x400, (min-width: 620px) 200x20, md 1000x1350, lg 1400x1200, xl 1600x1000"
           />
           <small>
             original: <i>{images[18].original_size}</i> <a
@@ -118,12 +118,13 @@ const App = () => (
             <div>&lt;Img <br/>
               <p>  src="{images[0].src}" <br/>  ratio="{images[0].ratio}"<br/></p>
               <p>  operation="crop"</p>
-              <p>  size=&#123;&#123;</p>
-              <p>    xl: '1600x1000',</p>
-              <p>    lg: '1400x1200',</p>
-              <p>    md: '1000x1350',</p>
-              <p>    sm: '800x400' </p>
-              <p>  &#125;&#125;</p>
+              <p>  size="</p>
+              <p>    sm 800x400,</p>
+              <p>    (min-width: 620px) 200x20,</p>
+              <p>    md 1000x1350,</p>
+              <p>    lg 1400x1200, </p>
+              <p>    xl 1600x1000 </p>
+              <p>  "</p>
               <p>/&gt;</p>
             </div>
           </code></pre>

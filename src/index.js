@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { findDOMNode } from 'react-dom';
 import CloudimageProvider, { CloudimageContext } from './Provider';
 import {
   checkOnMedia, checkIfRelativeUrlPath, getImgSrc, getSizeAccordingToPixelRatio, generateUrl,
-  getParentWidth, generateSources, getRatioBySize
+  getParentWidth, generateSources, getRatioBySize, getAdaptiveSize
 } from './utils';
 import LazyLoad from 'react-lazyload';
 
@@ -42,15 +42,20 @@ class Img extends Component {
     const { src = '', config = {} } = this.props;
     const operation = this.props.operation || this.props.o || config.operation;
     const parentContainerWidth = getParentWidth(imgNode, config);
-    const size = this.props.size || this.props.s || config.size || parentContainerWidth;
+    let size = this.props.size || this.props.s || config.size || parentContainerWidth;
     const filters = this.props.filters || this.props.f || config.filters;
     const isAdaptive = checkOnMedia(size);
+
+    size = isAdaptive ? getAdaptiveSize(size, config) : size;
+
     const isRelativeUrlPath = checkIfRelativeUrlPath(src);
     const imgSrc = getImgSrc(src, isRelativeUrlPath, config.baseUrl);
     const resultSize = isAdaptive ? size : getSizeAccordingToPixelRatio(size);
-    const isPreview = !config.isChrome && (parentContainerWidth > 400) && config.lazyLoading;
+    //const isPreview = !config.isChrome && (parentContainerWidth > 400) && config.lazyLoading;
+    const isPreview = (parentContainerWidth > 400) && config.lazyLoading;
+
     const cloudimageUrl = isAdaptive ?
-      generateUrl('width', parentContainerWidth, filters, imgSrc, config) :
+      generateUrl('width', getSizeAccordingToPixelRatio(parentContainerWidth), filters, imgSrc, config) :
       generateUrl(operation, resultSize, filters, imgSrc, config);
     const sources = isAdaptive ?
       generateSources(operation, resultSize, filters, imgSrc, isAdaptive, config) : [];
@@ -64,7 +69,6 @@ class Img extends Component {
       previewSources = isAdaptive ?
         generateSources(operation, resultSize, 'q10.foil1', imgSrc, isAdaptive, previewConfig, true) : [];
     }
-
 
     this.setState({
       cloudimageUrl,
@@ -122,15 +126,8 @@ class Img extends Component {
           ...pictureWithRatioStyles
         }}
       >
-        {(!isPreview ? sources : (isPreviewLoaded ? sources : previewSources))
-          .map(source => (
-          <source
-            key={source.srcSet}
-            media={source.mediaQuery || ''}
-            srcSet={source.srcSet || ''}
-            onLoad={() => { this.onImageLoad(isPreviewLoaded); }}
-          />
-        ))}
+        {this.getSources(sources, isPreview, isPreviewLoaded, previewSources)}
+
         <img
           style={{
             ...styles.img,
@@ -152,6 +149,35 @@ class Img extends Component {
         {picture}
       </LazyLoad>
     ) : picture;
+  }
+
+  getSources = (sources, isPreview, isPreviewLoaded, previewSources) => {
+    const resultSources = [...(!isPreview ? sources : (isPreviewLoaded ? sources : previewSources))];
+    const firstSource = resultSources[0];
+
+    return (
+      <Fragment>
+        {(
+          resultSources
+            .slice(1)
+            .reverse()
+            .map((source) => (
+              <source
+                key={source.srcSet}
+                media={(source.mediaQuery || '')}
+                srcSet={source.srcSet || ''}
+                onLoad={() => { this.onImageLoad(isPreviewLoaded); }}
+              />
+            ))
+        )}
+        {firstSource &&
+        <source
+          key={firstSource.srcSet}
+          srcSet={firstSource.srcSet || ''}
+          onLoad={() => { this.onImageLoad(isPreviewLoaded); }}
+        />}
+      </Fragment>
+    );
   }
 }
 

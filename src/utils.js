@@ -1,22 +1,13 @@
-export const getPresets = (value = '', type) => {
-  const splittedValues = value.split('|');
-  const result = { presets: {}, order: [] };
+export const checkOnMedia = size => {
+  try {
+    const array = size.split(',');
 
-  for (let i = 0; i < splittedValues.length; i++) {
-    const splittedParam = splittedValues[i] && splittedValues[i].split(':');
-    const prop = splittedParam[0] && splittedParam[0].trim();
-    const val = splittedParam[1] && splittedParam[1].trim();
-
-    if (prop && val) {
-      result.presets[prop] = val;
-      result.order.unshift(prop);
-    }
+    return array.length > 1;
   }
-
-  return result[type];
-}
-
-export const checkOnMedia = size => size && typeof size === "object";
+  catch (e) {
+    return false;
+  }
+};
 
 export const checkIfRelativeUrlPath = src => {
   if (src.indexOf('//') === 0) {
@@ -84,37 +75,39 @@ export const generateSources = (operation, size, filters, imgSrc, isAdaptive, co
   const sources = [];
 
   if (isAdaptive) {
-    const orderFiltered = [];
-
-    for (let i = 0; i < config.order.length; i++) {
-      const nextSize = size[config.order[i]];
-
-      if (nextSize)
-        orderFiltered.unshift(config.order[i]);
-    }
-
-    for (let i = 0; i < orderFiltered.length; i++) {
-      const isLast = !(i < orderFiltered.length - 1);
-      const nextSizeType = isLast ? orderFiltered[i - 1] : orderFiltered[i];
-      let nextSize = size[orderFiltered[i]];
-
-      if (isPreview){
+    size.forEach(({ size: nextSize, media: mediaQuery}) => {
+      if (isPreview) {
         nextSize = nextSize.split('x').map(size => size / 5).join('x');
         filters = 'q10.foil1';
       }
 
-      const srcSet = generateSrcset(operation, nextSize, filters, imgSrc, config);
-      const mediaQuery = '(' + (isLast ? 'min' : 'max') +'-width: ' + (config.presets[nextSizeType] + (isLast ? 1 : 0)) + 'px)';
-
-      sources.push({ mediaQuery, srcSet });
-    }
+      sources.push({ mediaQuery, srcSet: generateSrcset(operation, nextSize, filters, imgSrc, config) });
+    })
   } else {
+    if (isPreview) {
+      size = size.split('x').map(size => size / 5).join('x');
+      filters = 'q10.foil1';
+    }
+
     sources.push({
-      srcSet: generateSrcset(operation, size.split('x').map(size => size / 5).join('x'), 'q10.foil1', imgSrc, config)
+      srcSet: generateSrcset(operation, size, filters, imgSrc, config)
     });
   }
-
   return sources;
+}
+
+export const getAdaptiveSize = (size, config) => {
+  const arrayOfSizes = size.split(',');
+  const sizes = [];
+
+  arrayOfSizes.forEach(string => {
+    const groups = string.match(/((?<variable>[a-z_][a-z_]*)|(?<media>\([\S\s]*\)))\s*(?<size>[0-9xp]*)/).groups;
+    const media = groups.media ? groups.media : config.presets[groups.variable];
+
+    sizes.push({ media, size: groups.size });
+  })
+
+  return sizes;
 }
 
 const generateSrcset = (operation, size, filters, imgSrc, config) => {
@@ -128,25 +121,8 @@ export const getRatioBySize = (size, config) => {
   let width, height;
 
   if (typeof size === 'object') {
-    const breakPoint = getBreakPoint(config);
-    let orderIndex = config.order.indexOf(breakPoint);
-    let breakPointSize = null;
-
-    do {
-      const nextBreakpoint = config.order[orderIndex]
-      breakPointSize = size[nextBreakpoint];
-      orderIndex--;
-    } while (!breakPointSize && orderIndex >= 0)
-
-    if (!breakPointSize)  {
-      let orderIndex = config.order.indexOf(breakPoint);
-
-      do {
-        const nextBreakpoint = config.order[orderIndex]
-        breakPointSize = size[nextBreakpoint];
-        orderIndex++;
-      } while (!breakPointSize && orderIndex <= config.order.length)
-    }
+    const breakPointSource = getBreakPoint(size);
+    let breakPointSize = breakPointSource ? breakPointSource.size : size[0].size;
 
     width = breakPointSize.toString().split('x')[0]
     height = breakPointSize.toString().split('x')[1];
@@ -161,13 +137,7 @@ export const getRatioBySize = (size, config) => {
   return null;
 }
 
-export const getBreakPoint = (config) => {
-  const { presets, order } = config;
-  const innerWidth = window.innerWidth;
-  const prevBreakPointLimit = order.findIndex(item => presets[item] < innerWidth);
-
-  return order[prevBreakPointLimit - 1] || order[prevBreakPointLimit] || order[order.length - 1];
-}
+const getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
 
 const generateImgSrc = (operation, filters, imgSrc, imgWidth, imgHeight, factor, config) => {
   let imgSize = Math.trunc(imgWidth * factor);
