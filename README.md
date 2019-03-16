@@ -99,7 +99,7 @@ $ npm install --save react-cloudimage-responsive
 After installing the react-cloudimage-responsive lib, simply initialize it with your **token** and the **baseUrl**
 of your image storage with **CloudimageProvider**:
 
-```javascript
+```jsx
 import React from 'react';
 import { render } from 'react-dom';
 import Img, { CloudimageProvider } from 'react-cloudimage-responsive';
