@@ -60,6 +60,7 @@
     "react": "^16.6.3",
     "react-dom": "^16.6.3",
     "react-lazyload": "^2.3.0",
+    "react-syntax-highlighter": "^10.2.0",
     "style-loader": "^0.23.1",
     "throttle-debounce": "^2.0.1",
     "webpack": "^4.27.1",

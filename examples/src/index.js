@@ -5,6 +5,8 @@ import './style.css';
 import './assets/fonts/helvetica-neue.css';
 import { images } from './mock';
 import ContainerBox from './components/ContainerBox';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 
 const cloudimageConfig = {
@@ -123,10 +125,7 @@ class App extends Component {
             deliver it rocket fast to your visitors, <strong>responsively across various screen sizes</strong>.
           </p>
           <p style={{ marginTop: 20 }}>
-            Read the following
-            <a
-              href="https://medium.com/cloudimage/cloudimage-resizes-your-images-saves-time-accelerates-your-website-and-increases-your-conversion-eb128903d4c2">article</a>
-            to learn more about Cloudimage.io service.
+            Read the following <a href="https://medium.com/cloudimage/cloudimage-resizes-your-images-saves-time-accelerates-your-website-and-increases-your-conversion-eb128903d4c2">article</a> to learn more about Cloudimage.io service.
           </p>
         </section>
 
@@ -335,10 +334,9 @@ class App extends Component {
                 <p>
                   initialize it with your <strong>token</strong> and the <strong>baseUrl</strong> of your image
                   storage{' '}
-                  with <strong>CloudimageProvider</strong>
+                  using <strong>CloudimageProvider</strong>
                 </p>
-                <figure className="highlight">
-                <pre><code className="javascript">{`import React from 'react';
+                <SyntaxHighlighter language='jsx' style={darcula}>{`import React from 'react';
 import { render } from 'react-dom';
 import Img, { CloudimageProvider } from 'react-cloudimage-responsive';
 
@@ -356,8 +354,7 @@ const App = () => {
   );
 };
 
-render(<App />, document.body);`}</code></pre>
-                </figure>
+render(<App />, document.body);`}</SyntaxHighlighter>
                 <p>
                   Get your Cloudimage tokens <a href="https://www.cloudimage.io/en/register_page">here</a>.
                 </p>
@@ -368,9 +365,9 @@ render(<App />, document.body);`}</code></pre>
                 <p>
                   Implement it, just using the Img component:
                 </p>
-                <figure className="highlight">
-                  <pre><code className="javascript">&lt;Img src="img.jpg" alt="Demo image" ratio={1.5}/&gt;</code></pre>
-                </figure>
+                <SyntaxHighlighter language='jsx' style={darcula}>
+                  {`<Img src="img.jpg" alt="Demo image" ratio={1.5}/>`}
+                </SyntaxHighlighter>
                 <p>
                   <small>NOTE: "ratio" is recommended to prevent page layout jumping.{' '}
                     The parameter is used to calculate image height to hold the image position while image is loading.
@@ -380,8 +377,9 @@ render(<App />, document.body);`}</code></pre>
 
               <div className="action-wrapper forth-action">
                 <p>
-                  …and you're done!
-                  <a href="https://github.com/scaleflex/react-cloudimage-responsive#table-of-contents" target="_blank">
+                  …and you're done!{' '}
+                  <a href="https://github.com/scaleflex/react-cloudimage-responsive#table-of-contents"
+                     target="_blank">{' '}
                     Visit the full documentation here.
                   </a>
                 </p>
