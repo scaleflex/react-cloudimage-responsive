@@ -14,7 +14,8 @@ const cloudimageConfig = {
   baseUrl: 'https://cloudimage.public.airstore.io/demo/',
   filters: 'q80.foil1',
   queryString: '?&size_info=1&v=2',
-  lazyLoadOffset: 100
+  lazyLoadOffset: 100,
+  placeholderBackground: '#e1e1e1'
 };
 
 
@@ -84,7 +85,7 @@ class App extends Component {
 
         <section>
           <ContainerBox/>
-          <Img src="https://scaleflex.airstore.io/filerobot/js-cloudimage-responsive/assets/sky.jpg" ratio={2.37}/>
+          <Img src={images[0].src} ratio={images[0].ratio}/>
         </section>
 
         <div style={{ background: '#fff' }}>
@@ -321,8 +322,7 @@ class App extends Component {
             </div>
           </div>
 
-          <div id="js-version-box" className="">
-
+          <div id="js-version-box">
             <div className="action-wrapper first-action">
               <p>Install using npm</p>
               <figure className="highlight">
@@ -330,7 +330,7 @@ class App extends Component {
               </figure>
             </div>
 
-            <div id="js-version-box" className="">
+            <div>
               <div className="action-wrapper second-action">
                 <p>
                   initialize it with your <strong>token</strong> and the <strong>baseUrl</strong> of your image
