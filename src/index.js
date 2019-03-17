@@ -111,7 +111,7 @@ class Img extends Component {
     const pictureWithRatioStyles =  (ratioBySize || ratio) ?
       {
         paddingBottom: (100 / (ratioBySize || ratio)) + '%',
-        background: config.placeholderBackground
+        background: (!isPreviewLoaded && !isLoaded) ? config.placeholderBackground : 'transparent'
       } : {};
     const imgWithRatioStyles = (ratioBySize || ratio) ? styles.imgWithRatio : {};
     const imgLoadingStyles = config.imgLoadingAnimation ?
@@ -201,7 +201,7 @@ const styles = {
     opacity: 1,
     top: 0,
     left: 0,
-    height: '100%'
+    height: 'auto'
   },
 
   imgWithEffect: {
