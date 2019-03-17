@@ -401,13 +401,19 @@ render(<App />, document.body);`}</SyntaxHighlighter>
         <footer>
           <div style={{ background: '#fff' }}>
             <section className="container ready-to-start filerobot-ui-family">
-              <h2 className="text-center">Filerobot UI family</h2>
-              <ul>
-                <li><a href="https://github.com/scaleflex/js-cloudimage-responsive">JS Cloudimage Responsive</a></li>
-                <li><a href="https://github.com/scaleflex/ng-cloudimage-responsive">Angular Cloudimage Responsive</a></li>
-                <li><a href="https://github.com/scaleflex/filerobot-image-editor">Uploader</a></li>
-                <li><a href="https://github.com/scaleflex/filerobot-uploader">Image Editor</a></li>
-              </ul>
+              <div className="row">
+                <div className="col-sm-3 filerobot-ui-family-label" style={{maxWidth: 200, minWidth: 200}}>
+                  <h5>Filerobot UI family:</h5>
+                </div>
+                <div className="col-sm-9 filerobot-ui-family-libs" style={{maxWidth: 'calc(100% - 200px)'}}>
+                  <ul>
+                    <li><a target="_blank" href="https://github.com/scaleflex/js-cloudimage-responsive">JS Cloudimage Responsive</a></li>
+                    <li><a target="_blank" href="https://github.com/scaleflex/ng-cloudimage-responsive">Angular Cloudimage Responsive</a></li>
+                    <li><a target="_blank" href="https://github.com/scaleflex/filerobot-image-editor">Uploader</a></li>
+                    <li><a target="_blank" href="https://github.com/scaleflex/filerobot-uploader">Image Editor</a></li>
+                  </ul>
+                </div>
+              </div>
             </section>
           </div>
           <hr/>
