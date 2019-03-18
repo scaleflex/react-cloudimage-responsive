@@ -61,7 +61,6 @@ powered by [Cloudimage](https://www.cloudimage.io/)
 * [Step 3: Implement](#implement)
 * [Configuration](#configuration)
 * [Image properties](#image_properties)
-* [Lazy loading](#lazy_loading)
 * [Browser support](#browser_support)
 * [Filerobot UI Family](#ui_family)
 * [Contributing](#contributing)
@@ -164,7 +163,7 @@ Applies a nice interlacing effect for preview transition
 
 ### filters
 
-###### Type: **String** | Default: **'n'** | _optional_
+###### Type: **String** | Default: **'q35.foil1'** | _optional_
 
 Applies default Cloudimage filters to your image, e.g. fcontrast, fpixelate, fgaussian, backtransparent,
 rotation...  Multiple filters can be applied, separated by "```.```" (dot).

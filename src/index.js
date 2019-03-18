@@ -107,13 +107,14 @@ class Img extends Component {
 
     const ratioBySize = getRatioBySize(this.state.size, config);
     const imageHeight = Math.floor(parentContainerWidth / (ratioBySize || ratio || 1));
+    const resultRatio = (ratioBySize || ratio);
 
-    const pictureWithRatioStyles =  (ratioBySize || ratio) ?
+    const pictureWithRatioStyles =  resultRatio ?
       {
-        paddingBottom: (100 / (ratioBySize || ratio)) + '%',
+        paddingBottom: (100 / resultRatio) + '%',
         background: (!isPreviewLoaded && !isLoaded) ? config.placeholderBackground : 'transparent'
       } : {};
-    const imgWithRatioStyles = (ratioBySize || ratio) ? styles.imgWithRatio : {};
+    const imgWithRatioStyles = resultRatio ? styles.imgWithRatio : {};
     const imgLoadingStyles = config.imgLoadingAnimation ?
       { ...styles.imgWithEffect, filter: `blur(${Math.floor(parentContainerWidth / 100)}px)` } : {};
     const imgLoadedStyles = isLoaded && config.imgLoadingAnimation ? styles.imgLoaded : {};
@@ -133,7 +134,8 @@ class Img extends Component {
             ...styles.img,
             ...imgWithRatioStyles,
             ...imgLoadingStyles,
-            ...imgLoadedStyles
+            ...imgLoadedStyles,
+            ...((isPreview && resultRatio) ? { height: '100%' } : {})
           }}
           src={!isPreview ? cloudimageUrl : (isPreviewLoaded ? cloudimageUrl : previewCloudimageUrl)}
           alt={alt}

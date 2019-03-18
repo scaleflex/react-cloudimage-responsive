@@ -12,9 +12,7 @@ import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 const cloudimageConfig = {
   token: 'demo',
   baseUrl: 'https://cloudimage.public.airstore.io/demo/',
-  filters: 'q80.foil1',
   queryString: '?&size_info=1&v=2',
-  lazyLoadOffset: 100,
   placeholderBackground: '#e1e1e1'
 };
 
@@ -409,8 +407,8 @@ render(<App />, document.body);`}</SyntaxHighlighter>
                   <ul>
                     <li><a target="_blank" href="https://github.com/scaleflex/js-cloudimage-responsive">JS Cloudimage Responsive</a></li>
                     <li><a target="_blank" href="https://github.com/scaleflex/ng-cloudimage-responsive">Angular Cloudimage Responsive</a></li>
-                    <li><a target="_blank" href="https://github.com/scaleflex/filerobot-image-editor">Uploader</a></li>
-                    <li><a target="_blank" href="https://github.com/scaleflex/filerobot-uploader">Image Editor</a></li>
+                    <li><a target="_blank" href="https://github.com/scaleflex/filerobot-uploader">Uploader</a></li>
+                    <li><a target="_blank" href="https://github.com/scaleflex/filerobot-image-editor">Image Editor</a></li>
                   </ul>
                 </div>
               </div>
