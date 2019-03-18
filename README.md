@@ -1,4 +1,4 @@
-[![Release](https://img.shields.io/badge/release-v1.3.2-blue.svg)](https://github.com/scaleflex/react-cloudimage-responsive/releases)
+[![Release](https://img.shields.io/badge/release-v1.3.3-blue.svg)](https://github.com/scaleflex/react-cloudimage-responsive/releases)
 [![Free plan](https://img.shields.io/badge/price-includes%20free%20plan-green.svg)](https://www.cloudimage.io/en/home#b38181a6-b9c8-4015-9742-7b1a1ad382d5)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](#contributing)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -22,6 +22,8 @@
 		<a href="#table_of_contents">Docs</a>
 		•
 		<a href="https://scaleflex.github.io/react-cloudimage-responsive/" target="_blank">Demo</a>
+		•
+		<a href="https://codesandbox.io/s/1840nl707j" target="_blank">Code Sandbox</a>
 		•
 		<a href="#" target="_blank">Why?</a>
 	</strong>

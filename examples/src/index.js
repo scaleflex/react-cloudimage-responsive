@@ -60,9 +60,15 @@ class App extends Component {
               <a
                 id="view-github-btn"
                 href="https://github.com/scaleflex/react-cloudimage-responsive"
-                className="btn btn-primary btn-lg"
+                className="btn btn-primary"
                 target="_blank"
               >View on GitHub</a>
+              <a
+                href="https://codesandbox.io/s/1840nl707j"
+                style={{ marginLeft: 5 }}
+                className="btn btn-light"
+                target="_blank"
+              >Play in CodeSandbox</a>
               {/*//<!--<a href="#" class="btn btn-light btn-lg">Read on Medium</a>-->*/}
             </div>
           </div>
