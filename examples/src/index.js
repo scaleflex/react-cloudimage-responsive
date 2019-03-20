@@ -68,7 +68,7 @@ class App extends Component {
                 style={{ marginLeft: 5 }}
                 className="btn btn-light"
                 target="_blank"
-              >Play in CodeSandbox</a>
+              >Edit on CodeSandbox</a>
               {/*//<!--<a href="#" class="btn btn-light btn-lg">Read on Medium</a>-->*/}
             </div>
           </div>
