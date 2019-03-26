@@ -1,3 +1,4 @@
+import './polyfills';
 import React, { Component, Fragment } from 'react';
 import { findDOMNode } from 'react-dom';
 import CloudimageProvider, { CloudimageContext } from './Provider';
