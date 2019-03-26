@@ -109,7 +109,7 @@ export const getAdaptiveSize = (size, config) => {
     const media = groups[3] ? groups[3] : config.presets[groups[2]];
 
     sizes.push({ media, size: groups[4] });
-  })
+  });
 
   return sizes;
 }
