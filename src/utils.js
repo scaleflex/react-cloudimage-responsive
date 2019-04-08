@@ -105,7 +105,6 @@ export const getAdaptiveSize = (size, config) => {
 
   arrayOfSizes.forEach(string => {
     const groups = string.match(/(([a-z_][a-z_]*)|(\([\S\s]*\)))\s*([0-9xp]*)/);
-
     const media = groups[3] ? groups[3] : config.presets[groups[2]];
 
     sizes.push({ media, size: groups[4] });
