@@ -413,6 +413,7 @@ render(<App />, document.body);`}</SyntaxHighlighter>
                   <ul>
                     <li><a target="_blank" href="https://github.com/scaleflex/js-cloudimage-responsive">JS Cloudimage Responsive</a></li>
                     <li><a target="_blank" href="https://github.com/scaleflex/ng-cloudimage-responsive">Angular Cloudimage Responsive</a></li>
+                    <li><a target="_blank" href="https://github.com/scaleflex/js-cloudimage-360-view">JS Cloudimage 360 view</a></li>
                     <li><a target="_blank" href="https://github.com/scaleflex/filerobot-uploader">Uploader</a></li>
                     <li><a target="_blank" href="https://github.com/scaleflex/filerobot-image-editor">Image Editor</a></li>
                   </ul>
