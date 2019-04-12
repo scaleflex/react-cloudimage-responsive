@@ -179,7 +179,11 @@ rotation...  Multiple filters can be applied, separated by "```.```" (dot).
 
 ###### Type: **String** | Default: **'#f4f4f4'** | _optional_
 
-Placeholder colored background while the image is loading
+Placeholder colored background while the image is loading or use it to set your custom placeholder image or gif
+
+for example
+
+```placeholderBackground: "url('https://scaleflex.airstore.io/filerobot/red-loader.gif') 50% 50% no-repeat"```
 
 ### presets
 
@@ -340,6 +344,7 @@ Tested in all modern browsers and IE 11.
 
 * [JS Cloudimage Responsive](https://github.com/scaleflex/js-cloudimage-responsive)
 * [Angular Cloudimage Responsive](https://github.com/scaleflex/ng-cloudimage-responsive)
+* [JS Cloudimage 360 view](https://github.com/scaleflex/js-cloudimage-360-view)
 * [Image Editor](https://github.com/scaleflex/filerobot-image-editor)
 * [Uploader](https://github.com/scaleflex/filerobot-uploader)
 
