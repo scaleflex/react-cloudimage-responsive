@@ -34,7 +34,7 @@ class Img extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.config.innerWidth !== this.props.config.innerWidth)
+    if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
       this.processImage();
   }
 
