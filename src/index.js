@@ -65,8 +65,8 @@ class Img extends Component {
     if (isPreview) {
       const previewConfig = { ...config, queryString: '' };
       previewCloudimageUrl = isAdaptive ?
-        generateUrl('width', (parentContainerWidth / 5), 'q10.foil1', imgSrc, previewConfig) :
-        generateUrl(operation, resultSize.split('x').map(size => size / 5).join('x'), 'q10.foil1', imgSrc, previewConfig);
+        generateUrl('width', Math.floor((parentContainerWidth / 5)), 'q10.foil1', imgSrc, previewConfig) :
+        generateUrl(operation, resultSize.split('x').map(size => Math.floor(size / 5)).join('x'), 'q10.foil1', imgSrc, previewConfig);
       previewSources = isAdaptive ?
         generateSources(operation, resultSize, 'q10.foil1', imgSrc, isAdaptive, previewConfig, true) : [];
     }
