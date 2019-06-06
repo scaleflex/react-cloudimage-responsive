@@ -80,7 +80,7 @@ export const generateSources = (operation, size, filters, imgSrc, isAdaptive, co
   if (isAdaptive) {
     size.forEach(({ size: nextSize, media: mediaQuery}) => {
       if (isPreview) {
-        nextSize = nextSize.split('x').map(size => size / 5).join('x');
+        nextSize = nextSize.split('x').map(size => Math.floor(size / 5)).join('x');
         filters = 'q10.foil1';
       }
 
@@ -88,7 +88,7 @@ export const generateSources = (operation, size, filters, imgSrc, isAdaptive, co
     })
   } else {
     if (isPreview) {
-      size = size.split('x').map(size => size / 5).join('x');
+      size = size.split('x').map(size => Math.floor(size / 5)).join('x');
       filters = 'q10.foil1';
     }
 
