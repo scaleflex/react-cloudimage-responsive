@@ -75,21 +75,20 @@ const getParentContainerWithWidth = img => {
 }
 
 export const generateSources = (operation, size, filters, imgSrc, isAdaptive, config, isPreview) => {
+  const { previewQualityFactor } = config;
   const sources = [];
 
   if (isAdaptive) {
     size.forEach(({ size: nextSize, media: mediaQuery}) => {
       if (isPreview) {
-        nextSize = nextSize.split('x').map(size => Math.floor(size / 5)).join('x');
-        filters = 'q10.foil1';
+        nextSize = nextSize.split('x').map(size => Math.floor(size / previewQualityFactor)).join('x');
       }
 
       sources.push({ mediaQuery, srcSet: generateSrcset(operation, nextSize, filters, imgSrc, config) });
     })
   } else {
     if (isPreview) {
-      size = size.split('x').map(size => Math.floor(size / 5)).join('x');
-      filters = 'q10.foil1';
+      size = size.split('x').map(size => Math.floor(size / previewQualityFactor)).join('x');
     }
 
     sources.push({

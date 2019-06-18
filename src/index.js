@@ -41,6 +41,7 @@ class Img extends Component {
   processImage = () => {
     const imgNode = findDOMNode(this);
     const { src = '', config = {} } = this.props;
+    const { previewQualityFactor } = config;
     const operation = this.props.operation || this.props.o || config.operation;
     const parentContainerWidth = getParentWidth(imgNode, config);
     let size = this.props.size || this.props.s || config.size || parentContainerWidth;
@@ -65,10 +66,11 @@ class Img extends Component {
     if (isPreview) {
       const previewConfig = { ...config, queryString: '' };
       previewCloudimageUrl = isAdaptive ?
-        generateUrl('width', Math.floor((parentContainerWidth / 5)), 'q10.foil1', imgSrc, previewConfig) :
-        generateUrl(operation, resultSize.split('x').map(size => Math.floor(size / 5)).join('x'), 'q10.foil1', imgSrc, previewConfig);
+        generateUrl('width', Math.floor((parentContainerWidth / previewQualityFactor)), filters, imgSrc, previewConfig) :
+        generateUrl(operation, resultSize.split('x')
+          .map(size => Math.floor(size / previewQualityFactor)).join('x'), filters, imgSrc, previewConfig);
       previewSources = isAdaptive ?
-        generateSources(operation, resultSize, 'q10.foil1', imgSrc, isAdaptive, previewConfig, true) : [];
+        generateSources(operation, resultSize, filters, imgSrc, isAdaptive, previewConfig, true) : [];
     }
 
     this.setState({

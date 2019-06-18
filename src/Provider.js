@@ -19,7 +19,7 @@ class CloudimageProvider extends Component {
       width = '400',
       height = '300',
       operation = 'width',
-      filters = 'q35.foil1',
+      filters = 'foil1',
       placeholderBackground = '#f4f4f4',
       baseUrl = '/',
       presets,
@@ -49,6 +49,7 @@ class CloudimageProvider extends Component {
         },
       queryString,
       innerWidth: window.innerWidth,
+      previewQualityFactor: 10
       //isChrome: /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)
     };
 
