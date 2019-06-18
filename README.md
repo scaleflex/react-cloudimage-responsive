@@ -167,7 +167,7 @@ Applies a nice interlacing effect for preview transition
 
 ### filters
 
-###### Type: **String** | Default: **'q35.foil1'** | _optional_
+###### Type: **String** | Default: **'foil1'** | _optional_
 
 Applies default Cloudimage filters to your image, e.g. fcontrast, fpixelate, fgaussian, backtransparent,
 rotation...  Multiple filters can be applied, separated by "```.```" (dot).
