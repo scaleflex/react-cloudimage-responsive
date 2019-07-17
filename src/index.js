@@ -1,17 +1,26 @@
 import './polyfills';
 import React from 'react';
-import Img from './img.component';
+import ImgComponent from './img.component';
+import BackgroundImgComponent from './background.component';
 import CloudimageProvider, { CloudimageContext } from './Provider';
 
 
-const ImgWrapper = (props) => {
+const Img = (props) => {
   return (
     <CloudimageContext.Consumer>
-      {(context) => <Img {...props} config={context.config}/>}
+      {(context) => <ImgComponent {...props} config={context.config}/>}
     </CloudimageContext.Consumer>
   )
 }
 
-export default ImgWrapper;
+const BackgroundImg = (props) => {
+  return (
+    <CloudimageContext.Consumer>
+      {(context) => <BackgroundImgComponent {...props} config={context.config}/>}
+    </CloudimageContext.Consumer>
+  )
+}
 
-export { CloudimageProvider };
+export default Img;
+
+export { CloudimageProvider, Img, BackgroundImg };
