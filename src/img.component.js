@@ -94,7 +94,7 @@ class Img extends Component {
     } = this.state;
     const {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size,
-      lazyLoading = this.props.config.lazyLoading, ...otherProps
+      lazyLoading = this.props.config.lazyLoading, lazyLoadConfig, ...otherProps
     } = this.props;
 
     if (!isProcessed) return <picture/>;
@@ -141,7 +141,7 @@ class Img extends Component {
 
 
     return lazyLoading ? (
-      <LazyLoad height={imageHeight} offset={config.lazyLoadOffset}>
+      <LazyLoad height={imageHeight} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
         {picture}
       </LazyLoad>
     ) : picture;

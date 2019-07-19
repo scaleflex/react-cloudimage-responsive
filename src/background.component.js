@@ -131,7 +131,7 @@ class BackgroundImg extends Component {
     const { isLoaded, parentContainerWidth, isProcessed } = this.state;
     const {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size, style, height,
-      lazyLoading = this.props.config.lazyLoading, ...otherProps
+      lazyLoadConfig = {}, lazyLoading = this.props.config.lazyLoading, ...otherProps
     } = this.props;
 
     if (!isProcessed) return <div>{this.props.children}</div>;
@@ -146,7 +146,7 @@ class BackgroundImg extends Component {
     };
 
     return lazyLoading ? (
-      <LazyLoad height={height || 200} offset={config.lazyLoadOffset}>
+      <LazyLoad height={height || 200} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
         <Container {...containerProps}/>
       </LazyLoad>
     ) : <Container {...containerProps}/>;
