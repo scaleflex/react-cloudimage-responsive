@@ -334,6 +334,18 @@ Full documentation of all filters available [here](https://docs.cloudimage.io/go
 It is recommended to prevent page layout jumping. The parameter is used to calculate image height to hold
 the image position while image is loading.
 
+### lazyLoading
+
+###### Type: **Bool** | _optional_
+
+Make it possible to disable lazyLoading for each image.
+
+### lazyLoadConfig
+
+###### Type: **Object** | _optional_
+
+The lazyLoad configuration to [LazyLoad](https://github.com/twobin/react-lazyload#props) component. 
+
 To see the full cloudimage documentation [click here](https://docs.cloudimage.io/go/cloudimage-documentation)
 
 ## <a name="browser_support"></a>Browser support
