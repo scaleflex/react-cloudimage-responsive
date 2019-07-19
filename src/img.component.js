@@ -32,6 +32,7 @@ class Img extends Component {
     const imgNode = findDOMNode(this);
     const { src = '', config = {} } = this.props;
     const { previewQualityFactor } = config;
+    const { lazyLoading = config.lazyLoading } = this.props;
     const operation = this.props.operation || this.props.o || config.operation;
     const parentContainerWidth = getParentWidth(imgNode, config);
     let size = this.props.size || this.props.s || config.size || parentContainerWidth;
@@ -43,8 +44,8 @@ class Img extends Component {
     const isRelativeUrlPath = checkIfRelativeUrlPath(src);
     const imgSrc = getImgSrc(src, isRelativeUrlPath, config.baseUrl);
     const resultSize = isAdaptive ? size : getSizeAccordingToPixelRatio(size);
-    //const isPreview = !config.isChrome && (parentContainerWidth > 400) && config.lazyLoading;
-    const isPreview = (parentContainerWidth > 400) && config.lazyLoading;
+    //const isPreview = !config.isChrome && (parentContainerWidth > 400) && lazyLoading;
+    const isPreview = (parentContainerWidth > 400) && lazyLoading;
 
     const cloudimageUrl = isAdaptive ?
       generateUrl('width', getSizeAccordingToPixelRatio(parentContainerWidth), filters, imgSrc, config) :
@@ -93,7 +94,7 @@ class Img extends Component {
     } = this.state;
     const {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size,
-      ...otherProps
+      lazyLoading = this.props.config.lazyLoading, ...otherProps
     } = this.props;
 
     if (!isProcessed) return <picture/>;
@@ -139,7 +140,7 @@ class Img extends Component {
     );
 
 
-    return config.lazyLoading ? (
+    return lazyLoading ? (
       <LazyLoad height={imageHeight} offset={config.lazyLoadOffset}>
         {picture}
       </LazyLoad>

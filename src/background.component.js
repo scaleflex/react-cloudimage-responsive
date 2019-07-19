@@ -39,6 +39,7 @@ class BackgroundImg extends Component {
   processBackground = () => {
     const backgroundNode = findDOMNode(this);
     const { src = '', config = {} } = this.props;
+    const { lazyLoading = config.lazyLoading } = this.props;
     const { previewQualityFactor } = config;
     const operation = this.props.operation || this.props.o || config.operation;
     const parentContainerWidth = getParentWidth(backgroundNode, config);
@@ -52,7 +53,7 @@ class BackgroundImg extends Component {
     const isRelativeUrlPath = checkIfRelativeUrlPath(src);
     const imgSrc = getImgSrc(src, isRelativeUrlPath, config.baseUrl);
     const resultSize = isAdaptive ? size : getSizeAccordingToPixelRatio(size);
-    const isPreview = (parentContainerWidth > 400) && config.lazyLoading;
+    const isPreview = (parentContainerWidth > 400) && lazyLoading;
 
     let cloudimageUrl = '';
     let sources = [];
@@ -130,7 +131,7 @@ class BackgroundImg extends Component {
     const { isLoaded, parentContainerWidth, isProcessed } = this.state;
     const {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size, style, height,
-      ...otherProps
+      lazyLoading = this.props.config.lazyLoading, ...otherProps
     } = this.props;
 
     if (!isProcessed) return <div>{this.props.children}</div>;
@@ -144,7 +145,7 @@ class BackgroundImg extends Component {
       getBackgroundURL: this.getBackgroundURL
     };
 
-    return config.lazyLoading ? (
+    return lazyLoading ? (
       <LazyLoad height={height || 200} offset={config.lazyLoadOffset}>
         <Container {...containerProps}/>
       </LazyLoad>
@@ -154,7 +155,7 @@ class BackgroundImg extends Component {
 
 const Container = (props) => {
   const {
-    isLoaded, otherProps, style, imgLoadingStyles, imgLoadedStyles, children, getBackgroundURL, className, isVisible
+    isLoaded, otherProps, style, imgLoadingStyles, imgLoadedStyles, children, getBackgroundURL, className
   } = props;
 
   return (
