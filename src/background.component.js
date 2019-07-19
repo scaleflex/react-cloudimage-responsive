@@ -23,9 +23,6 @@ class BackgroundImg extends Component {
       isLoaded: false,
       isProcessed: false
     }
-
-    window.cloudimageBgIndex = (window.cloudimageBgIndex || 0) + 1;
-    this.bgImageIndex = window.cloudimageBgIndex;
   }
 
   componentDidMount() {
@@ -36,6 +33,8 @@ class BackgroundImg extends Component {
     if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
       this.processBackground();
   }
+
+  getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
 
   processBackground = () => {
     const backgroundNode = findDOMNode(this);
@@ -53,15 +52,20 @@ class BackgroundImg extends Component {
     const isRelativeUrlPath = checkIfRelativeUrlPath(src);
     const imgSrc = getImgSrc(src, isRelativeUrlPath, config.baseUrl);
     const resultSize = isAdaptive ? size : getSizeAccordingToPixelRatio(size);
-    //const isPreview = !config.isChrome && (parentContainerWidth > 400) && config.lazyLoading;
     const isPreview = (parentContainerWidth > 400) && config.lazyLoading;
 
-    const cloudimageUrl = isAdaptive ?
-      generateUrl('width', getSizeAccordingToPixelRatio(parentContainerWidth), filters, imgSrc, config) :
-      generateUrl(operation, resultSize, filters, imgSrc, config);
-    const sources = isAdaptive ?
-      generateSources(operation, resultSize, filters, imgSrc, isAdaptive, config) : [];
+    let cloudimageUrl = '';
+    let sources = [];
     let previewCloudimageUrl, previewSources;
+
+    if (isAdaptive) {
+      sources = generateSources(operation, resultSize, filters, imgSrc, isAdaptive, config);
+      const currentBreakpoint = this.getBreakPoint(resultSize) || resultSize[0];
+
+      cloudimageUrl = sources.find(breakPoint => breakPoint.mediaQuery === currentBreakpoint.media).srcSet;
+    } else {
+      cloudimageUrl = generateUrl(operation, resultSize, filters, imgSrc, config);
+    }
 
     if (isPreview) {
       const previewConfig = { ...config, queryString: '' };
@@ -90,9 +94,9 @@ class BackgroundImg extends Component {
   onImageLoad = (isPreviewLoaded) => {
     if (!this.state.isPreview) {
       this.setState({ isPreviewLoaded: true, isLoaded: true });
-    } else if (isPreviewLoaded)
+    } else if (isPreviewLoaded) {
       this.setState({ isLoaded: true });
-    else
+    } else
       this.setState({ isPreviewLoaded: true });
   }
 
@@ -122,34 +126,6 @@ class BackgroundImg extends Component {
     }
   }
 
-  addBackgroundSources = (bgImageIndex, sources) => {
-    let cssStyle = '';
-
-    cssStyle += this.createCSSSource(null, sources[0].srcSet, bgImageIndex);
-
-    [...sources.slice(1)].forEach(({ mediaQuery, srcSet }) => {
-      cssStyle += this.createCSSSource(mediaQuery, srcSet, bgImageIndex);
-    });
-
-    return cssStyle;
-  }
-
-  createCSSSource = (mediaQuery, srcSet, bgImageIndex) => {
-    if (mediaQuery) {
-      return `@media all and ${mediaQuery} { [data-ci-bg-index="${bgImageIndex}"] { background-image: url('${srcSet}') !important; } }`
-    } else {
-      return `[data-ci-bg-index="${bgImageIndex}"] { background-image: url('${srcSet}') !important; }`;
-    }
-  }
-
-  getSources = () => {
-    const { sources } = this.state;
-
-    if (sources.length === 0) return null;
-
-    return <style>{this.addBackgroundSources(this.bgImageIndex, sources)}</style>;
-  }
-
   render() {
     const { isLoaded, parentContainerWidth, isProcessed } = this.state;
     const {
@@ -160,14 +136,12 @@ class BackgroundImg extends Component {
     if (!isProcessed) return <div>{this.props.children}</div>;
 
     const imgLoadingStyles = config.imgLoadingAnimation ?
-      { ...styles.imgWithEffect, filter: `blur(${Math.floor(parentContainerWidth / 100)}px)` } : {};
+      { filter: `blur(${Math.floor(parentContainerWidth / 100)}px)` } : {};
     const imgLoadedStyles = isLoaded && config.imgLoadingAnimation ? styles.imgLoaded : {};
     const containerProps = {
       imgLoadingStyles, imgLoadedStyles, otherProps, isLoaded, style, className,
       children: this.props.children,
-      getBackgroundURL: this.getBackgroundURL,
-      getSources: this.getSources,
-      bgImageIndex: this.bgImageIndex
+      getBackgroundURL: this.getBackgroundURL
     };
 
     return config.lazyLoading ? (
@@ -176,38 +150,42 @@ class BackgroundImg extends Component {
       </LazyLoad>
     ) : <Container {...containerProps}/>;
   }
-};
+}
 
 const Container = (props) => {
   const {
-    isLoaded, otherProps, style, imgLoadingStyles, imgLoadedStyles, children, getBackgroundURL, getSources, className,
-    bgImageIndex
+    isLoaded, otherProps, style, imgLoadingStyles, imgLoadedStyles, children, getBackgroundURL, className, isVisible
   } = props;
 
   return (
-    <div className="cloudimage-image-background-wrapper" style={{ overflow: 'hidden' }}>
-      {getSources()}
-      <div
-        {...otherProps}
-        className={
-          `${className} cloudimage-image-background cloudimage-image-background-${isLoaded ? 'loaded' : 'loading'}`
-        }
-        style={{
-          ...style,
-          ...imgLoadingStyles,
-          ...imgLoadedStyles,
-          backgroundImage: `url(${getBackgroundURL()})`
-        }}
-        data-ci-bg-index={bgImageIndex}
-      >{children}</div>
+    <div
+      {...otherProps}
+      className={
+        `${className} cloudimage-image-background cloudimage-image-background-${isLoaded ? 'loaded' : 'loading'}`
+      }
+      style={{
+        overflow: 'hidden',
+        ...style,
+        position: 'relative',
+        backgroundImage: `url(${getBackgroundURL()})`
+      }}
+    >
+      <div style={{...styles.containerInner, ...imgLoadingStyles, ...imgLoadedStyles}}/>
+      {children}
     </div>
   );
 };
 
 const styles = {
-  imgWithEffect: {
-    transform: 'scale3d(1.1, 1.1, 1)',
-    transition: 'all 0.3s ease-in-out'
+  containerInner: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: 'inherit',
+    filter: 'blur(0)',
+    transition: 'filter 0.3s ease-in-out'
   },
 
   imgLoading: {
@@ -216,8 +194,7 @@ const styles = {
 
   imgLoaded: {
     opacity: 1,
-    filter: 'blur(0px)',
-    transform: 'translateZ(0) scale3d(1, 1, 1)'
+    filter: 'blur(0px)'
   }
 };
 
