@@ -26,12 +26,16 @@ class BackgroundImg extends Component {
   }
 
   componentDidMount() {
-    this.processBackground();
+    if (typeof window !== 'undefined') {
+      this.processBackground();
+    }
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
-      this.processBackground();
+    if (typeof window !== 'undefined') {
+      if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
+        this.processBackground();
+    }
   }
 
   getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
@@ -128,6 +132,10 @@ class BackgroundImg extends Component {
   }
 
   render() {
+    if (typeof window === 'undefined') {
+      return null;
+    }
+
     const { isLoaded, parentContainerWidth, isProcessed } = this.state;
     const {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size, style, height,

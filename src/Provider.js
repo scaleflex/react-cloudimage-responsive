@@ -48,12 +48,14 @@ class CloudimageProvider extends Component {
           xl: '(min-width: 1200px)'  // from 1200    USUALSCREEN
         },
       queryString,
-      innerWidth: window.innerWidth,
       previewQualityFactor: 10
       //isChrome: /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)
     };
 
-    window.addEventListener("resize", this.updateDimensions);
+    if (typeof window !== 'undefined') {
+      this.state.innerWidth = window.innerWidth;
+      window.addEventListener("resize", this.updateDimensions);
+    }
   }
 
   updateDimensions = debounce(100, () => {

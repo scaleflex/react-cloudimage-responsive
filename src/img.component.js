@@ -20,12 +20,18 @@ class Img extends Component {
   }
 
   componentDidMount() {
+    if (typeof window === 'undefined') {
+      return;
+    }
+
     this.processImage();
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
-      this.processImage();
+    if (typeof window !== 'undefined') {
+      if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
+        this.processImage();
+    }
   }
 
   processImage = () => {
@@ -96,6 +102,11 @@ class Img extends Component {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size,
       lazyLoading = this.props.config.lazyLoading, lazyLoadConfig, ...otherProps
     } = this.props;
+    const isServer = typeof window === 'undefined';
+
+    if (isServer) {
+      return <img src={config.baseUrl + src}/>;
+    }
 
     if (!isProcessed) return <picture/>;
 
