@@ -124,7 +124,7 @@ render(<App />, document.body);
 
 ## <a name="implement"></a>Step 3: Implement it
 
-Finally, just use the Img component:
+### Img component:
 
 ```html
 <Img src="img.jpg" alt="Demo image" ratio={1.5}/>
@@ -134,6 +134,16 @@ NOTE: "ratio" is recommended to prevent page layout jumping. The parameter is us
 the image position while image is loading.
 
 <a href="https://codesandbox.io/s/1840nl707j"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="edeit in codesandbox"/></a>
+
+### BackgroundImg component:
+
+```html
+<BackgroundImg src="img.jpg">
+ {'Your conent...'}
+</BackgroundImg>
+```
+
+<a href="https://codesandbox.io/s/react-cloudimage-responsive-background-1nin8"><img src="https://codesandbox.io/static/img/play-codesandbox.svg" alt="edeit in codesandbox"/></a>
 
 ## <a name="configuration"></a> Config
 
