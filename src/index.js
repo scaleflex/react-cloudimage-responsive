@@ -5,18 +5,18 @@ import BackgroundImgComponent from './background.component';
 import CloudimageProvider, { CloudimageContext } from './Provider';
 
 
-const Img = (props) => {
+const Img = (props = {}) => {
   return (
     <CloudimageContext.Consumer>
-      {(context) => <ImgComponent {...props} config={context.config}/>}
+      {(context = {}) => <ImgComponent {...props} config={context.config}/>}
     </CloudimageContext.Consumer>
   )
 }
 
-const BackgroundImg = (props) => {
+const BackgroundImg = (props = {}) => {
   return (
     <CloudimageContext.Consumer>
-      {(context) => <BackgroundImgComponent {...props} config={context.config}/>}
+      {(context = {}) => <BackgroundImgComponent {...props} config={context.config }/>}
     </CloudimageContext.Consumer>
   )
 }
