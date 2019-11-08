@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { debounce } from 'throttle-debounce';
 
 
-export const CloudimageContext = React.createContext();
+export const CloudimageContext = React.createContext({ config: {} });
 
 
 class CloudimageProvider extends Component {
-  constructor({ config = {} }) {
+  constructor({ config = {} } = {}) {
     super();
 
     const {

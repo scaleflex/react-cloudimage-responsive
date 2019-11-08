@@ -94,6 +94,12 @@ class Img extends Component {
   }
 
   render() {
+    const isServer = typeof window === 'undefined';
+
+    if (isServer) {
+      return <img src={this.props.config.baseUrl + this.props.src}/>;
+    }
+
     const {
       cloudimageUrl, sources, isLoaded, parentContainerWidth, isProcessed, isPreviewLoaded, previewCloudimageUrl,
       previewSources, isPreview
@@ -102,11 +108,6 @@ class Img extends Component {
       src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size,
       lazyLoading = this.props.config.lazyLoading, lazyLoadConfig, ...otherProps
     } = this.props;
-    const isServer = typeof window === 'undefined';
-
-    if (isServer) {
-      return <img src={config.baseUrl + src}/>;
-    }
 
     if (!isProcessed) return <picture/>;
 
