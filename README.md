@@ -97,7 +97,7 @@ $ npm install --save react-cloudimage-responsive
 
 ## <a name="initialize"></a>Step 2: Initialize
 
-After installing the react-cloudimage-responsive lib, simply initialize it with your **token** and the **baseUrl**
+After installing the react-cloudimage-responsive lib, simply initialize it with your **token** and the **baseURL**
 of your image storage with **CloudimageProvider**:
 
 ```jsx
@@ -156,11 +156,17 @@ Your Cloudimage customer token.
 Cloudimage account to get one. The subscription takes less than a
 minute and is totally free.
 
-### baseUrl
+### baseURL
 
 ###### Type: **String** | Default: **"/"** | _optional_
 
 Your image folder on server, this alows to shorten your origin image URLs.
+
+### doNotReplaceURL
+
+###### Type: **bool** | Default: **false**
+
+If set to **true** the plugin will only add query params to the given source of image.
 
 ### <a name="lazy_loading_config"></a>lazyLoading
 
@@ -175,14 +181,28 @@ Only images close to the client's viewport will be loaded, hence accelerating th
 
 Applies a nice interlacing effect for preview transition
 
-### filters
+### params
 
-###### Type: **String** | Default: **'q35.foil1'** | _optional_
+###### Type: **String** | Default: **'org_if_sml=1'** | _optional_
 
-Applies default Cloudimage filters to your image, e.g. fcontrast, fpixelate, fgaussian, backtransparent,
-rotation...  Multiple filters can be applied, separated by "```.```" (dot).
+Applies default Cloudimage operations/ filters to your image, e.g. brightness, contrast, rotation...
+Multiple params can be applied, separated by "```&```" e.g. wat_scale=35&wat_gravity=northeast&wat_pad=10&grey=1
 
-[Full documentation here.](https://docs.cloudimage.io/go/cloudimage-documentation/en/filters/)
+```javascript
+params: 'org_if_sml=1'
+```
+
+#### alternative syntax: type: **Object**
+
+```javascript
+params: {
+    org_if_sml: 1,
+    grey: 1,
+    ...
+}
+```
+
+[Full cloudimage v7 documentation here.](https://docs.cloudimage.io/go/cloudimage-documentation-v7/en/introduction)
 
 
 ### placeholderBackground
@@ -232,70 +252,22 @@ relative to baseUrl in your config.
 The plugin uses a special algorithm to detect the width of image container and set the image size accordingly.
 This is the recommended way of using the Cloudimage Responsive plugin.
 
-### operation (or o)
+### sizes
 
-###### Type: **String** | Default: **width** | _optional_
+###### Type: **Object** | Default: **undefined**
 
-Operation allows to customize the behaviour of the plugin for specific images:
-
-**width** - to resize with a specific width. This is useful when you want to have a fixed width, regardless of screen size.
-
-**height** - to resize with a specific height. This is useful when you want to have a fixed height, regardless of screen size.
-
-**crop** - to crop the image around the center
-
-**fit** - to resize the image in a box and keeping the proportions of the source image
-
-**cover** - to resize the image in a box without keeping the proportions of the source image
-
-**NOTES:**
-
-When you use an operation, you must specify the size for each screen size, see below
-
-Full documentation of all operations available [here](https://docs.cloudimage.io/go/cloudimage-documentation/en/operations/)
-
-### size (or s)
-
-###### Type: **String** | Default: **undefined** | _optional_ but _required_ when using operation
-
-Size of an image which is used as a base for creating retina ready and responsive image element.
-
-Examples (PR - stands for your device Pixel Ratio):
-
-**[width]**:
+**{preset breakpoint (xs,sm, md,lg,xl) or media query + ' ' + image params}**:
 
 ```jsx
 <Img
   src="dino-reichmuth-1.jpg"
-  operation="width"
-  size="250"/>
-```
-=> width: 250 * PR (px); height: auto;
-
-**[width x height]**:
-
-```jsx
-<Img
-  src="dino-reichmuth-1.jpg"
-  operation="width"
-  size="125x200"/>
-```
-
-=> width: 125 * PR (px); height: 200 * PR (px);
-
-**[Width and height for different screen resolutions]**:
-
-```jsx
-<Img
-  src="dino-reichmuth-1.jpg"
-  operation="crop"
-  size="
-    sm 800x400,
-    (min-width: 620px) 200x20,
-    md 1000x1350,
-    lg 1400x1200,
-    xl 1600x1000
-"/>
+  sizes={{
+      sm: { w: 400, h: 200 },
+      '(min-width: 620px)': { w: 200, h: 60 },
+      md: { w: 250, h: 350 },
+      lg: { w: 350, h: 300 },
+      xl: { w: 400, h: 250 }
+ }}/>
 ```
 
 You can drop some breakpoints, for example:
@@ -303,41 +275,16 @@ You can drop some breakpoints, for example:
 ```jsx
 <Img
   src="dino-reichmuth-1.jpg"
-  operation="crop"
-  size="md 1000x1350, lg 1400x1200"/>
+  sizes={{
+      sm: { w: 400, h: 200 },
+      '(min-width: 620px)': { w: 200, h: 60 }
+ }}/>
 ```
 
 **NOTE:** if size is not set, the plugin uses a special algorithm to
-detect the width of image container and set the image size accordingly. This is the recommended way of using
-the Cloudimage Responsive plugin.
+detect the width of image container and set the image size accordingly. This is the recommended way of using the Cloudimage Responsive plugin.
 
-For example:
-
-```jsx
-<Img src="dino-reichmuth-1.jpg"/>
-```
-
-### filters (or f)
-
-###### Type: **String** | Default: **none** | _optional_
-
-Filters allow you to modify the image's apperance and can be added on top of the resizing features above.
-
-**fgrey** - apply a greyscale filter on the image
-
-**fgaussian[0..10]** - apply a gaussian blur filter on the image
-
-**fcontrast[-100..100]** - apply a contrast filter on the image
-
-**fbright[0..255]** - apply a brightness filter on the image
-
-**fpixelate[0..100]** - apply a pixelate filter on the image
-
-**fradius[0..500]** - create a radius on the corners
-
-Full documentation of all filters available [here](https://docs.cloudimage.io/go/cloudimage-documentation/en/filters/)
-
-### ratio (or r)
+### ratio
 
 ###### Type: **Number** | _optional_
 
