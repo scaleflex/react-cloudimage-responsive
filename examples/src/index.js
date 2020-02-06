@@ -11,8 +11,8 @@ import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const cloudimageConfig = {
   token: 'scaleflex',
-  baseUrl: 'https://cloudimage.public.airstore.io/demo/',
-  queryString: '?&size_info=1&v=2',
+  baseURL: 'https://cloudimage.public.airstore.io/demo/',
+  params: 'ci_info=1&org_if_sml=1',
   placeholderBackground: '#e1e1e1'
 };
 
@@ -259,6 +259,15 @@ class App extends Component {
             <div className="row images-in-columns">
               <div className="col-12">
                 <ContainerBox/>
+                {/*<BackgroundImg src={images[8].src} params="func=crop" width={500} height={200}>*/}
+                {/*  <div className="container">*/}
+                {/*    <h2 className="text-center">Gallery demo</h2>*/}
+
+                {/*    <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive*/}
+                {/*      plugin{' '}*/}
+                {/*      will deliver an optimized image for the screen size.</p>*/}
+                {/*  </div>*/}
+                {/*</BackgroundImg>*/}
                 <Img src={images[8].src} ratio={images[8].ratio}/>
               </div>
 
@@ -277,8 +286,14 @@ class App extends Component {
               <div className="col-md-6 col-lg-7">
                 <Img
                   src={images[18].src}
-                  operation={'crop'}
-                  size="sm 400x200, (min-width: 620px) 200x60, md 250x350, lg 350x300, xl 400x250"
+                  params={'func=crop'}
+                  sizes={{
+                    sm: { w: 400, h: 200 },
+                    '(min-width: 620px)': { w: 200, h: 60 },
+                    md: { w: 250, h: 350 },
+                    lg: { w: 350, h: 300 },
+                    xl: { w: 400, h: 250 }
+                  }}
                 />
                 <small>
                   original: <i>{images[18].original_size}</i> <a

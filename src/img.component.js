@@ -1,8 +1,16 @@
-import React, { Fragment, Component } from 'react';
+import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import {
-  checkIfRelativeUrlPath, checkOnMedia, generateSources, generateUrl, getAdaptiveSize, getImgSrc, getParentWidth,
-  getRatioBySize, getSizeAccordingToPixelRatio
+  checkIfRelativeUrlPath,
+  determineContainerProps,
+  generateURL,
+  getAdaptiveSize,
+  getBreakPoint,
+  getImgSrc,
+  getParams,
+  isImageSVG,
+  isServer,
+  getFilteredProps
 } from './utils';
 import LazyLoad from 'react-lazyload';
 
@@ -12,7 +20,7 @@ class Img extends Component {
     super(props);
 
     this.state = {
-      cloudimageUrl: '',
+      cloudimageURL: '',
       sources: [],
       isLoaded: false,
       isProcessed: false
@@ -20,189 +28,184 @@ class Img extends Component {
   }
 
   componentDidMount() {
-    if (typeof window === 'undefined') {
-      return;
-    }
+    if (isServer) return;
 
     this.processImage();
   }
 
   componentDidUpdate(prevProps) {
-    if (typeof window !== 'undefined') {
-      if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
-        this.processImage();
+    if (isServer) return;
+
+    const { config: { innerWidth }, src } = this.props;
+
+    if (prevProps.config.innerWidth !== innerWidth) {
+      this.processImage(true, innerWidth > prevProps.config.innerWidth);
+    }
+
+    if (src !== prevProps.src) {
+      this.processImage();
     }
   }
 
-  processImage = () => {
+  processImage = (isUpdate, isInnerWidthBigger) => {
+    const {
+      src: imageNodeSRC = '',
+      width: imageNodeWidth = null,
+      height: imageNodeHeight = null,
+      ratio: imageNodeRatio,
+      params: imageNodeParams,
+      config = {},
+      sizes,
+      lazyLoading = config.lazyLoading
+    } = this.props;
     const imgNode = findDOMNode(this);
-    const { src = '', config = {} } = this.props;
-    const { previewQualityFactor } = config;
-    const { lazyLoading = config.lazyLoading } = this.props;
-    const operation = this.props.operation || this.props.o || config.operation;
-    const parentContainerWidth = getParentWidth(imgNode, config);
-    let size = this.props.size || this.props.s || config.size || parentContainerWidth;
-    const filters = this.props.filters || this.props.f || config.filters;
-    const isAdaptive = checkOnMedia(size);
+    const isRelativeUrlPath = checkIfRelativeUrlPath(imageNodeSRC);
+    const src = getImgSrc(imageNodeSRC, isRelativeUrlPath, config.baseURL);
+    const isSVG = isImageSVG(src);
+    const params = getParams(imageNodeParams);
+    const isAdaptive = !!sizes;
+    let containerProps;
+    let isPreview = false;
+    let cloudimageURL, previewCloudimageURL;
 
-    size = isAdaptive ? getAdaptiveSize(size, config) : size;
+    if (isAdaptive) {
+      const adaptiveSizes = getAdaptiveSize(sizes, config);
+      const size = getBreakPoint(adaptiveSizes);
+      containerProps = determineContainerProps({
+        imgNode,
+        config,
+        imageNodeWidth,
+        imageNodeHeight,
+        imageNodeRatio,
+        params,
+        size
+      });
+      const { width, height } = containerProps;
 
-    const isRelativeUrlPath = checkIfRelativeUrlPath(src);
-    const imgSrc = getImgSrc(src, isRelativeUrlPath, config.baseUrl);
-    const resultSize = isAdaptive ? size : getSizeAccordingToPixelRatio(size);
-    //const isPreview = !config.isChrome && (parentContainerWidth > 400) && lazyLoading;
-    const isPreview = (parentContainerWidth > 400) && lazyLoading;
+      isPreview = width > 400;
 
-    const cloudimageUrl = isAdaptive ?
-      generateUrl('width', getSizeAccordingToPixelRatio(parentContainerWidth), filters, imgSrc, config) :
-      generateUrl(operation, resultSize, filters, imgSrc, config);
-    const sources = isAdaptive ?
-      generateSources(operation, resultSize, filters, imgSrc, isAdaptive, config) : [];
-    let previewCloudimageUrl, previewSources;
+      cloudimageURL = generateURL({ src, params, config, width, height });
 
-    if (isPreview) {
-      const previewConfig = { ...config, queryString: '' };
-      previewCloudimageUrl = isAdaptive ?
-        generateUrl('width', Math.floor((parentContainerWidth / previewQualityFactor)), filters, imgSrc, previewConfig) :
-        generateUrl(operation, resultSize.split('x')
-          .map(size => Math.floor(size / previewQualityFactor)).join('x'), filters, imgSrc, previewConfig);
-      previewSources = isAdaptive ?
-        generateSources(operation, resultSize, filters, imgSrc, isAdaptive, previewConfig, true) : [];
+      if (isPreview) {
+        previewCloudimageURL = this.getPreviewSRC(width, height, params, src);
+      }
+    } else {
+      if (isUpdate && !isInnerWidthBigger) return;
+
+      containerProps = determineContainerProps({
+        imgNode,
+        config,
+        imageNodeWidth,
+        imageNodeHeight,
+        imageNodeRatio,
+        params
+      });
+      const { width, height } = containerProps;
+      isPreview = width > 400 && !isSVG;
+
+      cloudimageURL = isSVG ? src : generateURL({ src, params, config, width, height });
+
+      if (isPreview) {
+        previewCloudimageURL = this.getPreviewSRC(width, height, params, src);
+      }
     }
 
     this.setState({
-      cloudimageUrl,
-      previewCloudimageUrl,
-      previewSources,
-      sources,
-      isAdaptive,
-      size,
-      parentContainerWidth,
+      cloudimageURL,
+      previewCloudimageURL,
       isProcessed: true,
-      isPreview
-    })
+      isPreview,
+      lazyLoading,
+      ...containerProps
+    });
   }
 
-  onImageLoad = (isPreviewLoaded) => {
-    if (!this.state.isPreview) {
+  getPreviewSRC = (width, height, params, src) => {
+    const { config } = this.props;
+    const { previewQualityFactor } = config;
+    const previewParams = { ...params, ci_info: '' };
+    const previewWidth = Math.floor(width / previewQualityFactor);
+    const previewHeight = Math.floor(height / previewQualityFactor);
+
+    return generateURL({
+      src,
+      config,
+      params: previewParams,
+      width: previewWidth,
+      height: previewHeight
+    });
+  }
+
+  onImageLoad = () => {
+    const { isPreviewLoaded, isPreview } = this.state;
+
+    if (!isPreview) {
       this.setState({ isPreviewLoaded: true, isLoaded: true });
-    }
-    else if (isPreviewLoaded)
+    } else if (isPreviewLoaded)
       this.setState({ isLoaded: true });
     else
       this.setState({ isPreviewLoaded: true });
   }
 
   render() {
-    const isServer = typeof window === 'undefined';
-
-    if (isServer) {
-      return <img src={this.props.config.baseUrl + this.props.src}/>;
-    }
+    if (isServer) return <img src={this.props.config.baseURL + this.props.src}/>;
 
     const {
-      cloudimageUrl, sources, isLoaded, parentContainerWidth, isProcessed, isPreviewLoaded, previewCloudimageUrl,
-      previewSources, isPreview
+      cloudimageURL, isLoaded, width, height, isProcessed, isPreviewLoaded, previewCloudimageURL, isPreview, ratio,
+      lazyLoading
     } = this.state;
-    const {
-      src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size,
-      lazyLoading = this.props.config.lazyLoading, lazyLoadConfig, ...otherProps
-    } = this.props;
+    const { alt, className, config, lazyLoadConfig, preserveSize, imageNodeWidth, imageNodeHeight, ...otherProps } =
+      getFilteredProps(this.props);
+    const { placeholderBackground, imgLoadingAnimation } = config;
 
     if (!isProcessed) return <picture/>;
-
-    const ratioBySize = getRatioBySize(this.state.size, config);
-    const imageHeight = Math.floor(parentContainerWidth / (ratioBySize || ratio || 1));
-    const resultRatio = (ratioBySize || ratio);
-
-    const pictureWithRatioStyles =  resultRatio ?
-      {
-        paddingBottom: (100 / resultRatio) + '%',
-        background: (!isPreviewLoaded && !isLoaded) ? config.placeholderBackground : 'transparent'
-      } : {};
-    const imgWithRatioStyles = resultRatio ? styles.imgWithRatio : {};
-    const imgLoadingStyles = config.imgLoadingAnimation ?
-      { ...styles.imgWithEffect, filter: `blur(${Math.floor(parentContainerWidth / 100)}px)` } : {};
-    const imgLoadedStyles = isLoaded && config.imgLoadingAnimation ? styles.imgLoaded : {};
 
     const picture = (
       <picture
         className={`${className} cloudimage-image-picture cloudimage-image-${isLoaded ? 'loaded' : 'loading'}`}
-        style={{
-          ...styles.picture,
-          ...pictureWithRatioStyles
-        }}
+        style={styles.picture({
+          preserveSize, imageNodeWidth, imageNodeHeight, ratio, isPreviewLoaded, isLoaded, placeholderBackground
+        })}
       >
-        {this.getSources(sources, isPreview, isPreviewLoaded, previewSources)}
-
         <img
-          style={{
-            ...styles.img,
-            ...imgWithRatioStyles,
-            ...imgLoadingStyles,
-            ...imgLoadedStyles,
-            ...((isPreview && resultRatio) ? { height: '100%' } : {})
-          }}
-          src={!isPreview ? cloudimageUrl : (isPreviewLoaded ? cloudimageUrl : previewCloudimageUrl)}
+          style={styles.img({ ratio, imgLoadingAnimation, width, isLoaded })}
+          src={!isPreview ? cloudimageURL : (isPreviewLoaded ? cloudimageURL : previewCloudimageURL)}
           alt={alt}
-          onLoad={() => { this.onImageLoad(isPreviewLoaded); }}
+          onLoad={this.onImageLoad}
           {...otherProps}
         />
       </picture>
     );
 
-
     return lazyLoading ? (
-      <LazyLoad height={imageHeight} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
+      <LazyLoad height={height} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
         {picture}
       </LazyLoad>
     ) : picture;
   }
-
-  getSources = (sources, isPreview, isPreviewLoaded, previewSources) => {
-    const resultSources = [...(!isPreview ? sources : (isPreviewLoaded ? sources : previewSources))];
-    const firstSource = resultSources[0];
-
-    return (
-      <Fragment>
-        {(
-          resultSources
-            .slice(1)
-            .reverse()
-            .map((source) => (
-              <source
-                key={source.srcSet}
-                media={(source.mediaQuery || '')}
-                srcSet={source.srcSet || ''}
-                onLoad={() => { this.onImageLoad(isPreviewLoaded); }}
-              />
-            ))
-        )}
-        {firstSource &&
-        <source
-          key={firstSource.srcSet}
-          srcSet={firstSource.srcSet || ''}
-          onLoad={() => { this.onImageLoad(isPreviewLoaded); }}
-        />}
-      </Fragment>
-    );
-  }
 }
 
 const styles = {
-  picture: {
-    display: 'block',
-    width: '100%',
+  picture: ({ preserveSize, imageNodeWidth, imageNodeHeight, ratio, isPreviewLoaded, isLoaded, placeholderBackground }) => ({
+    display: 'inline-block',
+    width: preserveSize && imageNodeWidth ? imageNodeWidth : '100%',
+    height: preserveSize && imageNodeHeight ? imageNodeHeight : 'auto',
+    paddingBottom: preserveSize ? 'none' : (100 / ratio) + '%',
     overflow: 'hidden',
-    position: 'relative'
-  },
+    position: 'relative',
+    background: (!isPreviewLoaded && !isLoaded) ? placeholderBackground : 'transparent'
+  }),
 
-  pictureWithRatio: {},
-
-  img: {
-    display: 'block',
-    width: '100%',
-  },
+  img: ({ ratio, imgLoadingAnimation, width, isLoaded, isPreview }) => ({
+    ...{
+      display: 'block',
+      width: '100%',
+    },
+    ...(ratio ? styles.imgWithRatio : {}),
+    ...(imgLoadingAnimation ? { ...styles.imgWithEffect, filter: `blur(${Math.floor(width / 100)}px)` } : {}),
+    ...(isLoaded && imgLoadingAnimation ? styles.imgLoaded : {}),
+    ...((isPreview && ratio) ? { height: '100%' } : {})
+  }),
 
   imgWithRatio: {
     position: 'absolute',

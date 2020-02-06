@@ -1,162 +1,410 @@
-export const checkOnMedia = size => {
-  try {
-    const array = size.split(',');
-
-    return array.length > 1;
-  }
-  catch (e) {
-    return false;
-  }
-};
+export const isServer = typeof window === 'undefined';
 
 export const checkIfRelativeUrlPath = src => {
+  if (!src) return false;
+
   if (src.indexOf('//') === 0) {
     src = window.location.protocol + src;
   }
+
   return (src.indexOf('http://') !== 0 && src.indexOf('https://') !== 0 && src.indexOf('//') !== 0);
 }
 
-export const getImgSrc = (src, isRelativeUrlPath = false, baseUrl = '') => {
-  if (isRelativeUrlPath)
-    return baseUrl + src;
+export const getImgSrc = (src, isRelativeUrlPath = false, baseURL = '') => {
+  if (src.indexOf('//') === 0) {
+    src = window.location.protocol + src;
+  }
+
+  if (isRelativeUrlPath) {
+    return relativeToAbsolutePath(baseURL, src);
+  }
 
   return src;
-}
+};
 
-export const getSizeAccordingToPixelRatio = size => {
+const relativeToAbsolutePath = (base, relative) => {
+  const isRoot = relative[0] === '/';
+  const resultBaseURL = getBaseURL(isRoot, base);
+  const stack = resultBaseURL.split("/");
+  const parts = relative.split("/");
+
+  stack.pop(); // remove current file name (or empty string)
+               // (omit if "base" is the current folder without trailing slash)
+  if (isRoot) {
+    parts.shift();
+  }
+
+  for (let i = 0; i < parts.length; i++) {
+    if (parts[i] === ".")
+      continue;
+    if (parts[i] === "..")
+      stack.pop();
+    else
+      stack.push(parts[i]);
+  }
+
+  return stack.join("/");
+};
+
+const getBaseURL = (isRoot, base) => {
+  if (isRoot) {
+    return (base ? extractBaseURLFromString(base) : window.location.origin) + '/';
+  } else {
+    return base ? base : document.baseURI;
+  }
+};
+
+export const isImageSVG = url => url.slice(-4).toLowerCase() === '.svg';
+
+const extractBaseURLFromString = (path = '') => {
+  const pathArray = path.split('/');
+  const protocol = pathArray[0];
+  const host = pathArray[2];
+
+  return protocol + '//' + host;
+};
+
+export const generateURL = props => {
+  const { src, params, config, width, height } = props;
+  const { token, domain, doNotReplaceURL } = config;
+  const configParams = getParams(config.params);
+
+  return [
+    doNotReplaceURL ? '' : `https://${token}.${domain}/v7/`,
+    src,
+    src.includes('?') ? '&' : '?',
+    getQueryString({ params: { ...configParams, ...params }, width, height })
+  ].join('');
+};
+
+const getParamsExceptSizeRelated = params => {
+  const { w, h, width, height, ...restParams } = params;
+
+  return [restParams, w || width, h || height];
+};
+
+const getQueryString = props => {
+  const {
+    params = {},
+    width,
+    height
+  } = props;
+  const [restParams, widthFromParam = null, heightFromParam] = getParamsExceptSizeRelated(params);
+  const widthQ = width ? updateSizeWithPixelRatio(width) : widthFromParam;
+  const heightQ = height ? updateSizeWithPixelRatio(height) : heightFromParam;
+  const restParamsQ = Object
+    .keys(restParams)
+    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(restParams[key]))
+    .join('&');
+
+  return [
+    widthQ ? `w=${widthQ}` : '',
+    heightQ ? ((widthQ ? '&' : '') + `h=${heightQ}`) : '',
+    restParamsQ ? '&' + restParamsQ : ''
+  ].join('');
+};
+
+/*
+* possible size values: 200 | 200x400
+* */
+export const updateSizeWithPixelRatio = (size) => {
   const splittedSizes = size.toString().split('x');
   const result = [];
 
   [].forEach.call(splittedSizes, size => {
-    result.push(size * Math.round(window.devicePixelRatio || 1));
+    size ? result.push(Math.floor(size * (window.devicePixelRatio.toFixed(1) || 1))) : '';
   });
 
   return result.join('x');
-}
+};
 
-export const generateUrl = (operation, size, filters, imgSrc, config) => {
-  const { ultraFast, token, container, queryString } = config;
-  const isUltraFast = ultraFast ? 'https://scaleflex.ultrafast.io/' : 'https://';
-  const cloudUrl = isUltraFast + token + '.' + container + '/';
+/**
+ * Get container width for an image.
+ *
+ * Priority:
+ * 1. inline styling
+ * 2. parent node computed style width (up to body tag)
+ *
+ * @param {HTMLImageElement} img - image node
+ * @param {Object} config - config of the plugin
+ * @return {Number} width of image container
+ */
+export const getImageContainerWidth = (img, config) => {
+  let imageWidth = null;
+  const imageStyleWidth = img && img.style && img.style.width;
 
-  return cloudUrl + operation + '/' + size + '/' + filters + '/' + imgSrc + queryString;
-}
-
-export const getParentWidth = (img, config) => {
-  if (!(img && img.parentElement && img.parentElement.getBoundingClientRect) && !(img && img.width))
-    return config.width;
-
-  const parentContainer = getParentContainerWithWidth(img);
-  const currentWidth = parseInt(parentContainer, 10);
-  const computedWidth = parseInt(window.getComputedStyle(img).width);
-
-  if ((computedWidth && (computedWidth < currentWidth && computedWidth > 15) || !currentWidth)) {
-    return getSizeLimit(computedWidth);
-  } else {
-    if (!currentWidth) return img.width || config.width;
-
-    return getSizeLimit(currentWidth);
+  if (imageStyleWidth.indexOf('px') > -1) {
+    imageWidth = parseInt(imageStyleWidth).toString();
+  } else if (imageStyleWidth.indexOf('%') > -1) {
+    // todo calculate container width * %
   }
+
+  if (imageWidth) return parseInt(imageWidth, 10);
+
+  /*
+  * If no parentElement
+  * */
+  if (!(img && img.parentElement && img.parentElement.getBoundingClientRect)) {
+    return config.width;
+  }
+
+  return parseInt(getParentContainerSize(img), 10);
 }
 
-const getParentContainerWithWidth = img => {
+/**
+ * Get container height for an image.
+ *
+ * Priority:
+ * 1. inline styling
+ * 2. parent node computed style width (up to body tag)
+ *
+ * @param {HTMLImageElement} img - image node
+ * @param {Object} config - config of the plugin
+ * @return {Number} width of image container
+ */
+export const getImageContainerHeight = (img, config) => {
+  let imageHeight = null;
+  const imageStyleHeight = img && img.style && img.style.height;
+
+  if (imageStyleHeight.indexOf('px') > -1) {
+    imageHeight = parseInt(imageStyleHeight, 10).toString();
+  } else if (imageStyleHeight.indexOf('%') > -1) {
+    // todo calculate container height * %
+  }
+
+  if (imageHeight) return parseInt(imageHeight, 10);
+
+  /*
+  * If no parentElement
+  * */
+  if (!(img && img.parentElement && img.parentElement.getBoundingClientRect)) {
+    console.info('You have problem with the following image: ', img, 'Pls, contact cloudimage support with your example.')
+    return config.heightFallback;
+  }
+
+  return parseInt(getParentContainerSize(img, 'height'), 10);
+}
+
+const getParentContainerSize = (img, type = 'width') => {
   let parentNode = null;
-  let width = 0;
+  let size = 0;
 
   do {
     parentNode = (parentNode && parentNode.parentNode) || img.parentNode;
-    width = parentNode.getBoundingClientRect().width;
-  } while (parentNode && !width)
+    size = parentNode.getBoundingClientRect()[type];
+  } while (parentNode && !size)
 
-  const letPadding = width && parentNode && parseInt(window.getComputedStyle(parentNode).paddingLeft);
+  const leftPadding = size && parentNode && parseInt(window.getComputedStyle(parentNode).paddingLeft);
   const rightPadding = parseInt(window.getComputedStyle(parentNode).paddingRight)
 
-  return width + (width ? (- letPadding - rightPadding) : 0);
+  return size + (size ? (-leftPadding - rightPadding) : 0);
 }
 
-export const generateSources = (operation, size, filters, imgSrc, isAdaptive, config, isPreview) => {
-  const { previewQualityFactor } = config;
-  const sources = [];
+const normalizeSize = (params = {}) => {
+  let { w, h } = params;
 
-  if (isAdaptive) {
-    size.forEach(({ size: nextSize, media: mediaQuery}) => {
-      if (isPreview) {
-        nextSize = nextSize.split('x').map(size => Math.floor(size / previewQualityFactor)).join('x');
-      }
+  if ((w.toString()).indexOf('vw') > -1) {
+    const percent = parseFloat(w);
 
-      sources.push({ mediaQuery, srcSet: generateSrcset(operation, nextSize, filters, imgSrc, config) });
-    })
+    w = window.innerWidth * percent / 100;
   } else {
-    if (isPreview) {
-      size = size.split('x').map(size => Math.floor(size / previewQualityFactor)).join('x');
+    w = parseFloat(w);
+  }
+
+  if ((h.toString()).indexOf('vh') > -1) {
+    const percent = parseFloat(h);
+
+    h = window.innerHeight * percent / 100;
+  } else {
+    h = parseFloat(h);
+  }
+
+  return { w, h };
+};
+
+export const getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
+
+/**
+ * Get size limit for container/image.
+ *
+ * Priority:
+ * 1. inline styling
+ * 2. parent node computed style size (up to body tag)
+ *
+ * @param {Number} size - width/height of container/image
+ * @param {Boolean} exactSize - a flag to use exact width/height params
+ * @return {Number} size limit
+ */
+export const getSizeLimit = (size, exactSize) => {
+  if (exactSize) return size;
+  if (size <= 25) return 25;
+  if (size <= 50) return 50;
+
+  return Math.ceil(size / 100) * 100;
+};
+
+export const getParams = (params) => {
+  let resultParams = undefined;
+
+  try {
+    resultParams = JSON.parse('{"' + decodeURI(params.replace(/&/g, "\",\"").replace(/=/g, "\":\"")) + '"}');
+  } catch (e) {}
+
+  if (!resultParams) {
+    resultParams = params;
+  }
+
+  return resultParams;
+};
+
+export const getRatio = ({ imageNodeRatio, width, height, size }) => {
+  if (size && size.params) {
+    if (size.params.ratio) {
+      return size.params.ratio
+    } else if ((size.params.w || size.params.width) && (size.params.h || size.params.height)) {
+      return (size.params.w || size.params.width) / (size.params.h || size.params.height);
+    } else {
+      return null
     }
-
-    sources.push({
-      srcSet: generateSrcset(operation, size, filters, imgSrc, config)
-    });
-  }
-  return sources;
-}
-
-export const getAdaptiveSize = (size, config) => {
-  const arrayOfSizes = size.split(',');
-  const sizes = [];
-
-  arrayOfSizes.forEach(string => {
-    const groups = string.match(/(([a-z_][a-z_]*)|(\([\S\s]*\)))\s*([0-9xp]*)/);
-    const media = groups[3] ? groups[3] : config.presets[groups[2]];
-
-    sizes.push({ media, size: groups[4] });
-  });
-
-  return sizes;
-}
-
-const generateSrcset = (operation, size, filters, imgSrc, config) => {
-  const imgWidth = size.toString().split('x')[0]
-  const imgHeight = size.toString().split('x')[1];
-
-  return generateImgSrc(operation, filters, imgSrc, imgWidth, imgHeight, 1, config);
-}
-
-export const getRatioBySize = (size, config) => {
-  let width, height;
-
-  if (typeof size === 'object') {
-    const breakPointSource = getBreakPoint(size);
-    let breakPointSize = breakPointSource ? breakPointSource.size : size[0].size;
-
-    width = breakPointSize.toString().split('x')[0]
-    height = breakPointSize.toString().split('x')[1];
-  } else {
-    width = size.toString().split('x')[0]
-    height = size.toString().split('x')[1];
   }
 
-  if (width && height)
+  if (imageNodeRatio) {
+    return imageNodeRatio;
+  } else if (width && height) {
     return width / height;
+  }
 
   return null;
 }
 
-const getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
+/**
+ * Get width for an image.
+ *
+ * Priority:
+ * 1. image node param width
+ * 2. image node image width
+ * 3. image node inline styling
+ * 4. parent node of image computed style width (up to body tag)
+ *
+ * @param {HTMLImageElement} props.imgNode - image node
+ * @param {Object} props.config - plugin config
+ * @param {Boolean} props.exactSize - a flag to use exact width/height params
+ * @param {Number} props.imageNodeWidth - width of image node
+ * @param {String} props.params - params of image node
+ * @return {Number} width limit
+ */
+export const getWidth = props => {
+  const {
+    imgNode = null,
+    config = {},
+    exactSize = false,
+    imageNodeWidth = null,
+    params = {},
+    size
+  } = props;
+  const isCrop = params.func === 'crop';
 
-const generateImgSrc = (operation, filters, imgSrc, imgWidth, imgHeight, factor, config) => {
-  let imgSize = Math.trunc(imgWidth * factor);
+  if (size && size.params) {
+    return size.params.w || size.params.width;
+  }
 
-  if (imgHeight)
-    imgSize += 'x' + Math.trunc(imgHeight * factor);
+  if (params.width || params.w) {
+    return params.width || params.w;
+  }
 
-  return generateUrl(operation, getSizeAccordingToPixelRatio(imgSize), filters, imgSrc, config)
-    .replace('http://scaleflex.ultrafast.io/', '')
-    .replace('https://scaleflex.ultrafast.io/', '')
-    .replace('//scaleflex.ultrafast.io/', '')
-    .replace('///', '/');
+  if (imageNodeWidth) {
+    return imageNodeWidth;
+  }
+
+  const imageContainerWidth = getImageContainerWidth(imgNode, config);
+
+  return isCrop ? imageContainerWidth : getSizeLimit(imageContainerWidth, exactSize);
 }
 
-const getSizeLimit = (currentSize) => {
-  if (currentSize <= 25) return '25';
-  if (currentSize <= 50) return '50';
+/**
+ * Get height for an image.
+ *
+ * Priority:
+ * 1. image node param height
+ * 2. image node image height
+ * 3. image node inline styling
+ * 4. parent node of image computed style height (up to body tag)
+ *
+ * @param {HTMLImageElement} props.imgNode - image node
+ * @param {Object} props.config - plugin config
+ * @param {Boolean} props.exactSize - a flag to use exact width/height params
+ * @param {Number} props.imageNodeHeight - height of image node
+ * @param {String} props.params - params of image node
+ * @return {Number} height limit
+ */
+export const getHeight = props => {
+  const {
+    imgNode = null,
+    config = {},
+    exactSize = false,
+    imageNodeHeight = null,
+    params = {},
+    size
+  } = props;
+  const isCrop = params.func === 'crop';
 
-  return (Math.ceil(currentSize / 100) * 100).toString();
+  if (size && size.params) {
+    return size.params.h || size.params.height;
+  }
+
+  if (params.height || params.h) {
+    return params.height || params.h;
+  }
+
+  if (imageNodeHeight) {
+    return imageNodeHeight;
+  }
+
+  if ((params.func || config.params.func) !== 'crop') {
+    return null;
+  }
+
+  const imageContainerHeight = getImageContainerHeight(imgNode, config);
+
+  return isCrop ? imageContainerHeight : getSizeLimit(imageContainerHeight, exactSize);
+};
+
+export const determineContainerProps = props => {
+  const { imgNode, config, imageNodeWidth, imageNodeHeight, imageNodeRatio, params, size } = props;
+  const { exactSize } = config;
+  let width = getWidth({ imgNode, config, exactSize, imageNodeWidth, params, size });
+  let height = getHeight({ imgNode, config, exactSize, imageNodeHeight, params, size });
+  let ratio = getRatio({ imageNodeRatio, width, height, size });
+
+  if (!height && width && ratio) {
+    height = Math.floor(width / ratio);
+  }
+
+  if (!width && height && ratio) {
+    width = Math.floor(height * ratio);
+  }
+
+  return { width, height, ratio };
+};
+
+export const getAdaptiveSize = (sizes, config) => {
+  const resultSizes = [];
+
+  Object.keys(sizes).forEach(key => {
+    const isCustomMedia = key.indexOf(':') > -1;
+    const media = isCustomMedia ? key : config.presets[key];
+
+    resultSizes.push({ media, params: normalizeSize(sizes[key]) });
+  });
+
+  return resultSizes;
 }
+
+export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, ...otherProps }) => ({
+  config,
+  alt,
+  className,
+  imageNodeWidth: width,
+  imageNodeHeight: height,
+  ...otherProps
+});

@@ -11,34 +11,32 @@ class CloudimageProvider extends Component {
 
     const {
       token = '',
-      container = 'cloudimg.io',
-      ultraFast = false,
-      lazyLoading = true,
+      domain = 'cloudimg.io',
+      lazyLoading = false,
       imgLoadingAnimation = true,
       lazyLoadOffset = 100,
-      width = '400',
-      height = '300',
-      operation = 'width',
-      filters = 'foil1',
       placeholderBackground = '#f4f4f4',
-      baseUrl = '/',
+      baseUrl, // to support old name
+      baseURL,
+      ratio = 1.5,
       presets,
-      queryString = ''
+      params = 'org_if_sml=1',
+      exactSize = false,
+      doNotReplaceURL = false
     } = config;
 
     this.state = {
       token,
-      container,
-      ultraFast,
+      domain,
       lazyLoading,
       imgLoadingAnimation,
       lazyLoadOffset,
-      width,
-      height,
-      operation,
-      filters,
+      heightFallback: 300,
+      widthFallback: 400,
       placeholderBackground,
-      baseUrl,
+      baseURL: baseUrl || baseURL,
+      ratio,
+      exactSize,
       presets: presets ? presets :
         {
           xs: '(max-width: 575px)',  // to 575       PHONE
@@ -47,9 +45,10 @@ class CloudimageProvider extends Component {
           lg: '(min-width: 992px)',  // 992 - 1199   SMALL_LAPTOP_SCREEN
           xl: '(min-width: 1200px)'  // from 1200    USUALSCREEN
         },
-      queryString,
-      previewQualityFactor: 10
-      //isChrome: /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)
+      params,
+      innerWidth: window.innerWidth,
+      previewQualityFactor: 10,
+      doNotReplaceURL
     };
 
     if (typeof window !== 'undefined') {
@@ -59,11 +58,8 @@ class CloudimageProvider extends Component {
   }
 
   updateDimensions = debounce(100, () => {
-    const { innerWidth } = this.state;
-
-    if (innerWidth < window.innerWidth)
-      this.setState({ innerWidth: window.innerWidth });
-  })
+    this.setState({ innerWidth: window.innerWidth });
+  });
 
   render() {
     return (

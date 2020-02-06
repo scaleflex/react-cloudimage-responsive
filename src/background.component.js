@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import {
   checkIfRelativeUrlPath,
-  checkOnMedia,
-  generateSources,
-  generateUrl,
+  determineContainerProps,
+  generateURL,
   getAdaptiveSize,
+  getBreakPoint, getFilteredProps,
   getImgSrc,
-  getParentWidth,
-  getSizeAccordingToPixelRatio
+  getParams,
+  isImageSVG,
+  isServer
 } from './utils';
 import LazyLoad from 'react-lazyload';
 
@@ -18,7 +19,7 @@ class BackgroundImg extends Component {
     super(props);
 
     this.state = {
-      cloudimageUrl: '',
+      cloudimageURL: '',
       sources: [],
       isLoaded: false,
       isProcessed: false
@@ -26,78 +27,101 @@ class BackgroundImg extends Component {
   }
 
   componentDidMount() {
-    if (typeof window !== 'undefined') {
+    if (isServer) return;
+
+    this.processBackground();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (isServer) return;
+
+    const { config: { innerWidth }, src } = this.props;
+
+    if (prevProps.config.innerWidth !== innerWidth) {
+      this.processBackground(true, innerWidth > prevProps.config.innerWidth);
+    }
+
+    if (src !== prevProps.src) {
       this.processBackground();
     }
   }
 
-  componentDidUpdate(prevProps) {
-    if (typeof window !== 'undefined') {
-      if (prevProps.config.innerWidth !== this.props.config.innerWidth || this.props.src !== prevProps.src)
-        this.processBackground();
-    }
-  }
-
-  getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
-
-  processBackground = () => {
+  processBackground = (isUpdate, isInnerWidthBigger) => {
+    const {
+      src: imageNodeSRC = '',
+      width: imageNodeWidth = null,
+      height: imageNodeHeight = null,
+      ratio: imageNodeRatio,
+      params: imageNodeParams,
+      config = {},
+      sizes,
+      lazyLoading = config.lazyLoading
+    } = this.props;
     const backgroundNode = findDOMNode(this);
-    const { src = '', config = {} } = this.props;
-    const { lazyLoading = config.lazyLoading } = this.props;
-    const { previewQualityFactor } = config;
-    const operation = this.props.operation || this.props.o || config.operation;
-    const parentContainerWidth = getParentWidth(backgroundNode, config);
-    let size = this.props.size || this.props.s || config.size || parentContainerWidth;
-    const filters = this.props.filters || this.props.f || config.filters;
-    const isAdaptive = checkOnMedia(size);
-    let backgroundImageSrc = '';
-
-    size = isAdaptive ? getAdaptiveSize(size, config) : size;
-
-    const isRelativeUrlPath = checkIfRelativeUrlPath(src);
-    const imgSrc = getImgSrc(src, isRelativeUrlPath, config.baseUrl);
-    const resultSize = isAdaptive ? size : getSizeAccordingToPixelRatio(size);
-    const isPreview = (parentContainerWidth > 400) && lazyLoading;
-
-    let cloudimageUrl = '';
-    let sources = [];
-    let previewCloudimageUrl, previewSources;
+    const isRelativeUrlPath = checkIfRelativeUrlPath(imageNodeSRC);
+    const src = getImgSrc(imageNodeSRC, isRelativeUrlPath, config.baseURL);
+    const isSVG = isImageSVG(src);
+    const params = getParams(imageNodeParams);
+    const isAdaptive = !!sizes;
+    let containerProps;
+    let isPreview = false;
+    let cloudimageURL, previewCloudimageURL;
 
     if (isAdaptive) {
-      sources = generateSources(operation, resultSize, filters, imgSrc, isAdaptive, config);
-      const currentBreakpoint = this.getBreakPoint(resultSize) || resultSize[0];
+      const adaptiveSizes = getAdaptiveSize(sizes, config);
+      const size = getBreakPoint(adaptiveSizes);
+      containerProps = determineContainerProps({
+        imgNode: backgroundNode,
+        config,
+        imageNodeWidth,
+        imageNodeHeight,
+        imageNodeRatio,
+        params,
+        size
+      });
+      const { width, height } = containerProps;
 
-      cloudimageUrl = sources.find(breakPoint => breakPoint.mediaQuery === currentBreakpoint.media).srcSet;
+      isPreview = width > 400;
+      cloudimageURL = generateURL({ src, params, config, width, height });
+
+      if (isPreview) {
+        previewCloudimageURL = this.getPreviewSRC(width, height, params, src);
+      }
     } else {
-      cloudimageUrl = generateUrl(operation, resultSize, filters, imgSrc, config);
-    }
+      if (isUpdate && !isInnerWidthBigger) return;
 
-    if (isPreview) {
-      const previewConfig = { ...config, queryString: '' };
-      previewCloudimageUrl = isAdaptive ?
-        generateUrl('width', Math.floor((parentContainerWidth / previewQualityFactor)), filters, imgSrc, previewConfig) :
-        generateUrl(operation, resultSize.split('x')
-          .map(size => Math.floor(size / previewQualityFactor)).join('x'), filters, imgSrc, previewConfig);
-      previewSources = isAdaptive ?
-        generateSources(operation, resultSize, filters, imgSrc, isAdaptive, previewConfig, true) : [];
+      containerProps = determineContainerProps({
+        imgNode: backgroundNode,
+        config,
+        imageNodeWidth,
+        imageNodeHeight,
+        imageNodeRatio,
+        params
+      });
+      const { width, height } = containerProps;
+      isPreview = width > 400 && !isSVG;
+
+      cloudimageURL = isSVG ? src : generateURL({ src, params, config, width, height });
+
+      if (isPreview) {
+        previewCloudimageURL = this.getPreviewSRC(width, height, params, src);
+      }
     }
 
     this.setState({
-      cloudimageUrl,
-      previewCloudimageUrl,
-      previewSources,
-      sources,
-      isAdaptive,
-      size,
-      parentContainerWidth,
+      cloudimageURL,
+      previewCloudimageURL,
       isProcessed: true,
       isPreview,
-      backgroundImageSrc
-    })
+      lazyLoading,
+      ...containerProps
+    });
   }
 
-  onImageLoad = (isPreviewLoaded) => {
-    if (!this.state.isPreview) {
+  onImageLoad = () => {
+    const { isPreview, isPreviewLoaded } = this.state;
+
+    if (!isPreview) {
       this.setState({ isPreviewLoaded: true, isLoaded: true });
     } else if (isPreviewLoaded) {
       this.setState({ isLoaded: true });
@@ -106,51 +130,62 @@ class BackgroundImg extends Component {
   }
 
   getBackgroundURL = () => {
-    const { isPreview, isLoaded, cloudimageUrl, isPreviewLoaded, previewCloudimageUrl } = this.state;
+    const { isPreview, isLoaded, cloudimageURL, isPreviewLoaded, previewCloudimageURL } = this.state;
 
-    if (isLoaded) return cloudimageUrl;
-    if (isPreviewLoaded) return previewCloudimageUrl;
+    if (isLoaded) return cloudimageURL;
+    if (isPreviewLoaded) return previewCloudimageURL;
 
     if (isPreview) {
       let tempOriginalImage = new Image();
       let tempPreviewImage = new Image();
 
-      tempOriginalImage.src = cloudimageUrl;
-      tempPreviewImage.src = previewCloudimageUrl;
+      tempOriginalImage.src = cloudimageURL;
+      tempPreviewImage.src = previewCloudimageURL;
       tempPreviewImage.onload = () => { this.onImageLoad(); };
       tempOriginalImage.onload = () => { this.onImageLoad(true); }
 
-      return previewCloudimageUrl;
+      return previewCloudimageURL;
     } else {
       let tempOriginalImage = new Image();
 
-      tempOriginalImage.src = cloudimageUrl;
+      tempOriginalImage.src = cloudimageURL;
       tempOriginalImage.onload = () => { this.onImageLoad(true); }
 
-      return cloudimageUrl;
+      return cloudimageURL;
     }
   }
 
+  getPreviewSRC = (width, height, params, src) => {
+    const { config } = this.props;
+    const { previewQualityFactor } = config;
+    const previewParams = { ...params, ci_info: '' };
+    const previewWidth = Math.floor(width / previewQualityFactor);
+    const previewHeight = Math.floor(height / previewQualityFactor);
+
+    return generateURL({
+      src,
+      config,
+      params: previewParams,
+      width: previewWidth,
+      height: previewHeight
+    });
+  }
+
   render() {
-    if (typeof window === 'undefined') {
-      return null;
-    }
+    if (isServer) return null;
 
-    const { isLoaded, parentContainerWidth, isProcessed } = this.state;
-    const {
-      src = '', alt = '', className = '', config = {}, ratio = null, o, operation, f, filters, s, size, style, height,
-      lazyLoadConfig = {}, lazyLoading = this.props.config.lazyLoading, ...otherProps
-    } = this.props;
+    const { isLoaded, width, height, isProcessed } = this.state;
+    const { alt, className, config, style, lazyLoadConfig, lazyLoading = config.lazyLoading, children, ...otherProps
+    } = getFilteredProps(this.props);
 
-    if (!isProcessed) return <div>{this.props.children}</div>;
+    const { imgLoadingAnimation } = config;
 
-    const imgLoadingStyles = config.imgLoadingAnimation ?
-      { filter: `blur(${Math.floor(parentContainerWidth / 100)}px)` } : {};
-    const imgLoadedStyles = isLoaded && config.imgLoadingAnimation ? styles.imgLoaded : {};
+    if (!isProcessed) return <div>{children}</div>;
+
     const containerProps = {
-      imgLoadingStyles, imgLoadedStyles, otherProps, isLoaded, style, className,
-      children: this.props.children,
-      getBackgroundURL: this.getBackgroundURL
+      imgLoadingAnimation, width, isLoaded, otherProps, style, className,
+      children,
+      backgroundURL: this.getBackgroundURL()
     };
 
     return lazyLoading ? (
@@ -161,10 +196,8 @@ class BackgroundImg extends Component {
   }
 }
 
-const Container = (props) => {
-  const {
-    isLoaded, otherProps, style, imgLoadingStyles, imgLoadedStyles, children, getBackgroundURL, className
-  } = props;
+const Container = props => {
+  const { isLoaded, otherProps, style, imgLoadingAnimation, width, children, backgroundURL, className } = props;
 
   return (
     <div
@@ -172,30 +205,41 @@ const Container = (props) => {
       className={
         `${className} cloudimage-image-background cloudimage-image-background-${isLoaded ? 'loaded' : 'loading'}`
       }
-      style={{
-        overflow: 'hidden',
-        ...style,
-        position: 'relative',
-        backgroundImage: `url(${getBackgroundURL()})`
-      }}
+      style={styles.container({ style, url: backgroundURL })}
     >
-      <div style={{...styles.containerInner, ...imgLoadingStyles, ...imgLoadedStyles}}/>
-      {children}
+      <div style={styles.containerInner({ imgLoadingAnimation, width, isLoaded })}/>
+      <div style={{ position: 'relative' }}>
+        {children}
+      </div>
     </div>
   );
 };
 
 const styles = {
-  containerInner: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: 'inherit',
-    filter: 'blur(0)',
-    transition: 'filter 0.3s ease-in-out'
-  },
+  container: ({ style, url }) => ({
+    overflow: 'hidden',
+    position: 'relative',
+    backgroundImage: `url(${url})`,
+    backgroundSize: 'cover',
+    backgroundPosition: '50% 50%',
+    backgroundRepeat: 'no-repeat',
+    ...style
+  }),
+
+  containerInner: ({ imgLoadingAnimation, width, isLoaded }) => ({
+    ...{
+      position: 'absolute',
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background: 'inherit',
+      filter: 'blur(0)',
+      transition: 'filter 0.3s ease-in-out',
+    },
+    ...(imgLoadingAnimation ? { filter: `blur(${Math.floor(width / 100)}px)` } : {}),
+    ...(isLoaded && imgLoadingAnimation ? styles.imgLoaded : {})
+  }),
 
   imgLoading: {
     opacity: 1
