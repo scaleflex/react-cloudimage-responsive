@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import {
-  checkIfRelativeUrlPath,
-  determineContainerProps,
-  generateURL,
-  getAdaptiveSize,
-  getBreakPoint,
-  getImgSrc,
-  getParams,
-  isImageSVG,
-  isServer,
-  getFilteredProps
-} from './utils';
+import { getFilteredProps, processNode, server } from './utils';
+import styles from './img.styles';
 import LazyLoad from 'react-lazyload';
 
 
@@ -20,161 +10,83 @@ class Img extends Component {
     super(props);
 
     this.state = {
-      cloudimageURL: '',
+      cloudimgURL: '',
       sources: [],
-      isLoaded: false,
-      isProcessed: false
-    }
+      loaded: false,
+      processed: false
+    };
   }
 
   componentDidMount() {
-    if (isServer) return;
+    if (server) return;
 
-    this.processImage();
+    this.processImg();
   }
 
   componentDidUpdate(prevProps) {
-    if (isServer) return;
+    if (server) return;
 
     const { config: { innerWidth }, src } = this.props;
 
     if (prevProps.config.innerWidth !== innerWidth) {
-      this.processImage(true, innerWidth > prevProps.config.innerWidth);
+      this.processImg(true, innerWidth > prevProps.config.innerWidth);
     }
 
     if (src !== prevProps.src) {
-      this.processImage();
+      this.processImg();
     }
   }
 
-  processImage = (isUpdate, isInnerWidthBigger) => {
-    const {
-      src: imageNodeSRC = '',
-      width: imageNodeWidth = null,
-      height: imageNodeHeight = null,
-      ratio: imageNodeRatio,
-      params: imageNodeParams,
-      config = {},
-      sizes,
-      lazyLoading = config.lazyLoading
-    } = this.props;
+  processImg = (update, windowScreenBecomesBigger) => {
     const imgNode = findDOMNode(this);
-    const isRelativeUrlPath = checkIfRelativeUrlPath(imageNodeSRC);
-    const src = getImgSrc(imageNodeSRC, isRelativeUrlPath, config.baseURL);
-    const isSVG = isImageSVG(src);
-    const params = getParams(imageNodeParams);
-    const isAdaptive = !!sizes;
-    let containerProps;
-    let isPreview = false;
-    let cloudimageURL, previewCloudimageURL;
+    const data = processNode(this.props, imgNode, update, windowScreenBecomesBigger);
 
-    if (isAdaptive) {
-      const adaptiveSizes = getAdaptiveSize(sizes, config);
-      const size = getBreakPoint(adaptiveSizes);
-      containerProps = determineContainerProps({
-        imgNode,
-        config,
-        imageNodeWidth,
-        imageNodeHeight,
-        imageNodeRatio,
-        params,
-        size
-      });
-      const { width, height } = containerProps;
-
-      isPreview = width > 400;
-
-      cloudimageURL = generateURL({ src, params, config, width, height });
-
-      if (isPreview) {
-        previewCloudimageURL = this.getPreviewSRC(width, height, params, src);
-      }
-    } else {
-      if (isUpdate && !isInnerWidthBigger) return;
-
-      containerProps = determineContainerProps({
-        imgNode,
-        config,
-        imageNodeWidth,
-        imageNodeHeight,
-        imageNodeRatio,
-        params
-      });
-      const { width, height } = containerProps;
-      isPreview = width > 400 && !isSVG;
-
-      cloudimageURL = isSVG ? src : generateURL({ src, params, config, width, height });
-
-      if (isPreview) {
-        previewCloudimageURL = this.getPreviewSRC(width, height, params, src);
-      }
-    }
-
-    this.setState({
-      cloudimageURL,
-      previewCloudimageURL,
-      isProcessed: true,
-      isPreview,
-      lazyLoading,
-      ...containerProps
-    });
+    this.setState(data);
   }
 
-  getPreviewSRC = (width, height, params, src) => {
-    const { config } = this.props;
-    const { previewQualityFactor } = config;
-    const previewParams = { ...params, ci_info: '' };
-    const previewWidth = Math.floor(width / previewQualityFactor);
-    const previewHeight = Math.floor(height / previewQualityFactor);
-
-    return generateURL({
-      src,
-      config,
-      params: previewParams,
-      width: previewWidth,
-      height: previewHeight
-    });
-  }
-
-  onImageLoad = () => {
-    const { isPreviewLoaded, isPreview } = this.state;
-
-    if (!isPreview) {
-      this.setState({ isPreviewLoaded: true, isLoaded: true });
-    } else if (isPreviewLoaded)
-      this.setState({ isLoaded: true });
-    else
-      this.setState({ isPreviewLoaded: true });
+  onImgLoad = () => {
+    this.setState({ loaded: true });
   }
 
   render() {
-    if (isServer) return <img src={this.props.config.baseURL + this.props.src}/>;
+    const { config, src } = this.props;
+    const { baseURL, placeholderBg, lazyLoading: configLazyLoadingValue } = config;
+    const { lazyLoading = configLazyLoadingValue } = this.props;
+    const {
+      width, height, ratio, cloudimgURL, previewCloudimgURL, loaded, processed, previewLoaded, preview
+    } = this.state;
+
+    if (server) return <img src={baseURL + src}/>;
+    if (!processed) return <div/>;
 
     const {
-      cloudimageURL, isLoaded, width, height, isProcessed, isPreviewLoaded, previewCloudimageURL, isPreview, ratio,
-      lazyLoading
-    } = this.state;
-    const { alt, className, config, lazyLoadConfig, preserveSize, imageNodeWidth, imageNodeHeight, ...otherProps } =
-      getFilteredProps(this.props);
-    const { placeholderBackground, imgLoadingAnimation } = config;
-
-    if (!isProcessed) return <picture/>;
+      alt, className, lazyLoadConfig, preserveSize, imgNodeWidth, imgNodeHeight, ...otherProps
+    } = getFilteredProps(this.props);
 
     const picture = (
-      <picture
-        className={`${className} cloudimage-image-picture cloudimage-image-${isLoaded ? 'loaded' : 'loading'}`}
+      <div
+        className={`${className} cloudimage-image-wrapper cloudimage-image-${loaded ? 'loaded' : 'loading'}`}
         style={styles.picture({
-          preserveSize, imageNodeWidth, imageNodeHeight, ratio, isPreviewLoaded, isLoaded, placeholderBackground
+          preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBg
         })}
       >
+        {preview &&
+        <div style={styles.previewWrapper()}>
+          <img
+            style={styles.previewImg({ loaded, width })}
+            src={previewCloudimgURL}
+            alt="low quality preview image"
+          />
+        </div>}
+
         <img
-          style={styles.img({ ratio, imgLoadingAnimation, width, isLoaded })}
-          src={!isPreview ? cloudimageURL : (isPreviewLoaded ? cloudimageURL : previewCloudimageURL)}
+          style={styles.img({ preview, loaded, width })}
+          src={cloudimgURL}
           alt={alt}
-          onLoad={this.onImageLoad}
+          onLoad={this.onImgLoad}
           {...otherProps}
         />
-      </picture>
+      </div>
     );
 
     return lazyLoading ? (
@@ -185,50 +97,5 @@ class Img extends Component {
   }
 }
 
-const styles = {
-  picture: ({ preserveSize, imageNodeWidth, imageNodeHeight, ratio, isPreviewLoaded, isLoaded, placeholderBackground }) => ({
-    display: 'inline-block',
-    width: preserveSize && imageNodeWidth ? imageNodeWidth : '100%',
-    height: preserveSize && imageNodeHeight ? imageNodeHeight : 'auto',
-    paddingBottom: preserveSize ? 'none' : (100 / ratio) + '%',
-    overflow: 'hidden',
-    position: 'relative',
-    background: (!isPreviewLoaded && !isLoaded) ? placeholderBackground : 'transparent'
-  }),
-
-  img: ({ ratio, imgLoadingAnimation, width, isLoaded, isPreview }) => ({
-    ...{
-      display: 'block',
-      width: '100%',
-    },
-    ...(ratio ? styles.imgWithRatio : {}),
-    ...(imgLoadingAnimation ? { ...styles.imgWithEffect, filter: `blur(${Math.floor(width / 100)}px)` } : {}),
-    ...(isLoaded && imgLoadingAnimation ? styles.imgLoaded : {}),
-    ...((isPreview && ratio) ? { height: '100%' } : {})
-  }),
-
-  imgWithRatio: {
-    position: 'absolute',
-    opacity: 1,
-    top: 0,
-    left: 0,
-    height: 'auto'
-  },
-
-  imgWithEffect: {
-    transform: 'scale3d(1.1, 1.1, 1)',
-    transition: 'all 0.3s ease-in-out'
-  },
-
-  imgLoading: {
-    opacity: 1
-  },
-
-  imgLoaded: {
-    opacity: 1,
-    filter: 'blur(0px)',
-    transform: 'translateZ(0) scale3d(1, 1, 1)'
-  }
-};
 
 export default Img;

@@ -1,60 +1,135 @@
-export const isServer = typeof window === 'undefined';
+export const processNode = (props, imgNode, isUpdate, windowScreenBecomesBigger) => {
+  const imgProps = getProps(props);
+  const { imgNodeSRC, params, sizes, adaptive } = imgProps;
+  const { config } = props;
+  const { baseURL, presets } = config;
 
-export const checkIfRelativeUrlPath = src => {
+  if (!imgNodeSRC) return;
+
+  const [src, svg] = getImgSRC(imgNodeSRC, baseURL);
+  let previewCloudimgURL, size;
+
+  if (adaptive) {
+    size = getBreakPoint(sizes, presets);
+  } else {
+    if (isUpdate && !windowScreenBecomesBigger) return;
+  }
+
+  const containerProps = determineContainerProps({ imgNode, config, size, ...imgProps });
+  const { width, height } = containerProps;
+  const preview = isLowQualityPreview(adaptive, width, svg);
+  const cloudimgURL = !adaptive && svg ? src : generateURL({ src, params, config, width, height });
+
+  if (preview) {
+    previewCloudimgURL = getPreviewSRC({ src, params, config, ...containerProps });
+  }
+
+  return {
+    cloudimgURL,
+    previewCloudimgURL,
+    processed: true,
+    preview,
+    ...containerProps
+  };
+};
+
+export const getImgSRC = (src, baseURL = '') => {
+  const relativeURLPath = isRelativeUrlPath(src);
+
+  if (src.indexOf('//') === 0) {
+    src = window.location.protocol + src;
+  }
+
+  if (relativeURLPath) {
+    src = relativeToAbsolutePath(baseURL, src);
+  }
+
+  return [src, isSVG(src)];
+};
+
+export const getBreakPoint = (sizes, presets) => {
+  const size = getAdaptiveSize(sizes, presets);
+
+  return [...size].reverse().find(item => window.matchMedia(item.media).matches);
+};
+
+const getAdaptiveSize = (sizes, presets) => {
+  const resultSizes = [];
+
+  Object.keys(sizes).forEach(key => {
+    const customMedia = key.indexOf(':') > -1;
+    const media = customMedia ? key : presets[key];
+
+    resultSizes.push({ media, params: normalizeSize(sizes[key]) });
+  });
+
+  return resultSizes;
+};
+
+export const isLowQualityPreview = (adaptive, width, svg) => adaptive ? width > 400 : width > 400 && !svg;
+
+export const getPreviewSRC = ({ config, width, height, params, src }) => {
+  const { previewQualityFactor } = config;
+  const previewParams = { ...params, ci_info: '' };
+  const lowQualitySize = getLowQualitySize({ width, height }, previewQualityFactor);
+
+  return generateURL({ src, config, params: { ...previewParams, ...lowQualitySize } });
+};
+
+const getLowQualitySize = (params = {}, factor) => {
+  let { width, height } = params;
+
+  width = width ? Math.floor(width / factor) : null;
+  height = height ? Math.floor(height / factor) : null;
+
+  return { width, w: width, height, h: height };
+};
+
+export const server = typeof window === 'undefined';
+
+export const isRelativeUrlPath = src => {
   if (!src) return false;
 
   if (src.indexOf('//') === 0) {
     src = window.location.protocol + src;
   }
 
-  return (src.indexOf('http://') !== 0 && src.indexOf('https://') !== 0 && src.indexOf('//') !== 0);
-}
-
-export const getImgSrc = (src, isRelativeUrlPath = false, baseURL = '') => {
-  if (src.indexOf('//') === 0) {
-    src = window.location.protocol + src;
-  }
-
-  if (isRelativeUrlPath) {
-    return relativeToAbsolutePath(baseURL, src);
-  }
-
-  return src;
+  return src.indexOf('http://') !== 0 && src.indexOf('https://') !== 0 && src.indexOf('//') !== 0;
 };
 
 const relativeToAbsolutePath = (base, relative) => {
-  const isRoot = relative[0] === '/';
-  const resultBaseURL = getBaseURL(isRoot, base);
-  const stack = resultBaseURL.split("/");
-  const parts = relative.split("/");
+  const root = relative[0] === '/';
+  const resultBaseURL = getBaseURL(root, base);
+  const stack = resultBaseURL.split('/');
+  const parts = relative.split('/');
 
   stack.pop(); // remove current file name (or empty string)
-               // (omit if "base" is the current folder without trailing slash)
-  if (isRoot) {
+               // (omit if 'base' is the current folder without trailing slash)
+  if (root) {
     parts.shift();
   }
 
   for (let i = 0; i < parts.length; i++) {
-    if (parts[i] === ".")
+    if (parts[i] === '.')
       continue;
-    if (parts[i] === "..")
+    if (parts[i] === '..')
       stack.pop();
     else
       stack.push(parts[i]);
   }
 
-  return stack.join("/");
+  return stack.join('/');
 };
 
-const getBaseURL = (isRoot, base) => {
-  if (isRoot) {
+const getBaseURL = (root, base) => {
+  if (root) {
     return (base ? extractBaseURLFromString(base) : window.location.origin) + '/';
   } else {
     return base ? base : document.baseURI;
   }
 };
 
-export const isImageSVG = url => url.slice(-4).toLowerCase() === '.svg';
+export const isSVG = url => url.slice(-4).toLowerCase() === '.svg';
 
 const extractBaseURLFromString = (path = '') => {
   const pathArray = path.split('/');
@@ -84,17 +159,13 @@ const getParamsExceptSizeRelated = params => {
 };
 
 const getQueryString = props => {
-  const {
-    params = {},
-    width,
-    height
-  } = props;
+  const { params = {}, width, height } = props;
   const [restParams, widthFromParam = null, heightFromParam] = getParamsExceptSizeRelated(params);
   const widthQ = width ? updateSizeWithPixelRatio(width) : widthFromParam;
   const heightQ = height ? updateSizeWithPixelRatio(height) : heightFromParam;
   const restParamsQ = Object
     .keys(restParams)
-    .map((key) => encodeURIComponent(key) + "=" + encodeURIComponent(restParams[key]))
+    .map((key) => encodeURIComponent(key) + '=' + encodeURIComponent(restParams[key]))
     .join('&');
 
   return [
@@ -126,30 +197,32 @@ export const updateSizeWithPixelRatio = (size) => {
  * 2. parent node computed style width (up to body tag)
  *
  * @param {HTMLImageElement} img - image node
- * @param {Object} config - config of the plugin
  * @return {Number} width of image container
  */
-export const getImageContainerWidth = (img, config) => {
-  let imageWidth = null;
-  const imageStyleWidth = img && img.style && img.style.width;
+export const getImgContainerWidth = (img) => {
+  const imgStyleWidth = img && img.style && img.style.width;
+  const imgWidth = imgStyleWidth && convertToPX(imgStyleWidth);
 
-  if (imageStyleWidth.indexOf('px') > -1) {
-    imageWidth = parseInt(imageStyleWidth).toString();
-  } else if (imageStyleWidth.indexOf('%') > -1) {
-    // todo calculate container width * %
-  }
-
-  if (imageWidth) return parseInt(imageWidth, 10);
-
-  /*
-  * If no parentElement
-  * */
-  if (!(img && img.parentElement && img.parentElement.getBoundingClientRect)) {
-    return config.width;
-  }
+  if (imgWidth) return parseInt(imgWidth, 10);
 
   return parseInt(getParentContainerSize(img), 10);
 }
+
+export const convertToPX = (size = '') => {
+  size = size.toString();
+
+  if (size.indexOf('px') > -1) {
+    return parseInt(size);
+  } else if (size.indexOf('%') > -1) {
+    // todo calculate container width * %
+  } else if (size.indexOf('vw') > -1) {
+    return window.innerWidth * parseInt(size) / 100;
+  } else if (size.indexOf('vh') > -1) {
+    return window.innerHeight * parseInt(size) / 100;
+  }
+
+  return parseInt(size) || null;
+};
 
 /**
  * Get container height for an image.
@@ -159,28 +232,13 @@ export const getImageContainerWidth = (img, config) => {
  * 2. parent node computed style width (up to body tag)
  *
  * @param {HTMLImageElement} img - image node
- * @param {Object} config - config of the plugin
  * @return {Number} width of image container
  */
-export const getImageContainerHeight = (img, config) => {
-  let imageHeight = null;
-  const imageStyleHeight = img && img.style && img.style.height;
+export const getImgContainerHeight = (img) => {
+  const imgStyleHeight = img && img.style && img.style.height;
+  const imgHeight = convertToPX(imgStyleHeight);
 
-  if (imageStyleHeight.indexOf('px') > -1) {
-    imageHeight = parseInt(imageStyleHeight, 10).toString();
-  } else if (imageStyleHeight.indexOf('%') > -1) {
-    // todo calculate container height * %
-  }
-
-  if (imageHeight) return parseInt(imageHeight, 10);
-
-  /*
-  * If no parentElement
-  * */
-  if (!(img && img.parentElement && img.parentElement.getBoundingClientRect)) {
-    console.info('You have problem with the following image: ', img, 'Pls, contact cloudimage support with your example.')
-    return config.heightFallback;
-  }
+  if (imgHeight) return parseInt(imgHeight, 10);
 
   return parseInt(getParentContainerSize(img, 'height'), 10);
 }
@@ -222,8 +280,6 @@ const normalizeSize = (params = {}) => {
   return { w, h };
 };
 
-export const getBreakPoint = (size) => [...size].reverse().find(item => window.matchMedia(item.media).matches);
-
 /**
  * Get size limit for container/image.
  *
@@ -236,7 +292,7 @@ export const getBreakPoint = (size) => [...size].reverse().find(item => window.m
  * @return {Number} size limit
  */
 export const getSizeLimit = (size, exactSize) => {
-  if (exactSize) return size;
+  if (exactSize) return Math.ceil(size);
   if (size <= 25) return 25;
   if (size <= 50) return 50;
 
@@ -257,7 +313,7 @@ export const getParams = (params) => {
   return resultParams;
 };
 
-export const getRatio = ({ imageNodeRatio, width, height, size }) => {
+export const getRatio = ({ imgNodeRatio, width, height, size }) => {
   if (size && size.params) {
     if (size.params.ratio) {
       return size.params.ratio
@@ -268,8 +324,8 @@ export const getRatio = ({ imageNodeRatio, width, height, size }) => {
     }
   }
 
-  if (imageNodeRatio) {
-    return imageNodeRatio;
+  if (imgNodeRatio) {
+    return imgNodeRatio;
   } else if (width && height) {
     return width / height;
   }
@@ -287,22 +343,14 @@ export const getRatio = ({ imageNodeRatio, width, height, size }) => {
  * 4. parent node of image computed style width (up to body tag)
  *
  * @param {HTMLImageElement} props.imgNode - image node
- * @param {Object} props.config - plugin config
  * @param {Boolean} props.exactSize - a flag to use exact width/height params
- * @param {Number} props.imageNodeWidth - width of image node
+ * @param {Number} props.imgNodeWidth - width of image node
  * @param {String} props.params - params of image node
  * @return {Number} width limit
  */
 export const getWidth = props => {
-  const {
-    imgNode = null,
-    config = {},
-    exactSize = false,
-    imageNodeWidth = null,
-    params = {},
-    size
-  } = props;
-  const isCrop = params.func === 'crop';
+  const { imgNode = null, exactSize = false, imgNodeWidth = null, params = {}, size } = props;
+  const crop = params.func === 'crop';
 
   if (size && size.params) {
     return size.params.w || size.params.width;
@@ -312,13 +360,13 @@ export const getWidth = props => {
     return params.width || params.w;
   }
 
-  if (imageNodeWidth) {
-    return imageNodeWidth;
+  if (imgNodeWidth) {
+    return convertToPX(imgNodeWidth);
   }
 
-  const imageContainerWidth = getImageContainerWidth(imgNode, config);
+  const ImgContainerWidth = getImgContainerWidth(imgNode);
 
-  return isCrop ? imageContainerWidth : getSizeLimit(imageContainerWidth, exactSize);
+  return crop ? ImgContainerWidth : getSizeLimit(ImgContainerWidth, exactSize);
 }
 
 /**
@@ -333,20 +381,13 @@ export const getWidth = props => {
  * @param {HTMLImageElement} props.imgNode - image node
  * @param {Object} props.config - plugin config
  * @param {Boolean} props.exactSize - a flag to use exact width/height params
- * @param {Number} props.imageNodeHeight - height of image node
+ * @param {Number} props.imgNodeHeight - height of image node
  * @param {String} props.params - params of image node
  * @return {Number} height limit
  */
 export const getHeight = props => {
-  const {
-    imgNode = null,
-    config = {},
-    exactSize = false,
-    imageNodeHeight = null,
-    params = {},
-    size
-  } = props;
-  const isCrop = params.func === 'crop';
+  const { imgNode = null, config = {}, exactSize = false, imgNodeHeight = null, params = {}, size } = props;
+  const crop = params.func === 'crop';
 
   if (size && size.params) {
     return size.params.h || size.params.height;
@@ -356,25 +397,25 @@ export const getHeight = props => {
     return params.height || params.h;
   }
 
-  if (imageNodeHeight) {
-    return imageNodeHeight;
+  if (imgNodeHeight) {
+    return convertToPX(imgNodeHeight);
   }
 
   if ((params.func || config.params.func) !== 'crop') {
     return null;
   }
 
-  const imageContainerHeight = getImageContainerHeight(imgNode, config);
+  const imgContainerHeight = getImgContainerHeight(imgNode);
 
-  return isCrop ? imageContainerHeight : getSizeLimit(imageContainerHeight, exactSize);
+  return crop ? imgContainerHeight : getSizeLimit(imgContainerHeight, exactSize);
 };
 
 export const determineContainerProps = props => {
-  const { imgNode, config, imageNodeWidth, imageNodeHeight, imageNodeRatio, params, size } = props;
+  const { imgNode, config, imgNodeWidth, imgNodeHeight, imgNodeRatio, params, size } = props;
   const { exactSize } = config;
-  let width = getWidth({ imgNode, config, exactSize, imageNodeWidth, params, size });
-  let height = getHeight({ imgNode, config, exactSize, imageNodeHeight, params, size });
-  let ratio = getRatio({ imageNodeRatio, width, height, size });
+  let width = getWidth({ imgNode, exactSize, imgNodeWidth, params, size });
+  let height = getHeight({ imgNode, config, exactSize, imgNodeHeight, params, size });
+  let ratio = getRatio({ imgNodeRatio, width, height, size });
 
   if (!height && width && ratio) {
     height = Math.floor(width / ratio);
@@ -387,24 +428,28 @@ export const determineContainerProps = props => {
   return { width, height, ratio };
 };
 
-export const getAdaptiveSize = (sizes, config) => {
-  const resultSizes = [];
-
-  Object.keys(sizes).forEach(key => {
-    const isCustomMedia = key.indexOf(':') > -1;
-    const media = isCustomMedia ? key : config.presets[key];
-
-    resultSizes.push({ media, params: normalizeSize(sizes[key]) });
-  });
-
-  return resultSizes;
-}
+export const getProps = ({ src, width, height, ratio, params, sizes }) => ({
+  imgNodeSRC: src || '',
+  imgNodeWidth: width || null,
+  imgNodeHeight: height || null,
+  imgNodeRatio: ratio,
+  params: getParams(params),
+  sizes: sizes,
+  adaptive: !!sizes
+});
 
 export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, ...otherProps }) => ({
   config,
   alt,
   className,
-  imageNodeWidth: width,
-  imageNodeHeight: height,
+  imgNodeWidth: width,
+  imgNodeHeight: height,
+  ...otherProps
+});
+
+export const getFilteredBgProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, ...otherProps }) => ({
+  config,
+  alt,
+  className,
   ...otherProps
 });
