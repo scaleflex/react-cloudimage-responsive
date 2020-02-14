@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { render } from 'react-dom';
-import Img, { CloudimageProvider } from '../../src';
+import Img, { CloudimageProvider, BackgroundImg } from '../../src';
 import './style.css';
 import './assets/fonts/helvetica-neue.css';
 import { images } from './mock';
@@ -13,7 +13,8 @@ const cloudimageConfig = {
   token: 'scaleflex',
   baseURL: 'https://cloudimage.public.airstore.io/demo/',
   params: 'ci_info=1&org_if_sml=1',
-  placeholderBackground: '#e1e1e1'
+  placeholderBackground: '#e1e1e1',
+  lazyLoading: true
 };
 
 
@@ -259,15 +260,24 @@ class App extends Component {
             <div className="row images-in-columns">
               <div className="col-12">
                 <ContainerBox/>
-                {/*<BackgroundImg src={images[8].src} params="func=crop" width={500} height={200}>*/}
-                {/*  <div className="container">*/}
-                {/*    <h2 className="text-center">Gallery demo</h2>*/}
+                <BackgroundImg src={images[8].src} style={{ background: 'transparent 50% 50% / cover no-repeat'}}>
+                  <div className="container">
+                    <h2 className="text-center">Gallery demo</h2>
 
-                {/*    <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive*/}
-                {/*      plugin{' '}*/}
-                {/*      will deliver an optimized image for the screen size.</p>*/}
-                {/*  </div>*/}
-                {/*</BackgroundImg>*/}
+                    <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
+                      plugin{' '}
+                      will deliver an optimized image for the screen size.</p>
+                  </div>
+                </BackgroundImg>
+                <BackgroundImg src={images[8].src} params="func=crop" width={500} height={200} style={{ background: 'transparent 50% 50% / cover no-repeat'}}>
+                  <div className="container">
+                    <h2 className="text-center">Gallery demo</h2>
+
+                    <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
+                      plugin{' '}
+                      will deliver an optimized image for the screen size.</p>
+                  </div>
+                </BackgroundImg>
                 <Img src={images[8].src} ratio={images[8].ratio}/>
               </div>
 

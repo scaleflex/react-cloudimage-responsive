@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { getFilteredBgProps, server, processNode } from './utils';
+import { isServer, processReactNode } from 'cloudimage-responsive-utils';
+import { getFilteredBgProps } from './utils.js';
 import LazyLoad from 'react-lazyload';
 import styles from './background.styles';
 
@@ -9,6 +10,7 @@ class BackgroundImg extends Component {
   constructor(props) {
     super(props);
 
+    this.server = isServer();
     this.state = {
       cloudimgURL: '',
       sources: [],
@@ -18,13 +20,13 @@ class BackgroundImg extends Component {
   }
 
   componentDidMount() {
-    if (server) return;
+    if (this.server) return;
 
     this.processBg();
   }
 
   componentDidUpdate(prevProps) {
-    if (server) return;
+    if (this.server) return;
 
     const { config: { innerWidth }, src } = this.props;
 
@@ -39,7 +41,7 @@ class BackgroundImg extends Component {
 
   processBg = (update, windowScreenBecomesBigger) => {
     const bgNode = findDOMNode(this);
-    const data = processNode(this.props, bgNode, update, windowScreenBecomesBigger);
+    const data = processReactNode(this.props, bgNode, update, windowScreenBecomesBigger);
 
     if (!data) {
       return;
@@ -64,9 +66,9 @@ class BackgroundImg extends Component {
   }
 
   render() {
-    if (server) return null;
+    if (this.server) return null;
     
-    const { loaded, width, height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
+    const { loaded, height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
     const {
       alt, className, config, style, lazyLoadConfig, lazyLoading = config.lazyLoading, children, ...otherProps
     } = getFilteredBgProps(this.props);
@@ -85,7 +87,7 @@ class BackgroundImg extends Component {
       >
         {preview &&
         <div style={styles.previewBgWrapper({ loaded })}>
-          <div style={styles.previewBg({ previewCloudimgURL, width })}/>
+          <div style={styles.previewBg({ previewCloudimgURL })}/>
         </div>}
 
         {preview ?

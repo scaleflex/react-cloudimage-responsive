@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
-import { getFilteredProps, processNode, server } from './utils';
+import { isServer, processReactNode } from 'cloudimage-responsive-utils';
+import { getFilteredProps } from './utils.js';
 import styles from './img.styles';
 import LazyLoad from 'react-lazyload';
 
@@ -9,6 +10,7 @@ class Img extends Component {
   constructor(props) {
     super(props);
 
+    this.server = isServer();
     this.state = {
       cloudimgURL: '',
       sources: [],
@@ -18,13 +20,13 @@ class Img extends Component {
   }
 
   componentDidMount() {
-    if (server) return;
+    if (this.server) return;
 
     this.processImg();
   }
 
   componentDidUpdate(prevProps) {
-    if (server) return;
+    if (this.server) return;
 
     const { config: { innerWidth }, src } = this.props;
 
@@ -39,7 +41,7 @@ class Img extends Component {
 
   processImg = (update, windowScreenBecomesBigger) => {
     const imgNode = findDOMNode(this);
-    const data = processNode(this.props, imgNode, update, windowScreenBecomesBigger);
+    const data = processReactNode(this.props, imgNode, update, windowScreenBecomesBigger);
 
     this.setState(data);
   }
@@ -50,13 +52,11 @@ class Img extends Component {
 
   render() {
     const { config, src } = this.props;
-    const { baseURL, placeholderBg, lazyLoading: configLazyLoadingValue } = config;
+    const { baseURL, placeholderBackground, lazyLoading: configLazyLoadingValue } = config;
     const { lazyLoading = configLazyLoadingValue } = this.props;
-    const {
-      width, height, ratio, cloudimgURL, previewCloudimgURL, loaded, processed, previewLoaded, preview
-    } = this.state;
+    const { height, ratio, cloudimgURL, previewCloudimgURL, loaded, processed, previewLoaded, preview } = this.state;
 
-    if (server) return <img src={baseURL + src}/>;
+    if (this.server) return <img src={baseURL + src}/>;
     if (!processed) return <div/>;
 
     const {
@@ -67,20 +67,20 @@ class Img extends Component {
       <div
         className={`${className} cloudimage-image-wrapper cloudimage-image-${loaded ? 'loaded' : 'loading'}`}
         style={styles.picture({
-          preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBg
+          preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBackground
         })}
       >
         {preview &&
         <div style={styles.previewWrapper()}>
           <img
-            style={styles.previewImg({ loaded, width })}
+            style={styles.previewImg({ loaded })}
             src={previewCloudimgURL}
             alt="low quality preview image"
           />
         </div>}
 
         <img
-          style={styles.img({ preview, loaded, width })}
+          style={styles.img({ preview, loaded })}
           src={cloudimgURL}
           alt={alt}
           onLoad={this.onImgLoad}

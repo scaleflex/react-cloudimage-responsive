@@ -17,7 +17,7 @@ const previewBgWrapper = ({ loaded }) => ({
   opacity: loaded ? '0' : '1'
 });
 
-const previewBg = ({ previewCloudimgURL, width }) => ({
+const previewBg = ({ previewCloudimgURL }) => ({
   position: 'absolute',
   top: 0,
   left: 0,
@@ -26,7 +26,7 @@ const previewBg = ({ previewCloudimgURL, width }) => ({
   background: 'inherit',
   backgroundImage: `url(${previewCloudimgURL})`,
   transform: 'scale(1.1)',
-  filter: `blur(${Math.floor(width / 100)}px)`
+  filter: `blur(10px)`
 });
 
 export default { container, previewBgWrapper, previewBg }
