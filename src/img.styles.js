@@ -21,6 +21,7 @@ const previewWrapper = () => ({
 
 const previewImg = ({ loaded }) => ({
   opacity: loaded ? 0 : 1,
+  width: '100%',
   ...animation(true)
 });
 
