@@ -107,7 +107,7 @@ import Img, { CloudimageProvider } from 'react-cloudimage-responsive';
 
 const cloudimageConfig = {
   token: 'demo',
-  baseUrl: 'https://jolipage.airstore.io/'
+  baseURL: 'https://jolipage.airstore.io/'
 };
 
 const App = () => {
@@ -174,12 +174,6 @@ If set to **true** the plugin will only add query params to the given source of 
 
 Only images close to the client's viewport will be loaded, hence accelerating the page loading time. The plugin uses
 [react-lazyload](https://github.com/twobin/react-lazyload) library to achieve it.
-
-### imgLoadingAnimation
-
-###### Type: **Bool** | Default: **true** | _optional_
-
-Applies a nice interlacing effect for preview transition
 
 ### params
 
@@ -262,6 +256,7 @@ This is the recommended way of using the Cloudimage Responsive plugin.
 <Img
   src="dino-reichmuth-1.jpg"
   sizes={{
+      xs: { w: 200, h: 100 },
       sm: { w: 400, h: 200 },
       '(min-width: 620px)': { w: 200, h: 60 },
       md: { w: 250, h: 350 },
