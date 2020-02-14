@@ -8,28 +8,36 @@ class ContainerBox extends Component {
 
     this.box = React.createRef()
     this.state = {
-      width: '---'
+      width: '---',
+      height: '---'
     };
   }
 
   componentDidMount() {
     this.setState({
-      width: this.box.current.offsetWidth
+      width: this.box.current.parentNode.offsetWidth,
+      height: this.box.current.parentNode.offsetHeight
     });
 
     window.addEventListener('resize', debounce(400, () => {
-        this.setState({ width: this.box.current.offsetWidth });
+        this.setState({
+          width: this.box.current.parentNode.offsetWidth,
+          height: this.box.current.parentNode.offsetHeight
+        });
       })
     );
   }
 
   render() {
+    const { width, height } = this.state;
+    const { isHeight } = this.props;
+
     return (
       <div
         ref={this.box}
         className="container-width-box"
       >
-        container width: <span>{this.state.width}</span> px
+        container {isHeight ? '' : 'width:'} <span>{width}</span> {isHeight ? `x ${height}` : ''} px
       </div>
     )
   }

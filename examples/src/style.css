@@ -260,18 +260,6 @@
   position: relative;
 }
 
-.arrow {
-  background: url('https://scaleflex.airstore.io/filerobot/assets/arrow_1.png') 50% 50% / contain no-repeat;
-  width: 100px;
-  height: 250px;
-  position: absolute;
-  top: -42px;
-  left: -97px;
-  transform: rotate(38deg);
-  cursor: pointer;
-}
-
-
 .action-wrapper {
   text-align: left;
   position: relative;
@@ -365,7 +353,8 @@ footer .footer-menu ul {
 }
 
 footer .footer-menu ul li {
-  display: inline-block;
+  display: block;
+  text-align: left;
   margin-left: 15px;
   margin-bottom: 5px;
 }
@@ -500,6 +489,14 @@ img {
   border-bottom: 1px solid #6d6d6d;
   text-align: center;
   padding: 4px 0;
+  position: absolute;
+  width: 100%;
+  top: -33px;
+}
+
+.container-box-wrapper {
+  margin-top: 50px;
+  position: relative;
 }
 
 .device-pixel-ratio {
@@ -556,4 +553,13 @@ img {
   .ready-to-start.filerobot-ui-family h5 {
     margin-bottom: 20px;
   }
+}
+
+.border-box {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border: 1px solid black;
 }

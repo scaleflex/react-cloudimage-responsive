@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { render } from 'react-dom';
 import Img, { CloudimageProvider, BackgroundImg } from '../../src';
 import './style.css';
-import './assets/fonts/helvetica-neue.css';
 import { images } from './mock';
-import ContainerBox from './components/ContainerBox';
+import ContainerBox from './components/container-box';
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
@@ -88,7 +87,7 @@ class App extends Component {
           </a>
         </section>
 
-        <section>
+        <section className="container-box-wrapper" style={{ margin: 0 }}>
           <ContainerBox/>
           <Img src={images[0].src} ratio={images[0].ratio}/>
         </section>
@@ -104,7 +103,7 @@ class App extends Component {
               <li>Strip all unnecessary metadata and <strong>optimize JPEG, PNG and GIF compression</strong></li>
               <li>Efficiently <strong>lazy load images</strong> to speed initial page load and save bandwidth</li>
               <li>Use the low quality image with "blur-up" technique to <strong>show a preview</strong> of the image
-                <strong>while it loads</strong></li>
+                <strong> while it loads</strong></li>
               <li><strong>Hold the image position</strong> so your page doesn't jump while images load</li>
             </ul>
 
@@ -259,35 +258,21 @@ class App extends Component {
 
             <div className="row images-in-columns">
               <div className="col-12">
-                <ContainerBox/>
-                <BackgroundImg src={images[8].src} style={{ background: 'transparent 50% 50% / cover no-repeat'}}>
-                  <div className="container">
-                    <h2 className="text-center">Gallery demo</h2>
-
-                    <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
-                      plugin{' '}
-                      will deliver an optimized image for the screen size.</p>
-                  </div>
-                </BackgroundImg>
-                <BackgroundImg src={images[8].src} params="func=crop" width={500} height={200} style={{ background: 'transparent 50% 50% / cover no-repeat'}}>
-                  <div className="container">
-                    <h2 className="text-center">Gallery demo</h2>
-
-                    <p>Change the size of your browser's window and reload the page to see how the Cloudimage Responsive
-                      plugin{' '}
-                      will deliver an optimized image for the screen size.</p>
-                  </div>
-                </BackgroundImg>
-                <Img src={images[8].src} ratio={images[8].ratio}/>
+                <div className="container-box-wrapper">
+                  <ContainerBox/>
+                  <Img src={images[8].src} ratio={images[8].ratio}/>
+                </div>
               </div>
 
               {images.slice(1, 7).map((image, index) => (
                 <div key={index} className="col-6">
-                  <ContainerBox/>
-                  <Img src={image.src} ratio={image.ratio}/>
-                  original: <i>{image.original_size}</i> <a
-                  href={`https://cloudimage.public.airstore.io/demo/${image.src}`}
-                  target="_blank">link</a><br/>
+                  <div className="container-box-wrapper">
+                    <ContainerBox/>
+                    <Img src={image.src} ratio={image.ratio}/>
+                    original: <i>{image.original_size}</i> <a
+                    href={`https://cloudimage.public.airstore.io/demo/${image.src}`}
+                    target="_blank">link</a><br/>
+                  </div>
                 </div>
               ))}
             </div>
@@ -296,13 +281,13 @@ class App extends Component {
               <div className="col-md-6 col-lg-7">
                 <Img
                   src={images[18].src}
-                  params={'func=crop'}
                   sizes={{
-                    sm: { w: 400, h: 200 },
-                    '(min-width: 620px)': { w: 200, h: 60 },
-                    md: { w: 250, h: 350 },
-                    lg: { w: 350, h: 300 },
-                    xl: { w: 400, h: 250 }
+                    xs: { w: 400, h: 200 },
+                    sm: { w: 800, h: 400 },
+                    '(min-width: 620px)': { w: 400, h: 120 },
+                    md: { w: 500, h: 700 },
+                    lg: { w: 700, h: 600 },
+                    xl: { w: 800, h: 500 }
                   }}
                 />
                 <small>
@@ -316,13 +301,13 @@ class App extends Component {
                 <SyntaxHighlighter language='jsx' style={darcula}>
                   {`<Img
   src={images[18].src}
-  operation={'crop'}
   size="
-    sm 400x200,
-    (min-width: 620px) 200x60,
-    md 250x350,
-    lg 350x300,
-    xl 400x250
+    xs: { w: 400, h: 200 },
+    sm: { w: 800, h: 400 },
+    '(min-width: 620px)': { w: 400, h: 120 },
+    md: { w: 500, h: 700 },
+    lg: { w: 700, h: 600 },
+    xl: { w: 800, h: 500 }
   "
 />`}
                 </SyntaxHighlighter>
@@ -331,7 +316,89 @@ class App extends Component {
           </div>
         </section>
 
-        <section className="container ready-to-start">
+        <section className="ready-to-start">
+          <div className="container">
+            <h2 className="text-center">Crop your images</h2>
+
+            <div className="row">
+              <div className="col-md-4">
+                <p>Original Images</p>
+                <div >
+                  <div className="container-box-wrapper" style={{ display: 'inline-block', width: 200, height: 200 }}>
+                    <ContainerBox isHeight/>
+                    <img src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"/>
+                    <div className="border-box"/>
+                  </div>
+                </div>
+
+                <SyntaxHighlighter language='jsx' style={darcula}>{`<img 
+  src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"
+/>`}</SyntaxHighlighter>
+              </div>
+
+              <div className="col-md-4">
+                <p>Crop</p>
+                <div >
+                  <div className="container-box-wrapper" style={{ display: 'inline-block', width: 200, height: 200 }}>
+                    <ContainerBox isHeight/>
+                    <Img src="boat.jpg" params="func=crop"/>
+                    <div className="border-box"/>
+                  </div>
+                </div>
+                <SyntaxHighlighter language='jsx' style={darcula}>
+                  {`<Img 
+  src="boat.jpg" 
+  params="func=crop"
+/>`}</SyntaxHighlighter>
+              </div>
+
+              <div className="col-md-4">
+                <p>Auto crop</p>
+                <div>
+                  <div className="container-box-wrapper" style={{ display: 'inline-block', width: 200, height: 200 }}>
+                    <ContainerBox isHeight/>
+                    <Img src="boat.jpg" params="func=crop&gravity=auto"/>
+                    <div className="border-box"/>
+                  </div>
+                </div>
+                <SyntaxHighlighter language='jsx' style={darcula}>{`<Img 
+  src="boat.jpg" 
+  params="func=crop&gravity=auto"
+/>`}</SyntaxHighlighter>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="ready-to-start">
+          <div className="container">
+            <h2 className="text-center">Use with background images</h2>
+
+            <SyntaxHighlighter language='jsx' style={darcula}>{`<BackgroundImg
+  src="ameen-fahmy.jpg" 
+  params="func=crop" 
+  style={{ background: 'transparent 50% 50% / cover no-repeat' }}
+>...</BackgroundImg>`}</SyntaxHighlighter>
+          </div>
+
+          <BackgroundImg
+            src="ameen-fahmy.jpg"
+            params="func=crop"
+            style={{ background: 'transparent 50% 50% / cover no-repeat', color: '#fff' }}
+          >
+            <div style={{ background: 'rgba(0,0,0,.6)', padding: 40 }}>
+              <div className="container" >
+                <h2>What is Lorem Ipsum?</h2>
+                <p>
+                  Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                </p>
+              </div>
+            </div>
+          </BackgroundImg>
+        </section>
+
+
+          <section className="container ready-to-start">
           <h2 className="text-center">Ready to get started?</h2>
           <p>To use the plugin, you will need a Cloudimage token. Don't worry, it only takes seconds to get one by
             registering{' '}
@@ -345,9 +412,6 @@ class App extends Component {
         <section className="container">
           <div className="text-center">
             <div id="plugin-version-switcher" className="plugin-version-switcher btn-group btn-toggle">
-              {/*//<!--<button id="js-btn" class="btn btn-primary">JS version</button>-->*/}
-              {/*//<!--<a href="#" class="btn btn-light">React version</a>-->*/}
-              {/*//<!--<a href="#" class="btn btn-light">Angular version</a>-->*/}
             </div>
           </div>
 
@@ -362,7 +426,7 @@ class App extends Component {
             <div>
               <div className="action-wrapper second-action">
                 <p>
-                  initialize it with your <strong>token</strong> and the <strong>baseUrl</strong> of your image
+                  initialize it with your <strong>token</strong> and the <strong>baseURL</strong> of your image
                   storage{' '}
                   using <strong>CloudimageProvider</strong>
                 </p>
@@ -372,7 +436,7 @@ import Img, { CloudimageProvider } from 'react-cloudimage-responsive';
 
 const cloudimageConfig = {
   token: 'demo',
-  baseUrl: 'https://jolipage.airstore.io/'
+  baseURL: 'https://jolipage.airstore.io/'
 };
 
 const App = () => {
@@ -450,7 +514,7 @@ render(<App />, document.body);`}</SyntaxHighlighter>
           <div className="copyright">
             <div className="container">
               <div className="row">
-                <div className="team-desc col-sm-8">
+                <div className="team-desc col-sm-9">
                   <div>Made with ❤ in 2019 in Paris, Munich and Sofia by the Scaleflex team, the guys behind <a
                     href="https://www.cloudimage.io/en/home" target="_blank">Cloudimage.io</a>.
                   </div>
@@ -459,7 +523,7 @@ render(<App />, document.body);`}</SyntaxHighlighter>
                     All rights reserved.
                   </div>
                 </div>
-                <div className="footer-menu col-sm-4">
+                <div className="footer-menu col-sm-3">
                   <ul>
                     <li><a href="https://github.com/scaleflex/react-cloudimage-responsive" target="_blank">View
                       GitHub</a></li>
@@ -477,7 +541,7 @@ render(<App />, document.body);`}</SyntaxHighlighter>
         </footer>
 
         <div id="device-pixel-ratio" className="device-pixel-ratio">
-          Your device pixel ratio: <span>{Math.round(window.devicePixelRatio || 1)}</span>
+          Your device pixel ratio: <span>{(window.devicePixelRatio || 1).toFixed(1)}</span>
         </div>
 
       </CloudimageProvider>
