@@ -31,8 +31,6 @@ class CloudimageProvider extends Component {
       lazyLoading,
       imgLoadingAnimation,
       lazyLoadOffset,
-      heightFallback: 300,
-      widthFallback: 400,
       placeholderBackground,
       baseURL: baseUrl || baseURL,
       ratio,

@@ -2,7 +2,7 @@ import './polyfills';
 import React from 'react';
 import ImgComponent from './img.component';
 import BackgroundImgComponent from './background.component';
-import CloudimageProvider, { CloudimageContext } from './Provider';
+import CloudimageProvider, { CloudimageContext } from './provider';
 
 
 const Img = (props = {}) => {

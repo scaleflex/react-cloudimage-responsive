@@ -13,7 +13,6 @@ class BackgroundImg extends Component {
     this.server = isServer();
     this.state = {
       cloudimgURL: '',
-      sources: [],
       loaded: false,
       processed: false
     };
@@ -99,7 +98,7 @@ class BackgroundImg extends Component {
     );
 
     return lazyLoading ? (
-      <LazyLoad height={height || 200} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
+      <LazyLoad height={height} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
         {Container}
       </LazyLoad>
     ) : Container;

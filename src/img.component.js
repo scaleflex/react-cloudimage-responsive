@@ -13,7 +13,6 @@ class Img extends Component {
     this.server = isServer();
     this.state = {
       cloudimgURL: '',
-      sources: [],
       loaded: false,
       processed: false
     };
