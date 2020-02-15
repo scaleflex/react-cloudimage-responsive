@@ -11,11 +11,7 @@ class BackgroundImg extends Component {
     super(props);
 
     this.server = isServer();
-    this.state = {
-      cloudimgURL: '',
-      loaded: false,
-      processed: false
-    };
+    this.state = { cloudimgURL: '', processed: false };
   }
 
   componentDidMount() {
@@ -46,11 +42,36 @@ class BackgroundImg extends Component {
       return;
     }
 
-    if (this.state.cloudimgURL !== data.cloudimgURL) {
-      this.preLoadImg(data.cloudimgURL);
-    }
-
     this.setState(data);
+  }
+
+  render() {
+    if (this.server) return null;
+
+    const { height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
+    const {
+      className, config, style, lazyLoadConfig, lazyLoading = config.lazyLoading, children, ...otherProps
+    } = getFilteredBgProps(this.props);
+
+    if (!processed) return <div>{children}</div>;
+
+    const Container = (
+      <BackgroundInner {...{ cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps }}/>
+    );
+
+    return lazyLoading ? (
+      <LazyLoad height={height} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
+        {Container}
+      </LazyLoad>
+    ) : Container;
+  }
+}
+
+class BackgroundInner extends Component {
+  state = { loaded: false };
+
+  componentDidMount() {
+    this.preLoadImg(this.props.cloudimgURL);
   }
 
   preLoadImg = (cloudimgURL) => {
@@ -65,23 +86,13 @@ class BackgroundImg extends Component {
   }
 
   render() {
-    if (this.server) return null;
-    
-    const { loaded, height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
-    const {
-      alt, className, config, style, lazyLoadConfig, lazyLoading = config.lazyLoading, children, ...otherProps
-    } = getFilteredBgProps(this.props);
+    const { loaded } = this.state;
+    const { cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps } = this.props;
 
-    if (!processed) return <div>{children}</div>;
-
-    const Container = (
+    return (
       <div
         {...otherProps}
-        className={[
-          className,
-          'cloudimage-image-background',
-          `cloudimage-image-background-${loaded ? 'loaded' : 'loading'}`
-        ].join(' ')}
+        className={[className, 'cloudimage-background', loaded ? 'loaded' : 'loading'].join(' ').trim()}
         style={styles.container({ style, cloudimgURL })}
       >
         {preview &&
@@ -90,18 +101,12 @@ class BackgroundImg extends Component {
         </div>}
 
         {preview ?
-          <div className="cloudimage-image-background-content" style={{ position: 'relative' }}>
+          <div className="cloudimage-background-content" style={{ position: 'relative' }}>
             {children}
           </div>
           : children}
       </div>
-    );
-
-    return lazyLoading ? (
-      <LazyLoad height={height} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
-        {Container}
-      </LazyLoad>
-    ) : Container;
+    )
   }
 }
 

@@ -28,6 +28,7 @@ class App extends Component {
               href="https://scaleflex.github.io/react-cloudimage-responsive/">
               React Cloudimage Responsive
             </a>
+            <p>(Low quality preview version)</p>
             <div className="reference-buttons">
               <a className="github-button" target="_blank"
                  href="https://github.com/Scaleflex/react-cloudimage-responsive/subscription" data-icon="octicon-eye"

@@ -14,8 +14,12 @@
 </p>
 
 <h1 align="center">
-   React Cloudimage Responsive
+   React Cloudimage Responsive | Cloudimage v7
 </h1>
+
+<h3 align="center">
+   (low quality preview)
+</h3>
 
 <p align="center">
 	<strong>

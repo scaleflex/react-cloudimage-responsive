@@ -64,7 +64,7 @@ class Img extends Component {
 
     const picture = (
       <div
-        className={`${className} cloudimage-image-wrapper cloudimage-image-${loaded ? 'loaded' : 'loading'}`}
+        className={`${className} cloudimage-image ${loaded ? 'loaded' : 'loading'}`.trim()}
         style={styles.picture({
           preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBackground
         })}
