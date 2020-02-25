@@ -12,8 +12,7 @@ const cloudimageConfig = {
   token: 'scaleflex',
   baseURL: 'https://cloudimage.public.airstore.io/demo/',
   params: 'ci_info=1&org_if_sml=1',
-  placeholderBackground: '#e1e1e1',
-  lazyLoading: true
+  placeholderBackground: '#e1e1e1'
 };
 
 
