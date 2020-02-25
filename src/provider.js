@@ -12,7 +12,7 @@ class CloudimageProvider extends Component {
     const {
       token = '',
       domain = 'cloudimg.io',
-      lazyLoading = false,
+      lazyLoading = true,
       imgLoadingAnimation = true,
       lazyLoadOffset = 100,
       placeholderBackground = '#f4f4f4',
@@ -44,7 +44,7 @@ class CloudimageProvider extends Component {
           xl: '(min-width: 1200px)'  // from 1200    USUALSCREEN
         },
       params,
-      innerWidth: window.innerWidth,
+      innerWidth: typeof window !== 'undefined' ? window.innerWidth : null,
       previewQualityFactor: 10,
       doNotReplaceURL
     };
