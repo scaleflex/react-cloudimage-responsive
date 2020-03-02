@@ -82,7 +82,7 @@ class App extends Component {
 
           <a href="https://www.filerobot.com/" className="robot-icon">
             <img style={{ width: '100%' }} id="robot-icon"
-                 src="https://demo.cloudimg.io/width/800/q35.foil1/https://scaleflex.airstore.io/filerobot/assets/robot-icon-left.png"
+                 src="https://demo.cloudimg.io/width/800/q35.foil1/https://cdn.scaleflex.it/filerobot/assets/robot-icon-left.png"
                  alt=""/>
           </a>
         </section>
@@ -141,8 +141,8 @@ class App extends Component {
             <p>
               We have original image stored via CDN with <strong>6240×4160 px resolution</strong> and{' '}
               <strong>8.7 mb size</strong>:{' '}
-              <code>https://scaleflex.airstore.io/demo/redcharlie.jpg</code>{' '}
-              <a target="_blank" href="https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>{' '}
+              <code>https://cdn.scaleflex.it/demo/redcharlie.jpg</code>{' '}
+              <a target="_blank" href="https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>{' '}
               In the table below we can see what size and resolution will be loaded depending on the image's container.
             </p>
 
@@ -164,14 +164,14 @@ class App extends Component {
                 <td>1</td>
                 <td>400px</td>
                 <td>400×267 | 18.7 kb | <a target="_blank"
-                                           href="https://demo.cloudimg.io/width/400/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                           href="https://demo.cloudimg.io/width/400/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>800px</td>
                 <td>800×533 | 58.1 kb | <a target="_blank"
-                                           href="https://demo.cloudimg.io/width/800/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                           href="https://demo.cloudimg.io/width/800/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
 
@@ -182,14 +182,14 @@ class App extends Component {
                 <td>1</td>
                 <td>600px</td>
                 <td>600×400 | 35.4 kb | <a target="_blank"
-                                           href="https://demo.cloudimg.io/width/600/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                           href="https://demo.cloudimg.io/width/600/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>1200px</td>
                 <td>1200x800 | 119 kb | <a target="_blank"
-                                           href="https://demo.cloudimg.io/width/1200/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                           href="https://demo.cloudimg.io/width/1200/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
 
@@ -201,14 +201,14 @@ class App extends Component {
                 <td>1</td>
                 <td>800px</td>
                 <td>800×533 | 58.1 kb | <a target="_blank"
-                                           href="https://demo.cloudimg.io/width/800/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                           href="https://demo.cloudimg.io/width/800/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>1600px</td>
                 <td>1600px×1066 | 200 kb | <a target="_blank"
-                                              href="https://demo.cloudimg.io/width/1600/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                              href="https://demo.cloudimg.io/width/1600/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
 
@@ -219,14 +219,14 @@ class App extends Component {
                 <td>1</td>
                 <td>1200px</td>
                 <td>1200x800 | 119 kb | <a target="_blank"
-                                           href="https://demo.cloudimg.io/width/1200/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                           href="https://demo.cloudimg.io/width/1200/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
               <tr>
                 <td>2</td>
                 <td>2400px</td>
                 <td>2400x1600 | 405 kb | <a target="_blank"
-                                            href="https://demo.cloudimg.io/width/2400/q35.foil1/https://scaleflex.airstore.io/demo/redcharlie.jpg">link</a>
+                                            href="https://demo.cloudimg.io/width/2400/q35.foil1/https://cdn.scaleflex.it/demo/redcharlie.jpg">link</a>
                 </td>
               </tr>
 
