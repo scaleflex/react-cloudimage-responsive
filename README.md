@@ -6,6 +6,12 @@
 
 [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social)](https://twitter.com/intent/tweet?text=Responsive%20images,%20now%20easier%20than%20ever&url=https://scaleflex.github.io/react-cloudimage-responsive/&via=cloudimage&hashtags=react,images,cloudimage,responsive_images,lazy_loading,web_acceleration,image_optimization,image_CDN,image_CDNwebp,jpeg_xr,jpg_optimization,image_resizing_and_CDN,cropresize)
 
+## VERSIONS
+
+* __Low Quality Preview__
+* [__Blur Hash__](https://github.com/scaleflex/react-cloudimage-responsive-blur-hash)
+* [__Plain (CSS free)__](https://github.com/scaleflex/react-cloudimage-responsive-plain)
+
 <p align="center">
 	<img
 		height="175"
