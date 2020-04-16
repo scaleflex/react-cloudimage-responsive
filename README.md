@@ -1,4 +1,4 @@
-[![Release](https://img.shields.io/badge/release-v3.1.0-blue.svg)](https://github.com/scaleflex/react-cloudimage-responsive/releases)
+[![Release](https://img.shields.io/badge/release-v3.1.1-blue.svg)](https://github.com/scaleflex/react-cloudimage-responsive/releases)
 [![Free plan](https://img.shields.io/badge/price-includes%20free%20plan-green.svg)](https://www.cloudimage.io/en/home#b38181a6-b9c8-4015-9742-7b1a1ad382d5)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](#contributing)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -73,6 +73,7 @@ powered by [Cloudimage](https://www.cloudimage.io/)
 * [Step 3: Implement](#implement)
 * [Configuration](#configuration)
 * [Image properties](#image_properties)
+* [Usages](#usages)
 * [Browser support](#browser_support)
 * [Filerobot UI Family](#ui_family)
 * [Contributing](#contributing)
@@ -309,6 +310,18 @@ Make it possible to disable lazyLoading for each image.
 The lazyLoad configuration to [LazyLoad](https://github.com/twobin/react-lazyload#props) component. 
 
 To see the full cloudimage documentation [click here](https://docs.cloudimage.io/go/cloudimage-documentation)
+
+### Gatsby
+
+React-cloudimage-responsive plugins uses core-js v3 library to add polyfills. Gatsby has some problems with it.
+To support the plugin with Gatsby, there is separate build process which doesn't include polyfills.
+You can add them manually in your index.js file before importing the plugin.
+
+the initialization process is the same, the only difference you need to import **components** and **provider** with `react-cloudimage-responsive-blur-hash/dist/gatsby`;
+
+For example
+
+import Img, { CloudimageProvider } from "react-cloudimage-responsive-blur-hash/dist/gatsby";
 
 ## <a name="browser_support"></a>Browser support
 
