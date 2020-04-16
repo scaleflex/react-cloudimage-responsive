@@ -311,7 +311,9 @@ The lazyLoad configuration to [LazyLoad](https://github.com/twobin/react-lazyloa
 
 To see the full cloudimage documentation [click here](https://docs.cloudimage.io/go/cloudimage-documentation)
 
-### Gatsby
+## <a name="usages"></a>Usages
+
+#### Gatsby
 
 React-cloudimage-responsive plugins uses core-js v3 library to add polyfills. Gatsby has some problems with it.
 To support the plugin with Gatsby, there is separate build process which doesn't include polyfills.
