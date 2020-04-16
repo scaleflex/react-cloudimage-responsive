@@ -316,15 +316,15 @@ To see the full cloudimage documentation [click here](https://docs.cloudimage.io
 #### Gatsby
 
 React-cloudimage-responsive plugins uses core-js v3 library to add polyfills. Gatsby has some problems with it.
-To support the plugin with Gatsby, there is separate build process which doesn't include polyfills.
+To support the plugin with Gatsby, there is a separate build process which doesn't include polyfills.
 You can add them manually in your index.js file before importing the plugin.
 
-the initialization process is the same, the only difference you need to import **components** and **provider** with `react-cloudimage-responsive-blur-hash/dist/gatsby`;
+The initialization process is the same, the only difference you need to import **components** and **provider** with `react-cloudimage-responsive/dist/gatsby`;
 
 For example
 
 ```jsx
-import Img, { CloudimageProvider } from "react-cloudimage-responsive-blur-hash/dist/gatsby";
+import Img, { CloudimageProvider } from "react-cloudimage-responsive/dist/gatsby";
 ```
 
 ## <a name="browser_support"></a>Browser support
