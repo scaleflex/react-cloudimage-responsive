@@ -323,7 +323,9 @@ the initialization process is the same, the only difference you need to import *
 
 For example
 
+```jsx
 import Img, { CloudimageProvider } from "react-cloudimage-responsive-blur-hash/dist/gatsby";
+```
 
 ## <a name="browser_support"></a>Browser support
 
