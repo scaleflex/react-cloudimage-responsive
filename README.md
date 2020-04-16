@@ -24,7 +24,7 @@
 </h1>
 
 <h3 align="center">
-   (low quality preview)
+(low quality preview)
 </h3>
 
 <p align="center">
