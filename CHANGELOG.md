@@ -31,7 +31,6 @@ Types of changes:
 ### Added
 - separate build without polyfills to support Gatsby
 
-
 ## 3.1.0 - 2020-04-02
 
 ### Changed
