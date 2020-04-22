@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { debounce } from 'throttle-debounce';
+import { CONSTANTS, processParams } from 'cloudimage-responsive-utils';
 
 
 export const CloudimageContext = React.createContext({ config: {} });
@@ -13,23 +14,24 @@ class CloudimageProvider extends Component {
       token = '',
       domain = 'cloudimg.io',
       lazyLoading = true,
-      imgLoadingAnimation = true,
-      lazyLoadOffset = 100,
+      lazyLoadOffset = 100,  // TODO: add to readme
       placeholderBackground = '#f4f4f4',
       baseUrl, // to support old name
       baseURL,
-      ratio = 1.5,
       presets,
+      ratio = 1.5,
       params = 'org_if_sml=1',
       exactSize = false,
-      doNotReplaceURL = false
+      doNotReplaceURL = false,
+      limitFactor = 100,
+      devicePixelRatioList, // TODO: add to readme
+      minLowQualityWidth = 250 // TODO: add to readme
     } = config;
 
     this.state = {
       token,
       domain,
       lazyLoading,
-      imgLoadingAnimation,
       lazyLoadOffset,
       placeholderBackground,
       baseURL: baseUrl || baseURL,
@@ -43,10 +45,13 @@ class CloudimageProvider extends Component {
           lg: '(min-width: 992px)',  // 992 - 1199   SMALL_LAPTOP_SCREEN
           xl: '(min-width: 1200px)'  // from 1200    USUALSCREEN
         },
-      params,
+      params: processParams(params),
       innerWidth: typeof window !== 'undefined' ? window.innerWidth : null,
       previewQualityFactor: 10,
-      doNotReplaceURL
+      doNotReplaceURL,
+      devicePixelRatioList: devicePixelRatioList || CONSTANTS.DEVICE_PIXEL_RATIO_LIST,
+      limitFactor,
+      minLowQualityWidth
     };
 
     if (typeof window !== 'undefined') {

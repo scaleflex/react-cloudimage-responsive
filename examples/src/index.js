@@ -9,10 +9,11 @@ import { darcula } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 
 const cloudimageConfig = {
-  token: 'scaleflex',
+  token: 'demo',
   baseURL: 'https://cloudimage.public.airstore.io/demo/',
   params: 'ci_info=1&org_if_sml=1',
-  placeholderBackground: '#e1e1e1'
+  placeholderBackground: '#e1e1e1',
+  limitFactor: 10
 };
 
 

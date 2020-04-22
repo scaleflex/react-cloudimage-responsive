@@ -53,7 +53,9 @@ class Img extends Component {
     const { config = {}, src } = this.props;
     const { baseURL, placeholderBackground, lazyLoading: configLazyLoadingValue } = config;
     const { lazyLoading = configLazyLoadingValue } = this.props;
-    const { height, ratio, cloudimgURL, previewCloudimgURL, loaded, processed, previewLoaded, preview } = this.state;
+    const {
+      height, ratio, cloudimgURL, cloudimgSRCSET, previewCloudimgURL, loaded, processed, previewLoaded, preview
+    } = this.state;
 
     if (this.server) return <img src={baseURL + src}/>;
     if (!processed) return <div/>;
@@ -79,11 +81,12 @@ class Img extends Component {
         </div>}
 
         <img
-          style={styles.img({ preview, loaded })}
-          src={cloudimgURL}
           alt={alt}
-          onLoad={this.onImgLoad}
+          style={styles.img({ preview, loaded })}
           {...otherProps}
+          src={cloudimgURL}
+          onLoad={this.onImgLoad}
+          {...((preview && previewLoaded || !preview) && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
         />
       </div>
     );
