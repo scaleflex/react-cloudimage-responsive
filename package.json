@@ -1,6 +1,6 @@
 {
   "name": "react-cloudimage-responsive",
-  "version": "3.1.1",
+  "version": "3.2.0",
   "main": "dist/index.js",
   "description": "Cloudimage Responsive will smartly resize, compress and accelerate images across the World in your site for all devices. The plugin supports lazy loading technique with fancy animation on image load.",
   "author": "scaleflex",
@@ -39,9 +39,8 @@
     "publish-demo": "npm run build-demo && npm run deploy"
   },
   "dependencies": {
-    "cloudimage-responsive-utils": "^1.2.0",
-    "core-js": "^3.0.0",
-    "react-lazyload": "^2.3.0",
+    "cloudimage-responsive-utils": "^2.0.1",
+    "core-js": "^3.6.5",
     "throttle-debounce": "^2.0.1"
   },
   "peerDependencies": {
@@ -60,19 +59,19 @@
     "@babel/plugin-proposal-throw-expressions": "^7.0.0",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
-    "@babel/preset-env": "^7.0.0",
+    "@babel/preset-env": "^7.9.5",
     "@babel/preset-react": "^7.0.0",
     "babel-loader": "^8.0.0",
     "css-loader": "^2.0.0",
     "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "react": "^16.6.3",
-    "react-dom": "^16.6.3",
-    "react-lazyload": "^2.3.0",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-lazyload": "^2.6.7",
     "react-syntax-highlighter": "^10.2.0",
     "style-loader": "^0.23.1",
     "throttle-debounce": "^2.0.1",
-    "webpack": "^4.41.6",
+    "webpack": "^4.43.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.10.3"
   }
