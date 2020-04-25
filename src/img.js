@@ -45,7 +45,20 @@ class Img extends Component {
     this.setState(data);
   }
 
-  onImgLoad = () => {
+  onPreviewLoaded = (event) => {
+    this.updateLoadedImageSize(event.target);
+  }
+
+  updateLoadedImageSize = image => {
+    this.setState({
+      loadedImageWidth: image.width,
+      loadedImageHeight: image.height,
+      loadedImageRatio: image.width / image.height
+    })
+  }
+
+  onImgLoad = (event) => {
+    this.updateLoadedImageSize(event.target);
     this.setState({ loaded: true });
   }
 
@@ -54,7 +67,8 @@ class Img extends Component {
     const { baseURL, placeholderBackground, lazyLoading: configLazyLoadingValue } = config;
     const { lazyLoading = configLazyLoadingValue } = this.props;
     const {
-      height, ratio, cloudimgURL, cloudimgSRCSET, previewCloudimgURL, loaded, processed, previewLoaded, preview
+      height, ratio, cloudimgURL, cloudimgSRCSET, previewCloudimgURL, loaded, processed, previewLoaded, preview,
+      loadedImageRatio
     } = this.state;
 
     if (this.server) return <img src={baseURL + src}/>;
@@ -68,7 +82,13 @@ class Img extends Component {
       <div
         className={`${className} cloudimage-image ${loaded ? 'loaded' : 'loading'}`.trim()}
         style={styles.picture({
-          preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBackground
+          preserveSize,
+          imgNodeWidth,
+          imgNodeHeight,
+          ratio: ratio || loadedImageRatio,
+          previewLoaded,
+          loaded,
+          placeholderBackground
         })}
       >
         {preview &&
@@ -77,6 +97,7 @@ class Img extends Component {
             style={styles.previewImg({ loaded })}
             src={previewCloudimgURL}
             alt="low quality preview image"
+            onLoad={this.onPreviewLoaded}
           />
         </div>}
 

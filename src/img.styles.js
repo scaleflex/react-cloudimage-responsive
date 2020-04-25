@@ -1,11 +1,13 @@
 const picture = ({ preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBackground }) => ({
   width: preserveSize && imgNodeWidth ? imgNodeWidth : '100%',
   height: preserveSize && imgNodeHeight ? imgNodeHeight : 'auto',
-  paddingBottom: preserveSize ? 'none' : (100 / ratio) + '%',
   position: 'relative',
   background: (!previewLoaded && !loaded) ? placeholderBackground : 'transparent',
   transform: 'translateZ(0)',
-  overflow: 'hidden'
+  ...(ratio && {
+    paddingBottom: preserveSize ? 'none' : (100 / ratio) + '%',
+    overflow: 'hidden'
+  })
 });
 
 const previewWrapper = () => ({
