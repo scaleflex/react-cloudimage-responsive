@@ -26,6 +26,17 @@ Types of changes:
 
 -------------
 
+## 3.2.1 - 2020-04-25
+
+### Fixed
+- problem with not setting ratio
+- if use params as objects remove from html
+
+## 3.1.0 - 2020-04-02
+
+### Changed
+- babel version from 6.x.x to 7.x.x
+
 ## 1.2.0 - 2020-04-22
 
 ### Changed
@@ -35,8 +46,3 @@ Types of changes:
 
 ### Added
 - separate build without polyfills to support Gatsby
-
-## 3.1.0 - 2020-04-02
-
-### Changed
-- babel version from 6.x.x to 7.x.x
