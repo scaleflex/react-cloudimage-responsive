@@ -1,4 +1,4 @@
-export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, ...otherProps }) => ({
+export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, params, ...otherProps }) => ({
   alt,
   className,
   imgNodeWidth: width,
@@ -6,7 +6,7 @@ export const getFilteredProps = ({ config = {}, alt = '', className = '', src, s
   ...otherProps
 });
 
-export const getFilteredBgProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, ...otherProps }) => ({
+export const getFilteredBgProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, params, ...otherProps }) => ({
   alt,
   className,
   ...otherProps
