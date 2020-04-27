@@ -1,14 +1,39 @@
-const picture = ({ preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBackground }) => ({
-  width: preserveSize && imgNodeWidth ? imgNodeWidth : '100%',
-  height: preserveSize && imgNodeHeight ? imgNodeHeight : 'auto',
+const picture = ({ preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoaded, loaded, placeholderBackground, operation }) => ({
+  width: getPictureWidth({ operation, preserveSize, imgNodeWidth  }),
+  height: getPictureHeight({ operation, preserveSize, imgNodeHeight }),
   position: 'relative',
-  background: (!previewLoaded && !loaded) ? placeholderBackground : 'transparent',
+  background: (!previewLoaded && !loaded && operation !== 'bound') ? placeholderBackground : 'transparent',
   transform: 'translateZ(0)',
   ...(ratio && {
     paddingBottom: preserveSize ? 'none' : (100 / ratio) + '%',
     overflow: 'hidden'
   })
 });
+
+const getPictureWidth = ({ operation, preserveSize, imgNodeWidth }) => {
+  if (preserveSize && imgNodeWidth) {
+    return imgNodeWidth;
+  }
+
+  switch (operation) {
+    case 'bound': {
+      return 'auto';
+    }
+    default:
+      return  '100%';
+  }
+};
+
+const getPictureHeight = ({ operation, preserveSize, imgNodeHeight }) => {
+  if (preserveSize && imgNodeHeight) {
+    return imgNodeHeight;
+  }
+
+  switch (operation) {
+    default:
+      return  'auto';
+  }
+}
 
 const previewWrapper = () => ({
   transform: 'translateZ(0)',
@@ -23,19 +48,45 @@ const previewWrapper = () => ({
 
 const previewImg = ({ loaded }) => ({
   opacity: loaded ? 0 : 1,
-  width: '100%',
+  height: '100%',
   ...animation(true)
 });
 
-const img = ({ isPreview, loaded }) => ({
+const img = ({ isPreview, loaded, operation }) => ({
   display: 'block',
-  width: '100%',
-  position: 'absolute',
+  width: getImgWidth({ operation }),
+  ...(getImgPosition({ operation })),
   opacity: 1,
-  top: 0,
-  left: 0,
   ...(isPreview ? {} : animation(!loaded))
 });
+
+const getImgWidth = ({ operation }) => {
+  switch (operation) {
+    case 'bound': {
+      return 'auto';
+    }
+    default: {
+      return '100%'
+    }
+  }
+};
+
+const getImgPosition = ({ operation }) => {
+  switch (operation) {
+    case 'bound': {
+      return {
+        position: 'relative'
+      };
+    }
+    default: {
+      return {
+        position: 'absolute',
+        top: 0,
+        left: 0
+      }
+    }
+  }
+};
 
 const animation = (isON) => ({
   transform: isON ? `scale(1.1)` : 'scale(1)',

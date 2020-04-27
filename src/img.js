@@ -68,7 +68,7 @@ class Img extends Component {
     const { lazyLoading = configLazyLoadingValue } = this.props;
     const {
       height, ratio, cloudimgURL, cloudimgSRCSET, previewCloudimgURL, loaded, processed, previewLoaded, preview,
-      loadedImageRatio
+      loadedImageRatio, operation
     } = this.state;
 
     if (this.server) return <img src={baseURL + src}/>;
@@ -88,13 +88,14 @@ class Img extends Component {
           ratio: ratio || loadedImageRatio,
           previewLoaded,
           loaded,
-          placeholderBackground
+          placeholderBackground,
+          operation
         })}
       >
-        {preview &&
+        {(preview && operation !== 'bound') &&
         <div style={styles.previewWrapper()}>
           <img
-            style={styles.previewImg({ loaded })}
+            style={styles.previewImg({ loaded, operation })}
             src={previewCloudimgURL}
             alt="low quality preview image"
             onLoad={this.onPreviewLoaded}
@@ -103,7 +104,7 @@ class Img extends Component {
 
         <img
           alt={alt}
-          style={styles.img({ preview, loaded })}
+          style={styles.img({ preview, loaded, operation })}
           {...otherProps}
           src={cloudimgURL}
           onLoad={this.onImgLoad}
