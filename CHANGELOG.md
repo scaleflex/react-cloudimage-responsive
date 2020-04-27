@@ -26,6 +26,14 @@ Types of changes:
 
 -------------
 
+## 3.2.2 - 2020-04-25
+
+### Added
+- add possibility to configure minLowQualityWidth
+
+### Changed
+- improve logic for bound resize
+
 ## 3.2.1 - 2020-04-25
 
 ### Fixed
