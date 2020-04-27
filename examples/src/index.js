@@ -13,7 +13,10 @@ const cloudimageConfig = {
   baseURL: 'https://cloudimage.public.airstore.io/demo/',
   params: 'ci_info=1&org_if_sml=1',
   placeholderBackground: '#e1e1e1',
-  limitFactor: 10
+  limitFactor: 10,
+  lowQualityPreview: {
+    minImgWidth: 150
+  }
 };
 
 
@@ -384,7 +387,7 @@ class App extends Component {
 
           <BackgroundImg
             src="ameen-fahmy.jpg"
-            params="func=crop"
+            params="func=crop&ci_info=0"
             style={{ background: 'transparent 50% 50% / cover no-repeat', color: '#fff' }}
           >
             <div style={{ background: 'rgba(0,0,0,.6)', padding: 40 }}>
