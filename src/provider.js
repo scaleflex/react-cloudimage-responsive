@@ -25,7 +25,9 @@ class CloudimageProvider extends Component {
       doNotReplaceURL = false,
       limitFactor = 100,
       devicePixelRatioList, // TODO: add to readme
-      minLowQualityWidth = 250 // TODO: add to readme
+      lowQualityPreview: {
+        minImgWidth = 250
+      } = {}  // TODO: add to readme
     } = config;
 
     this.state = {
@@ -51,7 +53,7 @@ class CloudimageProvider extends Component {
       doNotReplaceURL,
       devicePixelRatioList: devicePixelRatioList || CONSTANTS.DEVICE_PIXEL_RATIO_LIST,
       limitFactor,
-      minLowQualityWidth
+      minLowQualityWidth: minImgWidth
     };
 
     if (typeof window !== 'undefined') {
