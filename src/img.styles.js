@@ -3,8 +3,9 @@ const picture = ({ preserveSize, imgNodeWidth, imgNodeHeight, ratio, previewLoad
   height: getPictureHeight({ operation, preserveSize, imgNodeHeight }),
   position: 'relative',
   background: (!previewLoaded && !loaded && operation !== 'bound') ? placeholderBackground : 'transparent',
+  ...(operation === 'bound' && { display: 'inline-block' }),
   transform: 'translateZ(0)',
-  ...(ratio && {
+  ...(ratio && operation !== 'bound' && {
     paddingBottom: preserveSize ? 'none' : (100 / ratio) + '%',
     overflow: 'hidden'
   })
