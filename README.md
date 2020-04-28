@@ -311,6 +311,17 @@ The lazyLoad configuration to [LazyLoad](https://github.com/twobin/react-lazyloa
 
 To see the full cloudimage documentation [click here](https://docs.cloudimage.io/go/cloudimage-documentation)
 
+### limitFactor
+
+###### Type: **Number** | Default: **100** | _optional_
+
+Rounds up size of an image to nearest limitFactor value.
+
+For example
+
+for an image with width 358px and limitFactor equals 100 the plugin will round up to 400px
+for an image with width 358px and limitFactor equals 5 the plugin will round up to 360px
+
 ## <a name="usages"></a>Usages
 
 #### Gatsby
