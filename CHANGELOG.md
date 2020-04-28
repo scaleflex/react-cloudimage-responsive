@@ -26,6 +26,14 @@ Types of changes:
 
 -------------
 
+## 3.2.4 - 2020-04-28
+
+### Fixed
+- problem with srcset attribute
+
+### Added
+- add SSR support
+
 ## 3.2.3 - 2020-04-28
 
 ### Changed
