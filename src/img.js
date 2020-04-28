@@ -108,7 +108,7 @@ class Img extends Component {
           {...otherProps}
           src={cloudimgURL}
           onLoad={this.onImgLoad}
-          {...((preview && previewLoaded || !preview) && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
+          {...(cloudimgSRCSET && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
         />
       </div>
     );
