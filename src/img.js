@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { isServer, processReactNode } from 'cloudimage-responsive-utils';
+import { BASE_64_PLACEHOLDER } from 'cloudimage-responsive-utils/dist/constants';
 import { getFilteredProps } from './utils.js';
 import styles from './img.styles';
 import LazyLoad from 'react-lazyload';
@@ -63,15 +64,15 @@ class Img extends Component {
   }
 
   render() {
-    const { config = {}, src } = this.props;
-    const { baseURL, placeholderBackground, lazyLoading: configLazyLoadingValue } = config;
+    const { config = {} } = this.props;
+    const { placeholderBackground, lazyLoading: configLazyLoadingValue } = config;
     const { lazyLoading = configLazyLoadingValue } = this.props;
     const {
       height, ratio, cloudimgURL, cloudimgSRCSET, previewCloudimgURL, loaded, processed, previewLoaded, preview,
       loadedImageRatio, operation
     } = this.state;
 
-    if (this.server) return <img src={baseURL + src}/>;
+    if (this.server) return <img alt={this.props.alt} src={BASE_64_PLACEHOLDER}/>;
     if (!processed) return <div/>;
 
     const {
