@@ -1,3 +1,9 @@
+body, html {
+  font-size: 14px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  background: #f5f5f5;
+}
+
 .home {
   position: relative;
   border-top: 1px solid transparent;
@@ -145,7 +151,7 @@
   margin: 0 auto -20px;
   top: 30px;
   padding: 0;
-  max-width: 800px;
+  max-width: 770px;
   display: inline-block;
   overflow: hidden;
   border-radius: 5px;
@@ -330,7 +336,7 @@ footer {
 
 footer {
   background: #fff;
-  padding-bottom: 50px;
+  padding-bottom: 30px;
   font-weight: lighter;
 }
 
@@ -353,8 +359,7 @@ footer .footer-menu ul {
 }
 
 footer .footer-menu ul li {
-  display: block;
-  text-align: left;
+  display: inline-block;
   margin-left: 15px;
   margin-bottom: 5px;
 }
@@ -489,14 +494,6 @@ img {
   border-bottom: 1px solid #6d6d6d;
   text-align: center;
   padding: 4px 0;
-  position: absolute;
-  width: 100%;
-  top: -33px;
-}
-
-.container-box-wrapper {
-  margin-top: 50px;
-  position: relative;
 }
 
 .device-pixel-ratio {
@@ -509,18 +506,35 @@ img {
   bottom: 15px;
   right: 15px;
   z-index: 100;
+  max-width: 250px;
 }
 
 .device-pixel-ratio span {
   background: #fff;
   display: inline-block;
-  border-radius: 50%;
-  width: 30px;
+  border-radius: 4px;
+  padding: 0 4px;
+  min-width: 30px;
   height: 30px;
   line-height: 30px;
   color: #222;
   text-align: center;
   vertical-align: middle;
+}
+
+.device-pixel-ratio .window-width-box {
+  display: inline-block;
+  margin-left: 4px;
+}
+
+.device-pixel-ratio hr {
+  margin: 0;
+  margin-top: 5px;
+}
+
+.device-pixel-ratio .label {
+  min-width: 150px;
+  display: inline-block;
 }
 
 .ready-to-start.filerobot-ui-family {

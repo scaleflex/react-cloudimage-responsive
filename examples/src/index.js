@@ -21,6 +21,18 @@ const cloudimageConfig = {
 
 
 class App extends Component {
+  state = {
+    innerWidth: window.innerWidth
+  };
+
+  componentDidMount() {
+    const self = this;
+
+    window.addEventListener('resize', () => {
+      self.setState({ innerWidth: window.innerWidth });
+    })
+  }
+
   render() {
     return (
       <CloudimageProvider config={cloudimageConfig}>
@@ -284,19 +296,19 @@ class App extends Component {
             <div className="row">
               <div className="col-md-6 col-lg-7">
                 <Img
-                  src={images[18].src}
+                  src={images[17].src}
                   sizes={{
-                    xs: { w: 400, h: 200 },
-                    sm: { w: 800, h: 400 },
-                    '(min-width: 620px)': { w: 400, h: 120 },
-                    md: { w: 500, h: 700 },
-                    lg: { w: 700, h: 600 },
-                    xl: { w: 800, h: 500 }
+                    '(max-width: 575px)': { w: 400, h: 150 },
+                    '(min-width: 576px)': { r: 1 },
+                    '(min-width: 620px)': { h: 560 },
+                    '(min-width: 768px)': { w: '50vw' },
+                    '(min-width: 992px)': { w: '55vw', h: 300 },
+                    '(min-width: 1200px)': { w: 1200 }
                   }}
                 />
                 <small>
-                  original: <i>{images[18].original_size}</i> <a
-                  href={`https://cloudimage.public.airstore.io/demo/${images[18].src}`} target="_blank">link</a><br/>
+                  original: <i>{images[17].original_size}</i> <a
+                  href={`https://cloudimage.public.airstore.io/demo/${images[17].src}`} target="_blank">link</a><br/>
                 </small>
               </div>
               <div className="col-md-6 col-lg-5 desc-wrapper-with-media-query">
@@ -304,14 +316,14 @@ class App extends Component {
                 <p>Resize your browser window to see how it works</p>
                 <SyntaxHighlighter language='jsx' style={darcula}>
                   {`<Img
-  src={images[18].src}
-  size="
-    xs: { w: 400, h: 200 },
-    sm: { w: 800, h: 400 },
-    '(min-width: 620px)': { w: 400, h: 120 },
-    md: { w: 500, h: 700 },
-    lg: { w: 700, h: 600 },
-    xl: { w: 800, h: 500 }
+  src={images[17].src}
+  sizes="
+    '(max-width: 575px)': { w: 400, h: 150 },
+    '(min-width: 576px)': { r: 1 },
+    '(min-width: 620px)': { h: 560 },
+    '(min-width: 768px)': { w: '50vw' },
+    '(min-width: 992px)': { w: '55vw', h: 300 },
+    '(min-width: 1200px)': { w: 1200 }
   "
 />`}
                 </SyntaxHighlighter>
@@ -328,47 +340,74 @@ class App extends Component {
               <div className="col-md-4">
                 <p>Original Images</p>
                 <div >
-                  <div className="container-box-wrapper" style={{ display: 'inline-block', width: 200, height: 200 }}>
-                    <ContainerBox isHeight/>
+                  <div style={{ width: 200 }}>
+                    <div className="container-width-box">
+                      container <span>200</span>x<span>200</span>px
+                    </div>
+                  </div>
+                  <div
+                    className="container-box-wrapper"
+                    style={{ display: 'inline-block', width: 200, height: 200, position: 'relative' }}
+                  >
                     <img src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"/>
                     <div className="border-box"/>
                   </div>
                 </div>
 
-                <SyntaxHighlighter language='jsx' style={darcula}>{`<img 
-  src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"
-/>`}</SyntaxHighlighter>
+                <SyntaxHighlighter language='jsx' style={darcula}>{`<div style={{ width: 200, height: 200 }}>
+  <img 
+    src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"
+  />
+</div>`}</SyntaxHighlighter>
               </div>
 
               <div className="col-md-4">
                 <p>Crop</p>
-                <div >
-                  <div className="container-box-wrapper" style={{ display: 'inline-block', width: 200, height: 200 }}>
-                    <ContainerBox isHeight/>
+                <div>
+                  <div style={{ width: 200 }}>
+                    <div className="container-width-box">
+                      container <span>200</span>x<span>200</span>px
+                    </div>
+                  </div>
+                  <div
+                    className="container-box-wrapper"
+                    style={{ display: 'inline-block', width: 200, height: 200, position: 'relative' }}
+                  >
                     <Img src="boat.jpg" params="func=crop"/>
                     <div className="border-box"/>
                   </div>
                 </div>
                 <SyntaxHighlighter language='jsx' style={darcula}>
-                  {`<Img 
-  src="boat.jpg" 
-  params="func=crop"
-/>`}</SyntaxHighlighter>
+                  {`<div style={{ width: 200, height: 200 }}>
+  <Img 
+    src="boat.jpg" 
+    params="func=crop"
+  />
+</div>`}</SyntaxHighlighter>
               </div>
 
               <div className="col-md-4">
                 <p>Auto crop</p>
                 <div>
-                  <div className="container-box-wrapper" style={{ display: 'inline-block', width: 200, height: 200 }}>
-                    <ContainerBox isHeight/>
+                  <div style={{ width: 200 }}>
+                    <div className="container-width-box">
+                      container <span>200</span>x<span>200</span>px
+                    </div>
+                  </div>
+                  <div
+                    className="container-box-wrapper"
+                    style={{ display: 'inline-block', width: 200, height: 200, position: 'relative' }}
+                  >
                     <Img src="boat.jpg" params="func=crop&gravity=auto"/>
                     <div className="border-box"/>
                   </div>
                 </div>
-                <SyntaxHighlighter language='jsx' style={darcula}>{`<Img 
-  src="boat.jpg" 
-  params="func=crop&gravity=auto"
-/>`}</SyntaxHighlighter>
+                <SyntaxHighlighter language='jsx' style={darcula}>{`<div style={{ width: 200, height: 200 }}>
+  <Img 
+    src="boat.jpg" 
+    params="func=crop&gravity=auto"
+  />
+</div>`}</SyntaxHighlighter>
               </div>
             </div>
           </div>
@@ -545,7 +584,10 @@ render(<App />, document.body);`}</SyntaxHighlighter>
         </footer>
 
         <div id="device-pixel-ratio" className="device-pixel-ratio">
-          Your device pixel ratio: <span>{(window.devicePixelRatio || 1).toFixed(1)}</span>
+          <div className="label">Your device pixel ratio:</div> <span>{(window.devicePixelRatio || 1).toFixed(1)}</span>
+          <hr/>
+          <div className="label">Your device width:</div>
+          <div className="window-width-box"><span>{this.state.innerWidth} px</span></div>
         </div>
 
       </CloudimageProvider>
