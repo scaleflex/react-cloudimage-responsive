@@ -47,14 +47,17 @@ class Img extends Component {
   }
 
   onPreviewLoaded = (event) => {
+    if (this.state.previewLoaded) return;
+
     this.updateLoadedImageSize(event.target);
+    this.setState({ previewLoaded: true });
   }
 
   updateLoadedImageSize = image => {
     this.setState({
-      loadedImageWidth: image.width,
-      loadedImageHeight: image.height,
-      loadedImageRatio: image.width / image.height
+      loadedImageWidth: image.naturalWidth,
+      loadedImageHeight: image.naturalHeight,
+      loadedImageRatio: image.naturalWidth / image.naturalHeight
     })
   }
 
