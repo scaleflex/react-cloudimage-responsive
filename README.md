@@ -73,7 +73,7 @@ powered by [Cloudimage](https://www.cloudimage.io/)
 * [Step 3: Implement](#implement)
 * [Configuration](#configuration)
 * [Image properties](#image_properties)
-* [Usages](#usages)
+* [Examples & workarounds](#examples_workarounds)
 * [Browser support](#browser_support)
 * [Filerobot UI Family](#ui_family)
 * [Contributing](#contributing)
@@ -392,21 +392,10 @@ The lazyLoad configuration to [LazyLoad](https://github.com/twobin/react-lazyloa
 
 To see the full cloudimage documentation [click here](https://docs.cloudimage.io/go/cloudimage-documentation)
 
-## <a name="usages"></a>Usages
-
-#### Gatsby
-
-React-cloudimage-responsive plugins uses core-js v3 library to add polyfills. Gatsby has some problems with it.
-To support the plugin with Gatsby, there is a separate build process which doesn't include polyfills.
-You can add them manually in your index.js file before importing the plugin.
-
-The initialization process is the same, the only difference you need to import **components** and **provider** with `react-cloudimage-responsive/dist/gatsby`;
-
-For example
-
-```jsx
-import Img, { CloudimageProvider } from "react-cloudimage-responsive/dist/gatsby";
-```
+## <a name="examples_workarounds"></a>Examples & workarounds
+* [See all](https://github.com/scaleflex/react-cloudimage-responsive/blob/master/examples/EXAMPLES.md)
+* [Cropping](https://github.com/scaleflex/react-cloudimage-responsive/blob/master/examples/EXAMPLES.md#cropping)
+* [Integration with Gatsby](https://github.com/scaleflex/react-cloudimage-responsive/blob/master/examples/EXAMPLES.md#integration-with-gatsby)
 
 ## <a name="browser_support"></a>Browser support
 
