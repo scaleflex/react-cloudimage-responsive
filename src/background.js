@@ -57,7 +57,9 @@ class BackgroundImg extends Component {
     if (!processed) return <div>{children}</div>;
 
     const Container = (
-      <BackgroundInner {...{ cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps }}/>
+      <BackgroundInner
+        {...{ cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps, config }}
+      />
     );
 
     return lazyLoading ? (
@@ -72,7 +74,15 @@ class BackgroundInner extends Component {
   state = { loaded: false };
 
   componentDidMount() {
-    this.preLoadImg(this.props.cloudimgURL);
+    const { config: { delay } } = this.props;
+
+    if (typeof delay !== 'undefined') {
+      setTimeout(() => {
+        this.preLoadImg(this.props.cloudimgURL);
+      }, delay);
+    } else {
+      this.preLoadImg(this.props.cloudimgURL);
+    }
   }
 
   preLoadImg = (cloudimgURL) => {

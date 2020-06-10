@@ -53,7 +53,7 @@ class CloudimageProvider extends Component {
       doNotReplaceURL,
       devicePixelRatioList,
       limitFactor,
-      minLowQualityWidth: minImgWidth
+      minLowQualityWidth: minImgWidth,
     };
 
     if (typeof window !== 'undefined') {

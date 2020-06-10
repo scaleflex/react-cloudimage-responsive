@@ -22,7 +22,15 @@ class Img extends Component {
   componentDidMount() {
     if (this.server) return;
 
-    this.processImg();
+    const { config: { delay } } = this.props;
+
+    if (typeof delay !== 'undefined') {
+      setTimeout(() => {
+        this.processImg();
+      }, delay);
+    } else {
+      this.processImg();
+    }
   }
 
   componentDidUpdate(prevProps) {
