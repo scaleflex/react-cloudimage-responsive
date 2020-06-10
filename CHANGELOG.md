@@ -26,6 +26,11 @@ Types of changes:
 
 -------------
 
+## 3.3.1 - 2020-06-10
+
+### Added
+- delay property to handle cases when we need wait till some layout is loaded first
+
 ## 3.3.0 - 2020-04-29
 
 ### Added

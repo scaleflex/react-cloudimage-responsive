@@ -283,6 +283,15 @@ For example
 
 List of supported device pixel ratios. If there is no need to support retina devices, you should set empty array `devicePixelRatioList: []`
 
+### delay
+
+###### Type: **Number** | _optional_
+
+Delay for processing an image after rendering component.
+
+**NOTE:** normally the parameter is not needed, but in some cases with integrating third part libraries it can fix wrong
+calculation of image container.
+
 ## <a name="image_properties"></a> Image properties
 
 ### src
