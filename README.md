@@ -306,6 +306,18 @@ relative to baseUrl in your config.
 The plugin uses a special algorithm to detect the width of image container and set the image size accordingly.
 This is the recommended way of using the Cloudimage Responsive plugin.
 
+### onImgLoad
+
+###### Type: **function** | Default: **undefined**
+
+A function to be executed after the image is loaded
+
+```jsx
+<Img
+  src="dino-reichmuth-1.jpg"
+  onImgLoad={(params)=>{console.log(params);}}/>
+```
+
 ### width
 
 ###### Type: **String** (e.g. 300px, 20vw) | Default: **undefined**
