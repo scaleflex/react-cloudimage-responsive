@@ -150,7 +150,7 @@ the image position while image is loading.
 
 ```html
 <BackgroundImg src="img.jpg">
- {'Your conent...'}
+ {'Your content...'}
 </BackgroundImg>
 ```
 
@@ -172,6 +172,18 @@ minute and is totally free.
 ###### Type: **String** | Default: **"/"** | _optional_
 
 Your image folder on server, this alows to shorten your origin image URLs.
+
+### onImgLoad
+
+###### Type: **function** | Default: **undefined**
+
+A function to be executed after the image is loaded
+
+```jsx
+<BackgroundImg src="img.jpg" onImgLoad={(params)=>{console.log(params);}}>
+ {'Your content...'}
+</BackgroundImg>
+```
 
 ### doNotReplaceURL
 
