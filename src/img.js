@@ -69,9 +69,14 @@ class Img extends Component {
     })
   }
 
-  onImgLoad = (event) => {
+  _onImgLoad = (event) => {
     this.updateLoadedImageSize(event.target);
     this.setState({ loaded: true });
+    
+    const { onImgLoad } = this.props;
+    if(typeof onImgLoad === "function"){
+      onImgLoad(event);
+    }
   }
 
   render() {
@@ -119,7 +124,7 @@ class Img extends Component {
           style={styles.img({ preview, loaded, operation })}
           {...otherProps}
           src={cloudimgURL}
-          onLoad={this.onImgLoad}
+          onLoad={this._onImgLoad}
           {...(cloudimgSRCSET && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
         />
       </div>

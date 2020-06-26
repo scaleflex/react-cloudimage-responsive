@@ -49,7 +49,7 @@ class BackgroundImg extends Component {
     if (this.server) return <div>{this.props.children}</div>;
 
     const { height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
-    const { config = {} } = this.props;
+    const { config = {}, onImgLoad } = this.props;
     const {
       className, style, lazyLoadConfig, lazyLoading = config.lazyLoading, children, ...otherProps
     } = getFilteredBgProps(this.props);
@@ -58,7 +58,17 @@ class BackgroundImg extends Component {
 
     const Container = (
       <BackgroundInner
-        {...{ cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps, config }}
+        {...{
+          cloudimgURL,
+          previewCloudimgURL,
+          className,
+          style,
+          children,
+          preview,
+          otherProps,
+          config,
+          onImgLoad
+        }}
       />
     );
 
@@ -88,12 +98,17 @@ class BackgroundInner extends Component {
   preLoadImg = (cloudimgURL) => {
     const img = new Image();
 
-    img.onload = this.onImgLoad;
+    img.onload = this._onImgLoad;
     img.src = cloudimgURL;
   }
 
-  onImgLoad = () => {
+  _onImgLoad = (...params) => {
     this.setState({ loaded: true });
+  
+    const { onImgLoad } = this.props;
+    if(typeof onImgLoad === "function"){
+      onImgLoad(params);
+    }
   }
 
   render() {
