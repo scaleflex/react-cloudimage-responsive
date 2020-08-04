@@ -57,7 +57,7 @@ const img = ({ isPreview, loaded, operation }) => ({
   display: 'block',
   width: getImgWidth({ operation }),
   ...(getImgPosition({ operation })),
-  opacity: 1,
+  opacity: loaded ? 1 : 0,
   ...(isPreview ? {} : animation(!loaded))
 });
 
@@ -91,7 +91,6 @@ const getImgPosition = ({ operation }) => {
 
 const animation = (isON) => ({
   transform: isON ? `scale(1.1)` : 'scale(1)',
-  transition: 'opacity 400ms ease 0ms',
   filter: isON ? `blur(10px)` : 'blur(0)'
 });
 
