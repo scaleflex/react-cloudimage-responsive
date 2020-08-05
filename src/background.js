@@ -3,8 +3,7 @@ import { findDOMNode } from 'react-dom';
 import { isServer, processReactNode } from 'cloudimage-responsive-utils';
 import { getFilteredBgProps } from './utils.js';
 import LazyLoad from 'react-lazyload';
-import styles from './background.styles';
-
+import { backgroundStyles as styles } from 'cloudimage-responsive-utils';
 
 class BackgroundImg extends Component {
   constructor(props) {
@@ -23,7 +22,10 @@ class BackgroundImg extends Component {
   componentDidUpdate(prevProps) {
     if (this.server) return;
 
-    const { config: { innerWidth }, src } = this.props;
+    const {
+      config: { innerWidth },
+      src
+    } = this.props;
 
     if (prevProps.config.innerWidth !== innerWidth) {
       this.processBg(true, innerWidth > prevProps.config.innerWidth);
@@ -36,37 +38,68 @@ class BackgroundImg extends Component {
 
   processBg = (update, windowScreenBecomesBigger) => {
     const bgNode = findDOMNode(this);
-    const data = processReactNode(this.props, bgNode, update, windowScreenBecomesBigger);
+    const data = processReactNode(
+      this.props,
+      bgNode,
+      update,
+      windowScreenBecomesBigger
+    );
 
     if (!data) {
       return;
     }
 
     this.setState(data);
-  }
+  };
 
   render() {
     if (this.server) return <div>{this.props.children}</div>;
 
-    const { height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
+    const {
+      height,
+      processed,
+      cloudimgURL,
+      previewCloudimgURL,
+      preview
+    } = this.state;
     const { config = {} } = this.props;
     const {
-      className, style, lazyLoadConfig, lazyLoading = config.lazyLoading, children, ...otherProps
+      className,
+      style,
+      lazyLoadConfig,
+      lazyLoading = config.lazyLoading,
+      children,
+      ...otherProps
     } = getFilteredBgProps(this.props);
 
     if (!processed) return <div>{children}</div>;
 
     const Container = (
       <BackgroundInner
-        {...{ cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps, config }}
+        {...{
+          cloudimgURL,
+          previewCloudimgURL,
+          className,
+          style,
+          children,
+          preview,
+          otherProps,
+          config
+        }}
       />
     );
 
     return lazyLoading ? (
-      <LazyLoad height={height} offset={config.lazyLoadOffset} {...lazyLoadConfig}>
+      <LazyLoad
+        height={height}
+        offset={config.lazyLoadOffset}
+        {...lazyLoadConfig}
+      >
         {Container}
       </LazyLoad>
-    ) : Container;
+    ) : (
+      Container
+    );
   }
 }
 
@@ -74,7 +107,9 @@ class BackgroundInner extends Component {
   state = { loaded: false };
 
   componentDidMount() {
-    const { config: { delay } } = this.props;
+    const {
+      config: { delay }
+    } = this.props;
 
     if (typeof delay !== 'undefined') {
       setTimeout(() => {
@@ -85,39 +120,59 @@ class BackgroundInner extends Component {
     }
   }
 
-  preLoadImg = (cloudimgURL) => {
+  preLoadImg = cloudimgURL => {
     const img = new Image();
 
     img.onload = this.onImgLoad;
     img.src = cloudimgURL;
-  }
+  };
 
   onImgLoad = () => {
     this.setState({ loaded: true });
-  }
+  };
 
   render() {
     const { loaded } = this.state;
-    const { cloudimgURL, previewCloudimgURL, className, style, children, preview, otherProps } = this.props;
+    const {
+      cloudimgURL,
+      previewCloudimgURL,
+      className,
+      style,
+      children,
+      preview,
+      otherProps
+    } = this.props;
 
     return (
       <div
         {...otherProps}
-        className={[className, 'cloudimage-background', loaded ? 'loaded' : 'loading'].join(' ').trim()}
+        className={[
+          className,
+          'cloudimage-background',
+          loaded ? 'loaded' : 'loading'
+        ]
+          .join(' ')
+          .trim()}
         style={styles.container({ style, cloudimgURL })}
       >
-        {preview &&
-        <div style={styles.previewBgWrapper({ loaded })}>
-          <div style={styles.previewBg({ previewCloudimgURL })}/>
-        </div>}
+        {preview && (
+          <div style={styles.previewBgWrapper({ loaded })}>
+            <div style={styles.previewBg({ previewCloudimgURL })} />
+          </div>
+        )}
 
-        {preview ?
-          <div className="cloudimage-background-content" style={{ position: 'relative' }}>
+        {preview ? (
+          <div
+            className="cloudimage-background-content"
+            style={{ position: 'relative' }}
+          >
             {children}
           </div>
-          : children}
+        ) : (
+          children
+        )}
       </div>
-    )
+    );
   }
 }
 
