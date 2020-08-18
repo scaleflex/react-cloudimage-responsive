@@ -49,7 +49,7 @@ Cloudimage's resizing servers will download the origin image from
 the source, resize it for the client's screen size and deliver to your users through one or multiple
 Content Delivery Networks (CDNs). The generated image formats are cached in the CDN and will be delivered rocket fast on any subsequent request.
 
-**NOTE:** Your original (master) images should be stored on a server
+**NOTE:** Your original (master) images have to be stored on a server
 or storage bucket (S3, Google Cloud, Azure Blob...) reachable over
 HTTP or HTTPS by Cloudimage. If you want to upload your master images to
 Cloudimage, contact us at
@@ -224,7 +224,7 @@ params: {
 
 ###### Type: **String** | Default: **'#f4f4f4'** | _optional_
 
-Placeholder colored background while the image is loading or use it to set your custom placeholder image or gif
+Placeholder coloured background while the image is loading or use it to set your custom placeholder image or gif
 
 for example
 
@@ -234,7 +234,7 @@ for example
 
 ###### Type: **Object**
 
-* `lowQualityPreview.minImgWidth` number (default: 400) - minimal width of an image to load low quality preview image
+* `lowQualityPreview.minImgWidth` number (default: 400) - minimum width of an image to load a low-quality preview image
 
 Example:
 
@@ -265,23 +265,23 @@ const cloudimageConfig = {
 };
 ```
 
-Breakpoints shortcuts to use in image size property, can be overwridden.
+Breakpoints shortcuts to use in image size property, can be overridden.
 
 ### limitFactor
 
 ###### Type: **Number** | Default: **100** | _optional_
 
-Rounds up size of an image to nearest limitFactor value.
+Rounds up the size of an image to the nearest limitFactor value.
 
-For example
-* for an image with width **358px** and limitFactor equals **100** the plugin will round up to 400px
-* for an image with width **358px** and limitFactor equals **5** the plugin will round up to 360px
+For example:
+* for an image with width **358px** and limitFactor equal to **100**, the plugin will round up to 400px;
+* for an image with width **358px** and limitFactor equal to **5**, the plugin will round up to 360px.
 
 ### devicePixelRatioList
 
 ###### Type: **[Number,...]** | Default: **[1, 1.5, 2, 3, 4]** | _optional_
 
-List of supported device pixel ratios. If there is no need to support retina devices, you should set empty array `devicePixelRatioList: []`
+List of supported device pixel ratios. If there is no need to support retina devices, you should set an empty array `devicePixelRatioList: []`.
 
 ### delay
 
@@ -289,7 +289,7 @@ List of supported device pixel ratios. If there is no need to support retina dev
 
 Delay for processing an image after rendering component.
 
-**NOTE:** normally the parameter is not needed, but in some cases with integrating third part libraries it can fix wrong
+**NOTE:** normally, the parameter is not needed but in some cases with integrating third-party libraries, it can fix wrong
 calculation of image container.
 
 ## <a name="image_properties"></a> Image properties
@@ -299,7 +299,7 @@ calculation of image container.
 ###### Type: **String** | Default: **undefined** | _required_
 
 Original image hosted on your web server. You can use absolute path or
-relative to baseUrl in your config.
+relative to the baseUrl in your config.
 
 **NOTES:**
 
@@ -310,20 +310,20 @@ This is the recommended way of using the Cloudimage Responsive plugin.
 
 ###### Type: **String** (e.g. 300px, 20vw) | Default: **undefined**
 
-If it's set the plugin will use width as fixed value and change only according device pixel ratio.
+If set, the plugin will use width as fixed value and change only according to the device pixel ratio.
 
 ### height
 
 ###### Type: **String** (e.g. 300px, 20vh) | Default: **undefined**
 
-If it's set the plugin will use height as fixed value and change only according device pixel ratio.
+If it's set, the plugin will use height as fixed value and change only according to the device pixel ratio.
 
 ### params
 
 ###### Type: **String** | Default: **undefined** | _optional_
 
-You can apply any Cloudimage operations/ filters to your image, e.g. brightness, contrast, rotation...
-Multiple params can be applied, separated by "```&```" e.g. **wat_scale=35&wat_gravity=northeast&wat_pad=10&grey=1**
+You can apply any Cloudimage operations/filters to your image, like brightness, contrast, rotation, etc.
+Multiple parameters can be applied, separated by "```&```" e.g. **wat_scale=35&wat_gravity=northeast&wat_pad=10&grey=1**
 
 ```javascript
 params="gray=1&bright=10"
@@ -384,14 +384,14 @@ detect the width of image container and set the image size accordingly. This is 
 
 ###### Type: **Number** | _optional_
 
-It is recommended to prevent page layout jumping. The parameter is used to calculate image height to hold
-the image position while image is loading.
+It is recommended to set this parameter to prevent page layout jumping. It is used to calculate the image height to hold
+the position of the image while it is loading.
 
 ### lazyLoading
 
 ###### Type: **Bool** | _optional_
 
-Make it possible to disable lazyLoading for each image.
+It makes possible to disable lazyLoading on a per-image basis.
 
 ### lazyLoadConfig
 
@@ -399,7 +399,7 @@ Make it possible to disable lazyLoading for each image.
 
 The lazyLoad configuration to [LazyLoad](https://github.com/twobin/react-lazyload#props) component. 
 
-To see the full cloudimage documentation [click here](https://docs.cloudimage.io/go/cloudimage-documentation)
+To see the full Cloudimage documentation, [click here](https://docs.cloudimage.io/go/cloudimage-documentation).
 
 ## <a name="examples_workarounds"></a>Examples & workarounds
 * [See all](https://github.com/scaleflex/react-cloudimage-responsive/blob/master/examples/EXAMPLES.md)
@@ -424,4 +424,4 @@ All contributions are super welcome!
 
 
 ## <a name="license"></a>License
-React Cloudimage Responsive is provided under the [MIT License](https://opensource.org/licenses/MIT)
+React Cloudimage Responsive is provided under the [MIT License](https://opensource.org/licenses/MIT).
