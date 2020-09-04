@@ -16,7 +16,8 @@ const cloudimageConfig = {
   limitFactor: 10,
   lowQualityPreview: {
     minImgWidth: 150
-  }
+  },
+
 };
 
 

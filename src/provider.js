@@ -61,6 +61,10 @@ class CloudimageProvider extends Component {
       window.addEventListener("resize", this.updateDimensions);
     }
   }
+  
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.updateDimensions);
+  }
 
   updateDimensions = debounce(100, () => {
     this.setState({ innerWidth: window.innerWidth });
