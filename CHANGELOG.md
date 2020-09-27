@@ -26,6 +26,14 @@ Types of changes:
 
 -------------
 
+## 3.3.2 - 2020-06-26
+
+### Added
+- onImgLoad handler to Img and BackgroundImg components
+
+## 3.3.2 - 2020-09-09
+### Added
+- allow unmounting the provider
 ## 3.3.1 - 2020-06-10
 
 ### Added

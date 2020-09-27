@@ -78,10 +78,15 @@ class Img extends Component {
     });
   };
 
-  onImgLoad = event => {
+  _onImgLoad = (event) => {
     this.updateLoadedImageSize(event.target);
     this.setState({ loaded: true });
-  };
+    
+    const { onImgLoad } = this.props;
+    if(typeof onImgLoad === "function"){
+      onImgLoad(event);
+    }
+  }
 
   render() {
     const { config = {} } = this.props;
@@ -150,12 +155,8 @@ class Img extends Component {
           style={styles.img({ preview, loaded, operation })}
           {...otherProps}
           src={cloudimgURL}
-          onLoad={this.onImgLoad}
-          {...(cloudimgSRCSET && {
-            srcSet: cloudimgSRCSET
-              .map(({ dpr, url }) => `${url} ${dpr}x`)
-              .join(', ')
-          })}
+          onLoad={this._onImgLoad}
+          {...(cloudimgSRCSET && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
         />
       </div>
     );

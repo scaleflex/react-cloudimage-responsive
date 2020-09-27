@@ -277,7 +277,7 @@ class App extends Component {
               <div className="col-12">
                 <div className="container-box-wrapper">
                   <ContainerBox/>
-                  <Img src={images[8].src} ratio={images[8].ratio}/>
+                  <Img src={images[8].src} ratio={images[8].ratio} onImgLoad={(params)=>{console.log(params);}}/>
                 </div>
               </div>
 
@@ -429,6 +429,7 @@ class App extends Component {
             src="ameen-fahmy.jpg"
             params="func=crop&ci_info=0"
             style={{ background: 'transparent 50% 50% / cover no-repeat', color: '#fff' }}
+            onImgLoad={(params)=>{console.log(params);}}
           >
             <div style={{ background: 'rgba(0,0,0,.6)', padding: 40 }}>
               <div className="container" >
