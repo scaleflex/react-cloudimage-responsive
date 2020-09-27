@@ -123,6 +123,7 @@ class Img extends Component {
       ...otherProps
     } = getFilteredProps(this.props);
 
+    const {onImgLoad,...filteredProps} = otherProps
     const picture = (
       <div
         className={`${className} cloudimage-image ${
@@ -153,7 +154,7 @@ class Img extends Component {
         <img
           alt={alt}
           style={styles.img({ preview, loaded, operation })}
-          {...otherProps}
+          {...filteredProps}
           src={cloudimgURL}
           onLoad={this._onImgLoad}
           {...(cloudimgSRCSET && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}

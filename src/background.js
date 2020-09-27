@@ -139,13 +139,14 @@ class BackgroundInner extends Component {
       className,
       style,
       children,
-      preview,
+      preview,  
       otherProps
     } = this.props;
 
+    const {onImgLoad,...filteredProps} = otherProps
     return (
       <div
-        {...otherProps}
+        {...filteredProps}
         className={[
           className,
           'cloudimage-background',
