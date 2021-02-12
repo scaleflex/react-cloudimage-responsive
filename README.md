@@ -173,17 +173,6 @@ minute and is totally free.
 
 Your image folder on server, this alows to shorten your origin image URLs.
 
-### onImgLoad
-
-###### Type: **function** | Default: **undefined**
-
-A function to be executed after the image is loaded
-
-```jsx
-<BackgroundImg src="img.jpg" onImgLoad={(params)=>{console.log(params);}}>
- {'Your content...'}
-</BackgroundImg>
-```
 
 ### doNotReplaceURL
 
