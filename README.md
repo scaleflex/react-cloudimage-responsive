@@ -293,7 +293,7 @@ Delay for processing an image after rendering component.
 **NOTE:** normally, the parameter is not needed but in some cases with integrating third-party libraries, it can fix wrong
 calculation of image container.
 
-##### imageSizeAttributes
+### ImageSizeAttributes
 
 ###### Type: **String** | possible values: 'use', 'ignore', 'take-ratio' | Default: **'use'** 
 
