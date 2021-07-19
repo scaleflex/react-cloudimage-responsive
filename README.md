@@ -293,6 +293,22 @@ Delay for processing an image after rendering component.
 **NOTE:** normally, the parameter is not needed but in some cases with integrating third-party libraries, it can fix wrong
 calculation of image container.
 
+##### **imageSizeAttributes**
+
+###### Type: **String** | possible values: 'use', 'ignore', 'take-ratio' | Default: **'use'** 
+
+If width and height attributes are set:
+
+**use** - width & height attributes values will be used to calculate image size (according to user's DPR) and **ratio**. 
+
+**take-ratio** - width & height attributes values will be used only to calculate **ratio**.
+
+**ignore** - width & height attributes will be ignored.
+
+If width and height attributes are NOT set, image container size will be detected to calculate result image size (according to user's DPR)
+
+*Note*: If only width or height attributes is set, ratio is going to be taken from ci-ratio image attribute
+
 ## <a name="image_properties"></a> Image properties
 
 ### src
