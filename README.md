@@ -167,6 +167,12 @@ Your Cloudimage customer token.
 Cloudimage account to get one. The subscription takes less than a
 minute and is totally free.
 
+### customDomain
+
+###### Type: **String** | Default: **"cloudimage.io"** | _optional_
+
+If you use a custom CNAME for your cloudimage integration, you can set it here.
+Note: this will disregard your token above as this should be built into the CNAME entry.
 ### baseURL
 
 ###### Type: **String** | Default: **"/"** | _optional_
