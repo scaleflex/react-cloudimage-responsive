@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.5.1 - 2021-07-27
+### Fixed
+- domain property in config
+
 ## 3.5.0 - 2021-07-23
 ### Added
 - new property: **customDomain**

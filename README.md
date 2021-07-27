@@ -1,4 +1,4 @@
-[![Release](https://img.shields.io/badge/release-v3.5.0-blue.svg)](https://github.com/scaleflex/react-cloudimage-responsive/releases)
+[![Release](https://img.shields.io/badge/release-v3.5.1-blue.svg)](https://github.com/scaleflex/react-cloudimage-responsive/releases)
 [![Free plan](https://img.shields.io/badge/price-includes%20free%20plan-green.svg)](https://www.cloudimage.io/en/home#b38181a6-b9c8-4015-9742-7b1a1ad382d5)
 [![Contributions welcome](https://img.shields.io/badge/contributions-welcome-orange.svg)](#contributing)
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
@@ -172,6 +172,7 @@ minute and is totally free.
 ###### Type: **String** | Default: **"cloudimage.io"** | _optional_
 
 If you use a custom CNAME for your cloudimage integration, you can set it here.
+
 Note: this will disregard your token above as this should be built into the CNAME entry.
 
 ### baseURL
