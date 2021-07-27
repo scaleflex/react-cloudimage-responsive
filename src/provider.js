@@ -12,7 +12,7 @@ class CloudimageProvider extends Component {
 
     const {
       token = '',
-      domain = 'cloudimg.io',
+      domain = config.customDomain || 'cloudimg.io',
       customDomain = false,
       lazyLoading = true,
       lazyLoadOffset = 100,
