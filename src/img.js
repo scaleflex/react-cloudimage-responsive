@@ -88,11 +88,20 @@ class Img extends Component {
     }
   }
 
+  getAlt = (name) => {
+   if(!name){
+     return
+   }
+   const index = name.indexOf('.')
+   return name.slice(0, index)
+  }
+  
   render() {
     const { config = {} } = this.props;
     const {
       placeholderBackground,
-      lazyLoading: configLazyLoadingValue
+      lazyLoading: configLazyLoadingValue,
+      autoAlt
     } = config;
     const { lazyLoading = configLazyLoadingValue } = this.props;
     const {
@@ -152,7 +161,7 @@ class Img extends Component {
         )}
 
         <img
-          alt={alt}
+          alt={!alt && autoAlt? this.getAlt(this.props.src) : alt }
           style={styles.img({ preview, loaded, operation })}
           {...filteredProps}
           src={cloudimgURL}

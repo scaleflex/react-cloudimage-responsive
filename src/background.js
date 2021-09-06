@@ -56,7 +56,7 @@ class BackgroundImg extends Component {
     if (this.server) return <div>{this.props.children}</div>;
 
     const { height, processed, cloudimgURL, previewCloudimgURL, preview } = this.state;
-    const { config = {}, onImgLoad } = this.props;
+    const { config = {}, onImgLoad, src } = this.props;
     const {
       className,
       style,
@@ -79,7 +79,8 @@ class BackgroundImg extends Component {
           preview,
           otherProps,
           config,
-          onImgLoad
+          onImgLoad,
+          src
         }}
       />
     );
@@ -131,22 +132,33 @@ class BackgroundInner extends Component {
     }
   }
 
+  getAlt = (name) => {
+    if(!name){
+      return
+    }
+    const index = name.indexOf('.')
+    return name.slice(0, index)
+  }
+
   render() {
     const { loaded } = this.state;
     const {
+      config: { autoAlt },
       cloudimgURL,
       previewCloudimgURL,
       className,
       style,
       children,
       preview,  
+      src,
       otherProps
     } = this.props;
-
-    const {onImgLoad,...filteredProps} = otherProps
+    
+    const {onImgLoad, alt, ...filteredProps} = otherProps
     return (
       <div
         {...filteredProps}
+        alt={!alt && autoAlt? this.getAlt(src) : alt }
         className={[
           className,
           'cloudimage-background',

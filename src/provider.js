@@ -29,7 +29,8 @@ class CloudimageProvider extends Component {
       devicePixelRatioList = CONSTANTS.DEVICE_PIXEL_RATIO_LIST,
       lowQualityPreview: {
         minImgWidth = 250
-      } = {}
+      } = {},
+      autoAlt = false
     } = config;
 
     this.state = {
@@ -57,7 +58,8 @@ class CloudimageProvider extends Component {
       devicePixelRatioList,
       limitFactor,
       minLowQualityWidth: minImgWidth,
-      imageSizeAttributes
+      imageSizeAttributes,
+      autoAlt
     };
 
     if (typeof window !== 'undefined') {
