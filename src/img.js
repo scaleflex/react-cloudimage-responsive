@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { findDOMNode } from 'react-dom';
 import { isServer, processReactNode } from 'cloudimage-responsive-utils';
-import { BASE_64_PLACEHOLDER } from 'cloudimage-responsive-utils/dist/constants';
 import { getFilteredProps } from './utils.js';
 import { imgStyles as styles } from 'cloudimage-responsive-utils';
 import LazyLoad from 'react-lazyload';
@@ -19,13 +18,11 @@ class Img extends Component {
   }
 
   componentDidMount() {
-    if (this.server) return;
-
     const {
       config: { delay }
     } = this.props;
 
-    if (typeof delay !== 'undefined') {
+    if (typeof delay !== 'undefined' && !this.server) {
       setTimeout(() => {
         this.processImg();
       }, delay);
@@ -118,8 +115,6 @@ class Img extends Component {
       operation
     } = this.state;
 
-    if (this.server)
-      return <img alt={this.props.alt} src={BASE_64_PLACEHOLDER} />;
     if (!processed) return <div />;
 
     const {
@@ -164,14 +159,16 @@ class Img extends Component {
           alt={!alt && autoAlt? this.getAlt(this.props.src) : alt }
           style={styles.img({ preview, loaded, operation })}
           {...filteredProps}
-          src={cloudimgURL}
-          onLoad={this._onImgLoad}
-          {...(cloudimgSRCSET && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
+          {...(!this.server && {
+            src: cloudimgURL,
+            onLoad: this._onImgLoad
+          })}
+          {...(cloudimgSRCSET && !this.server && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
         />
       </div>
     );
 
-    return lazyLoading ? (
+    return lazyLoading && !this.server ? (
       <LazyLoad
         height={height}
         offset={config.lazyLoadOffset}
