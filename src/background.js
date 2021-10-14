@@ -13,6 +13,12 @@ class BackgroundImg extends Component {
     this.state = { cloudimgURL: '', processed: false };
   }
 
+  UNSAFE_componentWillMount() {
+    if (this.server) {
+      this.processBg();
+    }
+  }
+
   componentDidMount() {
     if (this.server) return;
 
@@ -23,7 +29,7 @@ class BackgroundImg extends Component {
     if (this.server) return;
 
     const {
-      config: { innerWidth },
+      config: { innerWidth } = {},
       src
     } = this.props;
 
@@ -37,7 +43,7 @@ class BackgroundImg extends Component {
   }
 
   processBg = (update, windowScreenBecomesBigger) => {
-    const bgNode = findDOMNode(this);
+    const bgNode = !this.server ? findDOMNode(this) : null;
     const data = processReactNode(
       this.props,
       bgNode,
@@ -104,7 +110,7 @@ class BackgroundInner extends Component {
 
   componentDidMount() {
     const {
-      config: { delay }
+      config: { delay } = {}
     } = this.props;
 
     if (typeof delay !== 'undefined') {
@@ -143,7 +149,7 @@ class BackgroundInner extends Component {
   render() {
     const { loaded } = this.state;
     const {
-      config: { autoAlt },
+      config: { autoAlt } = {},
       cloudimgURL,
       previewCloudimgURL,
       className,

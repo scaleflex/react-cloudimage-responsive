@@ -3,7 +3,7 @@ import { debounce } from 'throttle-debounce';
 import { CONSTANTS, processParams } from 'cloudimage-responsive-utils';
 
 
-export const CloudimageContext = React.createContext({ config: {} });
+export const CloudimageContext = React.createContext({ cloudImageConfig: {} });
 
 
 class CloudimageProvider extends Component {
@@ -80,7 +80,7 @@ class CloudimageProvider extends Component {
 
   render() {
     return (
-      <CloudimageContext.Provider value={{ config: this.state }}>
+      <CloudimageContext.Provider value={{ cloudImageConfig: this.state }}>
         {this.props.children}
       </CloudimageContext.Provider>
     )

@@ -17,9 +17,15 @@ class Img extends Component {
     };
   }
 
+  UNSAFE_componentWillMount() {
+    if (this.server) {
+      this.processImg();
+    }
+  }
+
   componentDidMount() {
     const {
-      config: { delay }
+      config: { delay } = {}
     } = this.props;
 
     if (typeof delay !== 'undefined' && !this.server) {
@@ -35,12 +41,12 @@ class Img extends Component {
     if (this.server) return;
 
     const {
-      config: { innerWidth },
+      config: { innerWidth } = {},
       src
     } = this.props;
 
-    if (prevProps.config.innerWidth !== innerWidth) {
-      this.processImg(true, innerWidth > prevProps.config.innerWidth);
+    if ((prevProps.config && prevProps.config.innerWidth) !== innerWidth) {
+      this.processImg(true, innerWidth > (prevProps.config && prevProps.config.innerWidth));
     }
 
     if (src !== prevProps.src) {
@@ -49,7 +55,7 @@ class Img extends Component {
   }
 
   processImg = (update, windowScreenBecomesBigger) => {
-    const imgNode = findDOMNode(this);
+    const imgNode = !this.server ? findDOMNode(this) : null;
     const data = processReactNode(
       this.props,
       imgNode,
@@ -108,14 +114,11 @@ class Img extends Component {
       cloudimgSRCSET,
       previewCloudimgURL,
       loaded,
-      processed,
       previewLoaded,
       preview,
       loadedImageRatio,
       operation
     } = this.state;
-
-    if (!processed) return <div />;
 
     const {
       alt,

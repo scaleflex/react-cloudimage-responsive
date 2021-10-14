@@ -27,42 +27,49 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.0-beta.11 - 2021-10-14
+### Changed
+- better support for SSR (render placeholders with correct sizes via SSR stage)
+
+
 ## 3.5.1 - 2021-07-27
 ### Fixed
 - domain property in config
+
 
 ## 3.5.0 - 2021-07-23
 ### Added
 - new property: **customDomain**
 
+
 ## 3.4.0 - 2021-06-19
-
 ### Deprecated
-
 Property **ignoreNodeImgSize** is deprecated. Use **imageSizeAttributes: 'ignore'** instead
-
 ### Added
 - new property: **imageSizeAttributes**
-## 3.3.2 - 2020-06-26
 
+
+## 3.3.2 - 2020-06-26
 ### Added
 - onImgLoad handler to Img and BackgroundImg components
+
 
 ## 3.3.2 - 2020-09-09
 ### Added
 - allow unmounting the provider
-## 3.3.1 - 2020-06-10
 
+
+## 3.3.1 - 2020-06-10
 ### Added
 - delay property to handle cases when we need wait till some layout is loaded first
 
-## 3.3.0 - 2020-04-29
 
+## 3.3.0 - 2020-04-29
 ### Added
 - missing properties in the documentation (README), fix some mistakes
-
 ### Fixed
 - problem with not setting ratio on preview load when no image is set
+
 
 ## 3.2.4 - 2020-04-28
 
