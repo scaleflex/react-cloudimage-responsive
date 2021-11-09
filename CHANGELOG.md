@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.0-beta.13 - 2021-11-09
+### Fixed
+- possibility to remove API versions
+
 ## 3.6.0-beta.11 - 2021-10-14
 ### Changed
 - better support for SSR (render placeholders with correct sizes via SSR stage)
