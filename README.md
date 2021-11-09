@@ -185,7 +185,24 @@ Your image folder on server, this alows to shorten your origin image URLs.
 
 ###### Type: **String** |Default: **'v7'** | _optional_
 
-allow to use a specific version of API
+Allow to use a specific version of API.
+
+- set a specific version of API
+```javascript
+const cloudimageConfig = {
+  token: 'demo',
+  baseURL: 'https://jolipage.airstore.io/',
+  apiVersion: 'v7'                            // optional
+};
+```
+- disable API version
+```javascript
+const cloudimageConfig = {
+  token: 'demo',
+  baseURL: 'https://jolipage.airstore.io/',
+  apiVersion: null                            // optional
+};
+```
 
 ### doNotReplaceURL
 
