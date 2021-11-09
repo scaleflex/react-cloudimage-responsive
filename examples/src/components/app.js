@@ -336,14 +336,14 @@ class App extends Component {
                     className="container-box-wrapper"
                     style={{ display: 'inline-block', width: 200, height: 200, position: 'relative' }}
                   >
-                    <img src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"/>
+                    <img src="https://doc.cloudimg.io/sample.li/boat.jpg"/>
                     <div className="border-box"/>
                   </div>
                 </div>
 
                 <SyntaxHighlighter language='jsx' style={darcula}>{`<div style={{ width: 200, height: 200 }}>
   <img 
-    src="https://doc.cloudimg.io/v7/sample.li/boat.jpg"
+    src="https://doc.cloudimg.io/sample.li/boat.jpg"
   />
 </div>`}</SyntaxHighlighter>
               </div>
