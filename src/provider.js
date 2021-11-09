@@ -19,6 +19,7 @@ class CloudimageProvider extends Component {
       placeholderBackground = '#f4f4f4',
       baseUrl, // to support old name
       baseURL,
+      apiVersion = 'v7',
       presets,
       ratio = 1.5,
       params = 'org_if_sml=1',
@@ -52,6 +53,7 @@ class CloudimageProvider extends Component {
           xl: '(min-width: 1200px)'  // from 1200    USUALSCREEN
         },
       params: processParams(params),
+      apiVersion,
       innerWidth: typeof window !== 'undefined' ? window.innerWidth : null,
       previewQualityFactor: 10,
       doNotReplaceURL,

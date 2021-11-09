@@ -181,6 +181,11 @@ Note: this will disregard your token above as this should be built into the CNAM
 
 Your image folder on server, this alows to shorten your origin image URLs.
 
+### apiVersion
+
+###### Type: **String** |Default: **'v7'** | _optional_
+
+allow to use a specific version of API
 
 ### doNotReplaceURL
 
