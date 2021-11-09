@@ -204,6 +204,7 @@ const cloudimageConfig = {
 };
 ```
 
+
 ### doNotReplaceURL
 
 ###### Type: **bool** | Default: **false**
