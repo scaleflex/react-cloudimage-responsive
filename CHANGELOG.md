@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.0-beta.14 - 2021-12-22
+### Fixed
+-  img-src starts with "//"
+
 ## 3.6.0-beta.13 - 2021-11-09
 ### Fixed
 - possibility to remove API versions
