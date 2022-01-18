@@ -27,9 +27,13 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.0-beta.16 - 2021-01-18
+### Fixed
+- prevent the lazyLoading property from being spread onto the img tag
+
 ## 3.6.0-beta.15 - 2021-01-04
 ### Fixed
--  removed hardcoded ci_info query parameter to fix image caching
+- removed hardcoded ci_info query parameter to fix image caching
 
 ## 3.6.0-beta.14 - 2021-12-22
 ### Fixed
