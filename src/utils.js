@@ -1,4 +1,4 @@
-export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, params, ...otherProps }) => ({
+export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, params, lazyLoading, ...otherProps }) => ({
   alt,
   className,
   imgNodeWidth: width,
