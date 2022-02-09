@@ -311,7 +311,7 @@ For example:
 
 ### devicePixelRatioList
 
-###### Type: **[Number,...]** | Default: **[1, 1.5, 2, 3, 4]** | _optional_
+###### Type: **[Number,...]** | Default: **[1, 1.5, 2]** | _optional_
 
 List of supported device pixel ratios. If there is no need to support retina devices, you should set an empty array `devicePixelRatioList: []`.
 

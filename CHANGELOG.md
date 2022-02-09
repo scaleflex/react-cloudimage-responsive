@@ -27,7 +27,11 @@ Types of changes:
 -------------
 
 -------------
-## 3.6.0-beta.16 - 2021-01-18
+## 3.6.0-beta.17 - 2022-02-09
+### Fixed
+- change devicePixelRatioList to [1, 1.5, 2]
+
+## 3.6.0-beta.16 - 2022-01-18
 ### Fixed
 - prevent the lazyLoading property from being spread onto the img tag
 
