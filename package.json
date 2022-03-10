@@ -42,12 +42,13 @@
   "dependencies": {
     "cloudimage-responsive-utils": "^2.4.4",
     "core-js": "^3.15.2",
-    "react-lazyload": "^2.6.7",
-    "throttle-debounce": "^2.3.0"
+    "prop-types": "^15.8.1",
+    "react-lazyload": "^3.2.0",
+    "throttle-debounce": "^3.0.1"
   },
   "peerDependencies": {
-    "react": "^16.3.0",
-    "react-dom": "^16.3.0"
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
@@ -65,13 +66,18 @@
     "@babel/preset-react": "^7.14.5",
     "babel-loader": "^8.2.2",
     "css-loader": "^2.0.0",
+    "eslint": "^8.10.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.3",
+    "eslint-plugin-react-hooks": "^4.3.0",
     "gh-pages": "^2.0.1",
     "html-webpack-plugin": "^3.2.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "react-syntax-highlighter": "^10.2.0",
     "style-loader": "^0.23.1",
-    "throttle-debounce": "^2.3.0",
     "webpack": "^4.46.0",
     "webpack-cli": "^3.3.11",
     "webpack-dev-server": "^3.11.2"

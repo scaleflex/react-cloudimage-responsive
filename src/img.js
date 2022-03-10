@@ -1,188 +1,181 @@
-import React, { Component } from 'react';
-import { findDOMNode } from 'react-dom';
-import { isServer, processReactNode } from 'cloudimage-responsive-utils';
-import { getFilteredProps } from './utils.js';
-import { imgStyles as styles } from 'cloudimage-responsive-utils';
+import {
+  useRef, useState, useEffect, useMemo,
+} from 'react';
+import { isServer, processReactNode, imgStyles as styles } from 'cloudimage-responsive-utils';
 import LazyLoad from 'react-lazyload';
+import { getFilteredProps } from './utils';
+import usePrevious from './hooks/usePrevious';
 
-class Img extends Component {
-  constructor(props) {
-    super(props);
 
-    this.server = isServer();
-    this.state = {
-      cloudimgURL: '',
-      loaded: false,
-      processed: false
-    };
-  }
+function Img(props) {
+  const {
+    config, src, autoAlt, placeholderBackground,
+  } = props;
 
-  UNSAFE_componentWillMount() {
-    if (this.server) {
-      this.processImg();
-    }
-  }
+  const [loaded, setLoaded] = useState(false);
+  const [previewLoaded, setPreviewLoaded] = useState(false);
+  const [data, setData] = useState({});
+  const [loadedImageDim, setLoadedImageDim] = useState({});
 
-  componentDidMount() {
-    const {
-      config: { delay } = {}
-    } = this.props;
+  const imgNode = useRef();
+  const previousProps = usePrevious({ innerWidth: config.innerWidth, src });
+  const server = useMemo(() => isServer(), []);
 
-    if (typeof delay !== 'undefined' && !this.server) {
-      setTimeout(() => {
-        this.processImg();
-      }, delay);
-    } else {
-      this.processImg();
-    }
-  }
+  const {
+    lazyLoading: configLazyLoadingValue, lazyLoadOffset, delay, innerWidth,
+  } = config;
 
-  componentDidUpdate(prevProps) {
-    if (this.server) return;
+  const { lazyLoading = configLazyLoadingValue } = props;
 
-    const {
-      config: { innerWidth } = {},
-      src
-    } = this.props;
+  const {
+    ratio,
+    operation,
+    preview,
+    previewCloudimgURL,
+    cloudimgURL,
+    cloudimgSRCSET,
+    height,
+  } = data;
 
-    if ((prevProps.config && prevProps.config.innerWidth) !== innerWidth) {
-      this.processImg(true, innerWidth > (prevProps.config && prevProps.config.innerWidth));
-    }
+  const {
+    alt,
+    className,
+    lazyLoadConfig,
+    preserveSize,
+    imgNodeWidth,
+    imgNodeHeight,
+    ...otherProps
+  } = getFilteredProps(props);
 
-    if (src !== prevProps.src) {
-      this.processImg();
-    }
-  }
+  const { innerRef, onImgLoad, ...filteredProps } = otherProps;
 
-  processImg = (update, windowScreenBecomesBigger) => {
-    const imgNode = !this.server ? findDOMNode(this) : null;
-    const data = processReactNode(
-      this.props,
-      imgNode,
+  const processImg = (update, windowScreenBecomesBigger) => {
+    const imageData = processReactNode(
+      props,
+      imgNode.current,
       update,
-      windowScreenBecomesBigger
+      windowScreenBecomesBigger,
     );
 
-    this.setState(data);
+    if (imageData) {
+      setData(imageData);
+    }
   };
 
-  onPreviewLoaded = event => {
-    if (this.state.previewLoaded) return;
-
-    this.updateLoadedImageSize(event.target);
-    this.setState({ previewLoaded: true });
-  };
-
-  updateLoadedImageSize = image => {
-    this.setState({
-      loadedImageWidth: image.naturalWidth,
-      loadedImageHeight: image.naturalHeight,
-      loadedImageRatio: image.naturalWidth / image.naturalHeight
+  const updateLoadedImageSize = (image) => {
+    setLoadedImageDim({
+      width: image.naturalWidth,
+      height: image.naturalHeight,
+      ratio: image.naturalWidth / image.naturalHeight,
     });
   };
 
-  _onImgLoad = (event) => {
-    this.updateLoadedImageSize(event.target);
-    this.setState({ loaded: true });
-    
-    const { onImgLoad } = this.props;
-    if(typeof onImgLoad === "function"){
+  const onPreviewLoaded = (event) => {
+    if (previewLoaded) return;
+
+    updateLoadedImageSize(event.target);
+    setPreviewLoaded(true);
+  };
+
+  const _onImgLoad = (event) => {
+    updateLoadedImageSize(event.target);
+    setLoaded(true);
+
+    if (typeof onImgLoad === 'function') {
       onImgLoad(event);
     }
-  }
+  };
 
-  getAlt = (name) => {
-   if(!name){
-     return
-   }
-   const index = name.indexOf('.')
-   return name.slice(0, index)
-  }
-  
-  render() {
-    const { config = {} } = this.props;
-    const {
-      placeholderBackground,
-      lazyLoading: configLazyLoadingValue,
-      autoAlt
-    } = config;
-    const { lazyLoading = configLazyLoadingValue } = this.props;
-    const {
-      height,
-      ratio,
-      cloudimgURL,
-      cloudimgSRCSET,
-      previewCloudimgURL,
-      loaded,
-      previewLoaded,
-      preview,
-      loadedImageRatio,
-      operation
-    } = this.state;
+  const getAlt = (name) => {
+    if (!name) return;
 
-    const {
-      alt,
-      className,
-      lazyLoadConfig,
-      preserveSize,
-      imgNodeWidth,
-      imgNodeHeight,
-      ...otherProps
-    } = getFilteredProps(this.props);
+    const index = name.indexOf('.');
+    return name.slice(0, index);
+  };
 
-    const {onImgLoad,...filteredProps} = otherProps
-    const picture = (
-      <div
-        className={`${className} cloudimage-image ${
-          loaded ? 'loaded' : 'loading'
-        }`.trim()}
-        style={styles.picture({
-          preserveSize,
-          imgNodeWidth,
-          imgNodeHeight,
-          ratio: ratio || loadedImageRatio,
-          previewLoaded,
-          loaded,
-          placeholderBackground,
-          operation
+  const pictureStyles = styles.picture({
+    preserveSize,
+    imgNodeWidth,
+    imgNodeHeight,
+    ratio: ratio || loadedImageDim.ratio,
+    previewLoaded,
+    loaded,
+    placeholderBackground,
+    operation,
+  });
+
+  const pictureClassName = `${className} cloudimage-image ${loaded ? 'loaded' : 'loading'}`
+    .trim();
+
+  useEffect(() => {
+    if (typeof delay !== 'undefined' && !server) {
+      setTimeout(() => {
+        processImg();
+      }, delay);
+    } else {
+      processImg();
+    }
+  }, []);
+
+  useEffect(() => {
+    if (!previousProps) return;
+
+    if (previousProps.innerWidth !== innerWidth) {
+      processImg(
+        true,
+        innerWidth > previousProps.innerWidth,
+      );
+    }
+
+    if (src !== previousProps.src) {
+      processImg();
+    }
+  }, [innerWidth, src]);
+
+  const picture = (
+    <div
+      className={pictureClassName}
+      style={pictureStyles}
+      ref={imgNode}
+    >
+      {preview && operation !== 'bound' && (
+        <div style={styles.previewWrapper()}>
+          <img
+            style={styles.previewImg({ loaded, operation })}
+            src={previewCloudimgURL}
+            alt="low quality preview"
+            onLoad={onPreviewLoaded}
+          />
+        </div>
+      )}
+      <img
+        {...filteredProps}
+        ref={innerRef}
+        alt={!alt && autoAlt ? getAlt(src) : alt}
+        style={styles.img({ preview, loaded, operation })}
+        {...(!server && {
+          src: cloudimgURL,
+          onLoad: _onImgLoad,
         })}
-      >
-        {preview && operation !== 'bound' && (
-          <div style={styles.previewWrapper()}>
-            <img
-              style={styles.previewImg({ loaded, operation })}
-              src={previewCloudimgURL}
-              alt="low quality preview image"
-              onLoad={this.onPreviewLoaded}
-            />
-          </div>
-        )}
+        {...(cloudimgSRCSET && !server && {
+          srcSet: cloudimgSRCSET
+            .map(({ dpr, url }) => `${url} ${dpr}x`).join(', '),
+        })}
+      />
+    </div>
+  );
 
-        <img
-          alt={!alt && autoAlt? this.getAlt(this.props.src) : alt }
-          style={styles.img({ preview, loaded, operation })}
-          {...filteredProps}
-          {...(!this.server && {
-            src: cloudimgURL,
-            onLoad: this._onImgLoad
-          })}
-          {...(cloudimgSRCSET && !this.server && { srcSet: cloudimgSRCSET.map(({ dpr, url }) => `${url} ${dpr}x`).join(', ') })}
-        />
-      </div>
-    );
-
-    return lazyLoading && !this.server ? (
+  return lazyLoading && !server ? (
+    <div ref={imgNode}>
       <LazyLoad
         height={height}
-        offset={config.lazyLoadOffset}
+        offset={lazyLoadOffset}
         {...lazyLoadConfig}
       >
         {picture}
       </LazyLoad>
-    ) : (
-      picture
-    );
-  }
+    </div>
+  ) : picture;
 }
 
 export default Img;

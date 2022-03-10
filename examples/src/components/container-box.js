@@ -1,46 +1,45 @@
-import React, { Component } from 'react';
-import { debounce } from 'throttle-debounce'
+import {
+  useState, useRef, useCallback, useEffect,
+} from 'react';
+import { debounce } from 'throttle-debounce';
 
 
-class ContainerBox extends Component {
-  constructor() {
-    super();
+function ContainerBox({ isHeight }) {
+  const [width, setWidth] = useState('---');
+  const [height, setHeight] = useState('---');
 
-    this.box = React.createRef()
-    this.state = {
-      width: '---',
-      height: '---'
-    };
-  }
+  const box = useRef();
 
-  componentDidMount() {
-    this.setState({
-      width: this.box.current.parentNode.offsetWidth,
-      height: this.box.current.parentNode.offsetHeight
-    });
+  const setContainerWidthAndHeight = useCallback(() => {
+    setWidth(box.current.parentNode.offsetWidth);
+    setHeight(box.current.parentNode.offsetHeight);
+  }, [box]);
+
+  useEffect(() => {
+    setContainerWidthAndHeight();
 
     window.addEventListener('resize', debounce(400, () => {
-        this.setState({
-          width: this.box.current.parentNode.offsetWidth,
-          height: this.box.current.parentNode.offsetHeight
-        });
-      })
-    );
-  }
+      setContainerWidthAndHeight();
+    }));
 
-  render() {
-    const { width, height } = this.state;
-    const { isHeight } = this.props;
+    return () => {
+      window.removeEventListener('resize', debounce);
+    };
+  }, []);
 
-    return (
-      <div
-        ref={this.box}
-        className="container-width-box"
-      >
-        container {isHeight ? '' : 'width:'} <span>{width}</span> {isHeight ? `x ${height}` : ''} px
-      </div>
-    )
-  }
+  return (
+    <div ref={box} className="container-width-box">
+      container
+      {' '}
+      {isHeight ? '' : 'width:'}
+      {' '}
+      <span>{width}</span>
+      {' '}
+      {isHeight ? `x ${height}` : ''}
+      {' '}
+      px
+    </div>
+  );
 }
 
 export default ContainerBox;

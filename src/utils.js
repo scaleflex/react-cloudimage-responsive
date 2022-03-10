@@ -1,13 +1,17 @@
-export const getFilteredProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, params, lazyLoading, ...otherProps }) => ({
+export const getFilteredProps = ({
+  config = {}, alt = '', className = '', src, sizes, width, height, params, lazyLoading, ...otherProps
+}) => ({
   alt,
   className,
   imgNodeWidth: width,
   imgNodeHeight: height,
-  ...otherProps
+  ...otherProps,
 });
 
-export const getFilteredBgProps = ({ config = {}, alt = '', className = '', src, sizes, width, height, params, ...otherProps }) => ({
+export const getFilteredBgProps = ({
+  config = {}, alt = '', className = '', src, sizes, width, height, params, ...otherProps
+}) => ({
   alt,
   className,
-  ...otherProps
+  ...otherProps,
 });

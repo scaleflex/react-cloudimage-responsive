@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
 import { render } from 'react-dom';
 import { CloudimageProvider } from '../../src';
 import './style.css';
 import App from './components/app';
+
 
 const cloudimageConfig = {
   token: 'demo',
@@ -12,32 +12,16 @@ const cloudimageConfig = {
   limitFactor: 10,
   apiVersion: 'v7',
   lowQualityPreview: {
-    minImgWidth: 150
+    minImgWidth: 150,
   },
-
 };
 
-
-class Start extends Component {
-  state = {
-    innerWidth: window.innerWidth
-  };
-
-  componentDidMount() {
-    const self = this;
-
-    window.addEventListener('resize', () => {
-      self.setState({ innerWidth: window.innerWidth });
-    })
-  }
-
-  render() {
-    return (
-      <CloudimageProvider config={cloudimageConfig}>
-        <App/>
-      </CloudimageProvider>
-    )
-  }
+function Start() {
+  return (
+    <CloudimageProvider config={cloudimageConfig}>
+      <App />
+    </CloudimageProvider>
+  );
 }
 
-render(<Start/>, document.getElementById("app"));
+render(<Start />, document.getElementById('app'));
