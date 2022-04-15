@@ -48,7 +48,7 @@ function Img(props) {
   } = getFilteredProps(props);
 
   const {
-    innerRef, onImgLoad, disableAnimation, ...filteredProps
+    innerRef, onImgLoad, disableAnimation, doNotReplaceURL, ...filteredProps
   } = otherProps;
 
   const getcloudimgSRCSET = () => cloudimgSRCSET

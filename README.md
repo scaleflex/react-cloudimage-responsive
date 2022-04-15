@@ -365,6 +365,17 @@ A function to be executed after the image is loaded
   src="dino-reichmuth-1.jpg"
   onImgLoad={(params)=>{console.log(params);}}/>
 ```
+### doNotReplaceURL
+
+###### Type: **Boolean** | Default: **false** | _optional_
+
+If set to true, the plugin will only add query parameters to the provided image source URL.
+
+### disableAnimation
+
+###### Type: **Boolean** | Default: **false** | _optional_
+
+If set, the plugin will disable the animation for the Img and render only a single img tag.
 
 ### width
 
