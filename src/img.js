@@ -47,7 +47,12 @@ function Img(props) {
     ...otherProps
   } = getFilteredProps(props);
 
-  const { innerRef, onImgLoad, ...filteredProps } = otherProps;
+  const {
+    innerRef, onImgLoad, disableAnimation, ...filteredProps
+  } = otherProps;
+
+  const getcloudimgSRCSET = () => cloudimgSRCSET
+    .map(({ dpr, url }) => `${url} ${dpr}x`).join(', ');
 
   const processImg = (update, windowScreenBecomesBigger) => {
     const imageData = processReactNode(
@@ -70,13 +75,6 @@ function Img(props) {
     });
   };
 
-  const onPreviewLoaded = (event) => {
-    if (previewLoaded) return;
-
-    updateLoadedImageSize(event.target);
-    setPreviewLoaded(true);
-  };
-
   const _onImgLoad = (event) => {
     updateLoadedImageSize(event.target);
     setLoaded(true);
@@ -91,6 +89,15 @@ function Img(props) {
 
     const index = name.indexOf('.');
     return name.slice(0, index);
+  };
+
+  const onPreviewLoaded = (event) => {
+    if (previewLoaded) return;
+
+    const previewImage = event.target;
+
+    updateLoadedImageSize(previewImage);
+    setPreviewLoaded(true);
   };
 
   const pictureStyles = styles.picture({
@@ -109,6 +116,10 @@ function Img(props) {
 
   useEffect(() => {
     if (typeof delay !== 'undefined' && !server) {
+      if (disableAnimation) {
+        innerRef.current = imgNode.current;
+      }
+
       setTimeout(() => {
         processImg();
       }, delay);
@@ -132,6 +143,24 @@ function Img(props) {
     }
   }, [innerWidth, src]);
 
+  const pictureAlt = !alt && autoAlt ? getAlt(src) : alt;
+
+  const plainImage = (
+    <img
+      {...filteredProps}
+      ref={imgNode}
+      className={pictureClassName}
+      alt={pictureAlt}
+      {...(!server && {
+        src: cloudimgURL,
+        onLoad: _onImgLoad,
+      })}
+      {...(cloudimgSRCSET && !server && {
+        srcSet: getcloudimgSRCSET(),
+      })}
+    />
+  );
+
   const picture = (
     <div
       className={pictureClassName}
@@ -151,19 +180,20 @@ function Img(props) {
       <img
         {...filteredProps}
         ref={innerRef}
-        alt={!alt && autoAlt ? getAlt(src) : alt}
+        alt={pictureAlt}
         style={styles.img({ preview, loaded, operation })}
         {...(!server && {
           src: cloudimgURL,
           onLoad: _onImgLoad,
         })}
         {...(cloudimgSRCSET && !server && {
-          srcSet: cloudimgSRCSET
-            .map(({ dpr, url }) => `${url} ${dpr}x`).join(', '),
+          srcSet: getcloudimgSRCSET(),
         })}
       />
     </div>
   );
+
+  const renderedPicture = disableAnimation ? plainImage : picture;
 
   return lazyLoading && !server ? (
     <div ref={imgNode}>
@@ -172,10 +202,10 @@ function Img(props) {
         offset={lazyLoadOffset}
         {...lazyLoadConfig}
       >
-        {picture}
+        {renderedPicture}
       </LazyLoad>
     </div>
-  ) : picture;
+  ) : renderedPicture;
 }
 
 export default Img;
