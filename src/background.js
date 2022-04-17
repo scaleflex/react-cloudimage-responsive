@@ -41,6 +41,7 @@ function BackgroundImg(props) {
     lazyLoading = config.lazyLoading,
     children,
     innerRef,
+    doNotReplaceURL,
     ...otherProps
   } = getFilteredBgProps(props);
 
