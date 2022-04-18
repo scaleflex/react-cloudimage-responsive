@@ -40,7 +40,7 @@
     "publish-demo": "npm run build-demo && npm run deploy"
   },
   "dependencies": {
-    "cloudimage-responsive-utils": "^2.4.5",
+    "cloudimage-responsive-utils": "^2.4.6",
     "core-js": "^3.15.2",
     "prop-types": "^15.8.1",
     "react-lazyload": "^3.2.0",
