@@ -27,10 +27,13 @@ Types of changes:
 -------------
 
 -------------
-## 3.6.0-beta.19 - 2022-04-18
-### Fixed
-- possibility to add `doNotReplaceURL` to single image
+## 3.6.0-beta.20 - 2022-04-18
+### Added
+- possibility to render unwrapped image using `disableAnimation` prop
 
+## 3.6.0-beta.19 - 2022-04-18
+### Added
+- possibility to add `doNotReplaceURL` to single image
 
 ## 3.6.0-beta.17 - 2022-02-09
 ### Fixed

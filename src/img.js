@@ -111,6 +111,13 @@ function Img(props) {
     operation,
   });
 
+  const imageStyles = styles.image({
+    preserveSize,
+    imgNodeWidth,
+    imgNodeHeight,
+    operation,
+  });
+
   const pictureClassName = `${className} cloudimage-image ${loaded ? 'loaded' : 'loading'}`
     .trim();
 
@@ -150,6 +157,7 @@ function Img(props) {
       {...filteredProps}
       ref={imgNode}
       className={pictureClassName}
+      style={imageStyles}
       alt={pictureAlt}
       {...(!server && {
         src: cloudimgURL,

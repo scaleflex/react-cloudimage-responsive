@@ -2005,10 +2005,10 @@
     "strip-ansi" "^5.2.0"
     "wrap-ansi" "^5.1.0"
 
-"cloudimage-responsive-utils@^2.4.5":
-  "integrity" "sha512-S9yk/DEh9AkTfxN+P3UIfcB3+IbKDQg/tA+0fFU+ZDDKC31fzvshge03zLCeV371o/Y6FXZlh6HmcqRNE42o0A=="
-  "resolved" "https://registry.npmjs.org/cloudimage-responsive-utils/-/cloudimage-responsive-utils-2.4.5.tgz"
-  "version" "2.4.5"
+"cloudimage-responsive-utils@^2.4.6":
+  "integrity" "sha512-KMtPdlKXsfSAaXXmajlrSNYQBhoQb/VFZ9R2cqe+TqLTwLL9kkGpQNmGdy4HXXvopxNLLJIYCUqhsAnvE9P90w=="
+  "resolved" "https://registry.npmjs.org/cloudimage-responsive-utils/-/cloudimage-responsive-utils-2.4.6.tgz"
+  "version" "2.4.6"
 
 "collection-visit@^1.0.0":
   "integrity" "sha1-S8A3PBZLwykbTTaMgpzxqApZ3KA="
