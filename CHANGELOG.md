@@ -27,7 +27,7 @@ Types of changes:
 -------------
 
 -------------
-## 3.6.0-beta.18 - 2022-04-18
+## 3.6.0-beta.19 - 2022-04-18
 ### Fixed
 - possibility to add `doNotReplaceURL` to single image
 
