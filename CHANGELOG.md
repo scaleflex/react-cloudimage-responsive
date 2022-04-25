@@ -27,8 +27,12 @@ Types of changes:
 -------------
 
 -------------
-## 3.6.0 - 2022-04-25
+## 3.6.1 - 2022-04-26
 ### Fixed
+- Low preview image width
+
+## 3.6.0 - 2022-04-25
+### Changed
 - Update documentations
 
 ## 3.6.0-beta.20 - 2022-04-18
