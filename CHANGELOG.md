@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.0 - 2022-04-25
+### Fixed
+- Update documentations
+
 ## 3.6.0-beta.20 - 2022-04-18
 ### Added
 - possibility to render unwrapped image using `disableAnimation` prop

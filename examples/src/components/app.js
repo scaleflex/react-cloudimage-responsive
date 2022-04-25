@@ -505,7 +505,7 @@ function App() {
                   <i>{image.original_size}</i>
                   {' '}
                   <a
-                    href={`https://cloudimage.public.airstore.io/demo/${image.src}`}
+                    href={`https://cdn.scaleflex.it/demo/${image.src}`}
                     target="_blank"
                     rel="noreferrer"
                   >
@@ -536,7 +536,7 @@ function App() {
                 <i>{images[17].original_size}</i>
                 {' '}
                 <a
-                  href={`https://cloudimage.public.airstore.io/demo/${images[17].src}`}
+                  href={`https://cdn.scaleflex.it/demo/${images[17].src}`}
                   target="_blank"
                   rel="noreferrer"
                 >
@@ -590,7 +590,7 @@ sizes="
                     display: 'inline-block', width: 200, height: 200, position: 'relative',
                   }}
                 >
-                  <img src="https://doc.cloudimg.io/sample.li/boat.jpg" />
+                  <img src="https://doc.cloudimg.io/sample.li/boat.jpg" alt="boat" />
                   <div className="border-box" />
                 </div>
               </div>
@@ -767,13 +767,13 @@ import Img, { CloudimageProvider } from 'react-cloudimage-responsive';
 
 const cloudimageConfig = {
 token: 'demo',
-baseURL: 'https://jolipage.airstore.io/'
+baseURL: 'https://cdn.scaleflex.it/demo/'
 };
 
 const cloudimageConfigWithCustomCNAMEDomain = {
 token: 'demo',
-baseURL: 'https://jolipage.airstore.io/',
-customDomain: 'images.airstore.io'
+baseURL: 'https://cdn.scaleflex.it/demo/',
+customDomain: 'https://cdn.scaleflex.it/demo/'
 };
 
 const App = () => {
