@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.2 - 2022-04-29
+### Fixed
+- Low preview image width
+
 ## 3.6.1 - 2022-04-26
 ### Fixed
 - Low preview image width

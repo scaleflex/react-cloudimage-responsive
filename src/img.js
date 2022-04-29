@@ -122,11 +122,11 @@ function Img(props) {
     .trim();
 
   useEffect(() => {
-    if (typeof delay !== 'undefined' && !server) {
-      if (disableAnimation) {
-        innerRef.current = imgNode.current;
-      }
+    if (disableAnimation) {
+      innerRef.current = imgNode.current;
+    }
 
+    if (typeof delay !== 'undefined' && !server) {
       setTimeout(() => {
         processImg();
       }, delay);
