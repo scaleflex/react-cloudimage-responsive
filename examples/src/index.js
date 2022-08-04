@@ -1,4 +1,4 @@
-import { render } from 'react-dom';
+import ReactDOM from 'react-dom/client';
 import { CloudimageProvider } from '../../src';
 import './style.css';
 import App from './components/app';
@@ -16,12 +16,10 @@ const cloudimageConfig = {
   },
 };
 
-function Start() {
-  return (
-    <CloudimageProvider config={cloudimageConfig}>
-      <App />
-    </CloudimageProvider>
-  );
-}
+const root = ReactDOM.createRoot(document.getElementById('app'));
 
-render(<Start />, document.getElementById('app'));
+root.render(
+  <CloudimageProvider config={cloudimageConfig}>
+    <App />
+  </CloudimageProvider>,
+);

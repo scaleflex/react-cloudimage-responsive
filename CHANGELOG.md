@@ -14,7 +14,7 @@ Types of changes:
 
 > Date format: YYYY-MM-DD
 
-> If we have some "Breaking changes" we can mark it in message by `**BREAKING**` preffix, like:  
+> If we have some "Breaking changes" we can mark it in message by `**BREAKING**` preffix, like:
 > `- **BREAKING**: Some message`
 
 -------------
@@ -27,6 +27,13 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.3 - 2022-04-29
+### Changed
+- Support React 18
+
+### Fixed
+- Removed deprecated methods
+
 ## 3.6.2 - 2022-04-29
 ### Fixed
 - Low preview image width
