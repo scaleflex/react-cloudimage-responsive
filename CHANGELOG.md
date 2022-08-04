@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.4 - 2022-08-04
+### Fixed
+- prop-types dependency
+
 ## 3.6.3 - 2022-08-04
 ### Changed
 - Support React 18
