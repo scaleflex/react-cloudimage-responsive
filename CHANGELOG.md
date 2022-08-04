@@ -27,10 +27,9 @@ Types of changes:
 -------------
 
 -------------
-## 3.6.3 - 2022-04-29
+## 3.6.3 - 2022-08-04
 ### Changed
 - Support React 18
-
 ### Fixed
 - Removed deprecated methods
 
