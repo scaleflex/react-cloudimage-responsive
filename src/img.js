@@ -1,7 +1,9 @@
 import {
   useRef, useState, useEffect, useMemo,
 } from 'react';
-import { isServer, processReactNode, imgStyles as styles } from 'cloudimage-responsive-utils';
+import {
+  isServer, processReactNode, imgStyles as styles, generateAlt,
+} from 'cloudimage-responsive-utils';
 import LazyLoad from 'react-lazyload';
 import { getFilteredProps } from './utils';
 import usePrevious from './hooks/usePrevious';
@@ -9,7 +11,7 @@ import usePrevious from './hooks/usePrevious';
 
 function Img(props) {
   const {
-    config, src, autoAlt, placeholderBackground,
+    config, src, placeholderBackground,
   } = props;
 
   const [loaded, setLoaded] = useState(false);
@@ -150,7 +152,7 @@ function Img(props) {
     }
   }, [innerWidth, src]);
 
-  const pictureAlt = !alt && autoAlt ? getAlt(src) : alt;
+  const pictureAlt = alt || generateAlt(src);
 
   const plainImage = (
     <img
@@ -180,7 +182,7 @@ function Img(props) {
           <img
             style={styles.previewImg({ loaded, operation })}
             src={previewCloudimgURL}
-            alt="low quality preview"
+            alt={`low quality preview for ${pictureAlt}`}
             onLoad={onPreviewLoaded}
           />
         </div>

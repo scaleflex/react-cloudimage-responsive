@@ -2060,10 +2060,10 @@ cliui@^5.0.0:
     strip-ansi "^5.2.0"
     wrap-ansi "^5.1.0"
 
-cloudimage-responsive-utils@^2.4.9:
-  version "2.4.9"
-  resolved "https://registry.yarnpkg.com/cloudimage-responsive-utils/-/cloudimage-responsive-utils-2.4.9.tgz#827828496b39648d2d1e1bd7cc85d9c50c2eab66"
-  integrity sha512-25+acgALV7k26s6jvEJh7YDinVMs/Qcrvawk9yuRp29bCZ3ArgPyuRMFAeSeoBNSf+xnA4F1sx00mIm8pNF7DQ==
+cloudimage-responsive-utils@^2.5.1:
+  version "2.5.1"
+  resolved "https://registry.yarnpkg.com/cloudimage-responsive-utils/-/cloudimage-responsive-utils-2.5.1.tgz#1ee6a82aee3920140431d4a3ecadea9356a98a8d"
+  integrity sha512-yY49lNwREkcU1dIBgO6NLsqnEbONX4+yyu9TATEg4Tdc14vpXbktKE9jkIDfv3KpqV9rlApzHv3Xt4XjzcKnVw==
 
 collection-visit@^1.0.0:
   version "1.0.0"
@@ -5345,7 +5345,7 @@ promise-inflight@^1.0.1:
   resolved "https://registry.yarnpkg.com/promise-inflight/-/promise-inflight-1.0.1.tgz#98472870bf228132fcbdd868129bad12c3c029e3"
   integrity sha512-6zWPyEOFaQBJYcGMHBKTKJ3u6TBsnMFOIZSa6ce1e/ZrrsOlnHRHbabMjLiBYKp+n44X9eUI6VUPaukCXHuG4g==
 
-prop-types@^15.8.1:
+prop-types@15.8.1, prop-types@^15.8.1:
   version "15.8.1"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
   integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==

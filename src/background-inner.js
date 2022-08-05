@@ -19,9 +19,7 @@ function BackgroundInner(props) {
 
   const [loaded, setLoaded] = useState(false);
 
-  const { alt } = otherProps;
-
-  const { autoAlt, delay } = config;
+  const { delay } = config;
 
   const _onImgLoad = (event) => {
     setLoaded(true);
@@ -36,14 +34,6 @@ function BackgroundInner(props) {
 
     img.onload = _onImgLoad;
     img.src = cloudimgURL;
-  };
-
-  const getAlt = (name) => {
-    if (!name) return;
-
-    const index = name.indexOf('.');
-
-    return name.slice(0, index);
   };
 
   const containerClassName = [
@@ -65,7 +55,6 @@ function BackgroundInner(props) {
   return (
     <div
       {...otherProps}
-      alt={(!alt && autoAlt) ? getAlt(src) : alt}
       className={containerClassName}
       ref={innerRef}
       style={styles.container({ style, cloudimgURL })}

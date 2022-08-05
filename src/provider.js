@@ -29,7 +29,6 @@ function CloudimageProvider({ config = {}, children } = {}) {
     lowQualityPreview: {
       minImgWidth = 250,
     } = {},
-    autoAlt = false,
   } = config;
 
   const [cloudImageConfig, setCloudImageConfig] = useState({
@@ -58,7 +57,6 @@ function CloudimageProvider({ config = {}, children } = {}) {
     limitFactor,
     minLowQualityWidth: minImgWidth,
     imageSizeAttributes,
-    autoAlt,
   });
 
   const updateDimensions = debounce(100, () => {
