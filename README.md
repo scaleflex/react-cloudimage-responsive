@@ -95,10 +95,15 @@ loading time.
 In order to use Cloudimage responsive plugins on your single-page application, please check out Cloudimage responsive plugins for vanilla Javascript and the most popular Javascript frameworks.
 
 <details>
-<summary>Javascript</summary>
-<a href="https://github.com/scaleflex/js-cloudimage-responsive">Js Cloudimage Responsive (Low Quality Preview)</a><br/>
-<a href="https://github.com/scaleflex/js-cloudimage-responsive/blob/master/README-BLUR-HASH.md">Js Cloudimage Responsive (Blur-hash)</a><br/>
-<a href="https://github.com/scaleflex/js-cloudimage-responsive/blob/master/README-PLAIN.md">Js Cloudimage Responsive (Plain)</a>
+<summary>React</summary>
+<a href="https://github.com/scaleflex/react-cloudimage-responsive">React Cloudimage Responsive (Low Quality Preview)</a><br/>
+<a href="https://github.com/scaleflex/react-cloudimage-responsive-blur-hash">React Cloudimage Responsive (Blur-hash)</a><br/>
+<a href="https://github.com/scaleflex/react-cloudimage-responsive-plain">React Cloudimage Responsive (Plain)</a>
+</details>
+
+<details>
+<summary>Next.js</summary>
+<a href="https://github.com/scaleflex/next-cloudimage-responsive">Vue Cloudimage Responsive (Low Quality Preview)</a><br/>
 </details>
 
 <details>
