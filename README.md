@@ -70,6 +70,7 @@ Cloudimage, contact us at
 
 * [Demo](#demo)
 * [Responsive plugins family](#plugin_family)
+* [Compatibility](#compatibility)
 * [Requirements](#requirements)
 * [Step 1: Installation](#installation)
 * [Step 2: Initialize](#initialize)
@@ -117,6 +118,12 @@ In order to use Cloudimage responsive plugins on your single-page application, p
 <summary>Angular</summary>
 <a href="https://github.com/scaleflex/ng-cloudimage-responsive">Angular Cloudimage Responsive (Low Quality Preview)</a><br/>
 </details>
+
+## <a name="compatibility"></a> Compatibility
+| Version | React Version |
+|---------|--------------|
+| >3.6.3   | >=18.0.0 |
+| <=3.6.3   | <=17.x.x |
 
 ## <a name="requirements"/> Requirements
 
