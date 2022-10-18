@@ -30,7 +30,7 @@ declare module 'react-cloudimage-responsive' {
     ratio?: number;
     lazyLoading?: boolean;
     lazyLoadConfig?: Record<string, any>;
-    doNotReplaceURL: boolean;
+    doNotReplaceURL?: boolean;
   }
 
   class BackgroundImg extends React.Component<ImgProps & React.ComponentProps<'img'>> { }
