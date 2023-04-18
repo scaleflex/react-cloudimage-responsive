@@ -1,10 +1,9 @@
-import './polyfills';
-import {
-  useContext, forwardRef, useCallback,
-} from 'react';
+import { useContext, forwardRef, useCallback } from 'react';
+
 import ImgComponent from './img';
 import BackgroundImgComponent from './background';
 import CloudimageProvider, { CloudimageContext } from './provider';
+import './polyfills';
 
 
 const Img = forwardRef((props, ref) => {

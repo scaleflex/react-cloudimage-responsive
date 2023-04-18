@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.5 - 2023-04-18
+### Fixed
+- Remove CVE vulnerabilities
+
 ## 3.6.4 - 2022-08-04
 ### Fixed
 - prop-types dependency

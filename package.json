@@ -1,6 +1,6 @@
 {
   "name": "react-cloudimage-responsive",
-  "version": "3.6.4",
+  "version": "3.6.5",
   "main": "dist/index.js",
   "description": "Cloudimage Responsive will smartly resize, compress and accelerate images across the World in your site for all devices. The plugin supports lazy loading technique with fancy animation on image load.",
   "author": "scaleflex",
@@ -41,14 +41,14 @@
   },
   "dependencies": {
     "cloudimage-responsive-utils": "^2.5.1",
-    "prop-types": "15.8.1",
     "core-js": "^3.15.2",
+    "prop-types": "15.8.1",
     "react-lazyload": "^3.2.0",
     "throttle-debounce": "^3.0.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.14.5",
-    "@babel/core": "^7.14.6",
+    "@babel/core": "^7.21.4",
     "@babel/plugin-proposal-class-properties": "^7.14.5",
     "@babel/plugin-proposal-decorators": "^7.14.5",
     "@babel/plugin-proposal-export-namespace-from": "^7.14.5",
@@ -58,24 +58,23 @@
     "@babel/plugin-proposal-throw-expressions": "^7.14.5",
     "@babel/plugin-syntax-dynamic-import": "^7.0.0",
     "@babel/plugin-syntax-import-meta": "^7.0.0",
-    "@babel/preset-env": "^7.14.7",
+    "@babel/preset-env": "^7.21.4",
     "@babel/preset-react": "^7.14.5",
-    "babel-loader": "^8.2.2",
-    "css-loader": "^2.0.0",
+    "babel-loader": "^9.1.2",
+    "css-loader": "^6.7.3",
     "eslint": "^8.10.0",
     "eslint-config-airbnb": "^19.0.4",
-    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-react": "^7.29.3",
     "eslint-plugin-react-hooks": "^4.3.0",
     "gh-pages": "^2.0.1",
-    "html-webpack-plugin": "^3.2.0",
+    "html-webpack-plugin": "^5.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-syntax-highlighter": "^10.2.0",
-    "style-loader": "^0.23.1",
-    "webpack": "^4.46.0",
-    "webpack-cli": "^3.3.11",
-    "webpack-dev-server": "^3.11.2"
+    "react-syntax-highlighter": "^15.5.0",
+    "style-loader": "^3.3.2",
+    "webpack": "^5.79.0",
+    "webpack-cli": "^5.0.1",
+    "webpack-dev-server": "^4.13.3"
   }
 }

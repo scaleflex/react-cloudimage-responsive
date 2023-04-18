@@ -5,6 +5,7 @@ import {
   isServer, processReactNode, imgStyles as styles, generateAlt,
 } from 'cloudimage-responsive-utils';
 import LazyLoad from 'react-lazyload';
+
 import { getFilteredProps } from './utils';
 import usePrevious from './hooks/usePrevious';
 
@@ -24,7 +25,9 @@ function Img(props) {
   const server = useMemo(() => isServer(), []);
 
   const {
-    lazyLoading: configLazyLoadingValue, lazyLoadOffset, delay, innerWidth,
+    lazyLoading: configLazyLoadingValue,
+    lazyLoadOffset,
+    delay, innerWidth,
   } = config;
 
   const { lazyLoading = configLazyLoadingValue } = props;
@@ -50,7 +53,12 @@ function Img(props) {
   } = getFilteredProps(props);
 
   const {
-    innerRef, onImgLoad, disableAnimation, doNotReplaceURL, ...filteredProps
+    innerRef,
+    onImgLoad,
+    disableAnimation,
+    doNotReplaceURL,
+    config: _config,
+    ...filteredProps
   } = otherProps;
 
   const getcloudimgSRCSET = () => cloudimgSRCSET
@@ -84,13 +92,6 @@ function Img(props) {
     if (typeof onImgLoad === 'function') {
       onImgLoad(event);
     }
-  };
-
-  const getAlt = (name) => {
-    if (!name) return;
-
-    const index = name.indexOf('.');
-    return name.slice(0, index);
   };
 
   const onPreviewLoaded = (event) => {
