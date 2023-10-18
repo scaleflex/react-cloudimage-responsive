@@ -27,6 +27,10 @@ Types of changes:
 -------------
 
 -------------
+## 3.6.6 - 2023-10-18
+### Fixed
+- Replace `react-lazyload` plugin with `react-lazy-load` to support React 18.
+
 ## 3.6.5 - 2023-04-18
 ### Fixed
 - Remove CVE vulnerabilities

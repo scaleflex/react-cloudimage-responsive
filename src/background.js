@@ -2,7 +2,8 @@ import {
   useState, useMemo, useEffect, useRef,
 } from 'react';
 import { isServer, processReactNode } from 'cloudimage-responsive-utils';
-import LazyLoad from 'react-lazyload';
+import LazyLoad from 'react-lazy-load';
+
 import { getFilteredBgProps } from './utils';
 import BackgroundInner from './background-inner';
 

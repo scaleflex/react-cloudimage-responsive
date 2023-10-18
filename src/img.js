@@ -4,7 +4,7 @@ import {
 import {
   isServer, processReactNode, imgStyles as styles, generateAlt,
 } from 'cloudimage-responsive-utils';
-import LazyLoad from 'react-lazyload';
+import LazyLoad from 'react-lazy-load';
 
 import { getFilteredProps } from './utils';
 import usePrevious from './hooks/usePrevious';
